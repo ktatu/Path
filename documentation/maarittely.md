@@ -8,7 +8,7 @@ Käyttäjä syöttää käyttöliittymässä ohjelmalle kaksi tiedostoa: kartan 
 ## Vertailuympäristö ja syötedata
 Algoritmit etsivät lyhimpiä reittejä kahden ruudun välillä kaksiulotteisissa ruudukkokartoissa. 
 
-Valmiita karttoja ja niihen liittyviä skenaarioita löytyy [Moving Ai:n sivuilta](https://movingai.com/benchmarks/grids.html). Karttoja ja skenaarioita voi myös tehdä itse, mutta niiden tulee noudattaa [Moving Ai:n määrittelemiä 
+Valmiita karttoja ja niihin liittyviä skenaarioita löytyy [Moving Ai:n sivuilta](https://movingai.com/benchmarks/grids.html). Karttoja ja skenaarioita voi myös tehdä itse, mutta niiden tulee noudattaa [Moving Ai:n määrittelemiä 
 formaatteja](https://movingai.com/benchmarks/formats.html).
 
 ### Kartat
