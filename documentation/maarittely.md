@@ -40,17 +40,17 @@ V = solmu (vertex), tämän ohjelman tapauksessa yksi ruutu
 È = kaari (edge), ohjelmassa tämä vastaa reunaa tai kulmaa kahden ruudun välillä
 ```
 
-#### BFS (leveyshaku)
+#### [BFS (leveyshaku)](https://en.wikipedia.org/wiki/Breadth-first_search)
 - Aikavaativuus O(E+V): pahimmassa tapauksessa joudutaan käymään kartan jokaisessa ruudussa ja tutkimaan jokaisen ruudun viereiset ruudut
 - Tilavaativuus O(V): algoritmiin tullaan tarvitsemaan jono ja pari läpikäytävän kartan kokoista aputaulukkoa
 
-#### Dijkstra
+#### [Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 - Aikavaativuus O(E+V*log(V)): algoritmi voi joutua käymään läpi kaikkien ruutujen kaikki naapurit sekä lisäämään ja poistamaan kunkin niistä prioriteettijonosta
 - Tilavaativuus O(V): riippuen käytettävästä Dijkstran versiosta kaikki solmut voivat olla aluksi prioriteettijonossa [Jyrki Kivisen materiaalin mukaisesti](https://cs.helsinki.fi/u/jkivinen/opetus/tira/k16/luku8b.pdf) tai sitten kaikki läpikäytävät 
 solmut voivat lopulta päätyä listaan [(Uniform Cost Search)](http://www.bgu.ac.il/~felner/2011/dikstra.pdf), jolloin tilavaativuus on myös O(V). [Tirakirjan](https://cs.helsinki.fi/u/ahslaaks/tirakirja) (kpl. 11) mukainen vieruslistan 
-hyödyntäminen veisi enemmän tilaa, mutta todennäköisesti en aio käyttää sitä
+hyödyntäminen veisi jonkin verran enemmän tilaa, mutta sanoisin sen silti olevan O(V)
 
-#### A*
+#### [A*](https://en.wikipedia.org/wiki/A*_search_algorithm)
 - Aikavaativuus O(E+V*log(V)): hyvän heuristisen funktion avulla A*:n pitäisi olla huomattavasti Dijkstraa [nopeampi](https://youtube.com/watch?v=g024lzsknDo), mutta se myös hankaloittaa merkittävästi aikavaativuuden arviointia. Pohjimmiltaan A* on 
 kuitenkin Dijkstra lisäominaisuudella. [Video josta tämän voi helposti havaita](https://www.youtube.com/watch?v=6TsL96NAZCo&t). Epäilen, että esimerkiksi hyvin sokkeloisissa kartoissa kyseisten algoritmien nopeudet eivät välttämättä eroa merkittävästi.  
 - Tilavaativuus O(V): kuten Dijkstran tietorakenteet ja algoritmit-kurssilla opitussa versiossa, [A*:n täytyy säilyttää jokaista solmua tietorakenteissaan](https://en.wikipedia.org/wiki/A*_search_algorithm)

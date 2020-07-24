@@ -1,11 +1,12 @@
 package tiralabra.path.dao;
 
-import tiralabra.path.domain.Map;
+import java.util.HashSet;
 
 /**
  *
  * @author Tatu
  */
 public interface MapDao {
-    Map returnMap(Object object);
+    void getTerrainTypes();
+    int[][] createMap(Object object);
 }
