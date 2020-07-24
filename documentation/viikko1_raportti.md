@@ -6,7 +6,7 @@ läpikäymiseen.
 Tiedonhakuun ja siten myös määrittelydokumentin kirjoittamiseen meni myös paljon aikaa, sillä mietin melko kauan mitkä algoritmit valitsisin ja vaihtoehtoja oli 
 yllättävän paljon. Leveyshakua ja Dijkstraa lukuunottamatta kaikki olivat itselleni uusia.
 
-Ohjelma ja github-repositorio ovat luotu. Olen aloittanut koodaamisen datankäsittelyluokista, jotta en joutuisi algoritmeja tehdessäni kovakoodaamaan niin paljoa. Ne 
+Olen aloittanut ohjelman rakentamisen datankäsittelyluokista, jotta en joutuisi algoritmeja tehdessäni kovakoodaamaan paljon. Ne 
 ovat kuitenkin vielä kesken.
 
 ## Mitä teen seuraavaksi
