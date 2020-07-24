@@ -42,7 +42,7 @@ V = solmu (vertex), tämän ohjelman tapauksessa yksi ruutu
 
 #### [Dijkstra](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 - Aikavaativuus O(E+V*log(V)): algoritmi voi joutua käymään läpi kaikkien ruutujen kaikki naapurit sekä lisäämään ja poistamaan kunkin niistä prioriteettijonosta
-- Tilavaativuus O(V): riippuen käytettävästä Dijkstran versiosta kaikki solmut voivat olla aluksi prioriteettijonossa [Jyrki Kivisen materiaalin mukaisesti](https://cs.helsinki.fi/u/jkivinen/opetus/tira/k16/luku8b.pdf) tai sitten kaikki läpikäytävät 
+- Tilavaativuus O(V): riippuen käytettävästä Dijkstran versiosta kaikki solmut voivat olla aluksi prioriteettijonossa, vieruslistassa tai sitten kaikki läpikäytävät 
 solmut voivat lopulta päätyä listaan [(Uniform Cost Search)](http://www.bgu.ac.il/~felner/2011/dikstra.pdf), jolloin tilavaativuus on myös O(V). [Tirakirjan](https://cs.helsinki.fi/u/ahslaaks/tirakirja) (kpl. 11) mukainen vieruslistan 
 hyödyntäminen veisi jonkin verran enemmän tilaa, mutta uskoisin sen silti olevan luokkaa O(V)
 
