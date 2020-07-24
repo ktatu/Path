@@ -12,7 +12,7 @@ ovat kuitenkin vielä kesken.
 ## Mitä teen seuraavaksi
 Viimeistelen datankäsittelyluokat ja teen niille yksikkötestit. Niiden jälkeen alan todennäköisesti työstämään leveyshakua.
 
-## Käytetty aika 15h
+<b>Käytetty aika 15h</b>
 
 ## Ohjaajalle
 Päätin ottaa mukaan leveyshaun, mutta ymmärtääkseni en kuitenkaan voi antaa sen liikkua kartoissa diagonaalisesti, koska liikkeiden kustannus on eri. Tällöin leveyshaku 
