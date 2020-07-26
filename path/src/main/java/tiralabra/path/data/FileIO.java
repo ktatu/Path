@@ -1,4 +1,4 @@
-package tiralabra.path.dao;
+package tiralabra.path.data;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -18,9 +18,14 @@ public class FileIO {
     
     private String ioFile;
     private ArrayList<String> fileAsList;
+    private static FileIO instance = null;
     
-    public FileIO(String ioFile) {
-        this.ioFile = ioFile;
+    // there will only be one instance of FileIO that all classes will use
+    public static FileIO getInstance() {
+        if (instance == null) {
+            instance = new FileIO();
+        }
+        return instance;
     }
     
     private void collectFileToList() {
@@ -28,6 +33,10 @@ public class FileIO {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(ioFile), "UTF-8"));
             this.fileAsList = collectLinesToList(reader.lines());
             reader.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex);
+        } catch (UnsupportedEncodingException ex) {
+            System.out.println(ex);
         } catch (IOException ex) {
             System.out.println(ex);
         } 
@@ -37,17 +46,9 @@ public class FileIO {
         return lines.collect(Collectors.toCollection(ArrayList::new));
     }
     
-    // collectFileToList() jonnekin muualle
-    public ArrayList<String> getFileAsList() {
+    public ArrayList<String> getFileAsList(String ioFile) {
+        this.ioFile = ioFile;
         collectFileToList();
         return this.fileAsList;
     }
 }
-
-
-/*
-        // ehkä mieluummin catchit kullekin poikkeustapaukselle erikseen fileReaderissä, voi helpottaa testausta
-        /*catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            Logger.getLogger(FileIO.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("error: " + ex);
-        }*/

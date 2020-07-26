@@ -1,4 +1,4 @@
-package tiralabra.path.domain;
+package tiralabra.path.logic;
 
 /**
  *
@@ -7,18 +7,20 @@ package tiralabra.path.domain;
 public class Scenario {
     private int startX;
     private int startY;
-    
     private int goalX;
     private int goalY;
     
-    private long optimalCost;
-    
-    public Scenario(int startX, int startY, int goalX, int goalY, long optimalCost) {
+    public Scenario(int startX, int startY, int goalX, int goalY) {
         this.startX = startX;
         this.startY = startY;
         this.goalX = goalX;
         this.goalY = goalY;
-        this.optimalCost = optimalCost;
     }
+
+    @Override
+    public String toString() {
+        return "Start coordinates: " + startX+","+startY + " goal coordinates: " + goalX+","+goalY;
+    }
+    
     
 }
