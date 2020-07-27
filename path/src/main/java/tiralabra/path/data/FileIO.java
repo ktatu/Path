@@ -7,20 +7,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  *
  * @author Tatu
  */
 public class FileIO {
-    
-    private String ioFile;
-    private ArrayList<String> fileAsList;
+
     private static FileIO instance = null;
     
-    // there will only be one instance of FileIO that all classes will use
+    // private constructor prevents other classes from creating instances of FileIO using parameterless constructor
+    private FileIO(){
+    }
+    
+    // returns instance of FileIO if one exists, otherwise creates one
     public static FileIO getInstance() {
         if (instance == null) {
             instance = new FileIO();
@@ -28,10 +31,11 @@ public class FileIO {
         return instance;
     }
     
-    private void collectFileToList() {
+    public ArrayList<String> collectFileToList(String ioFile) {
+        ArrayList<String> fileAsList = null;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(ioFile), "UTF-8"));
-            this.fileAsList = collectLinesToList(reader.lines());
+            fileAsList = reader.lines().collect(Collectors.toCollection(ArrayList::new));
             reader.close();
         } catch (FileNotFoundException ex) {
             System.out.println(ex);
@@ -40,15 +44,8 @@ public class FileIO {
         } catch (IOException ex) {
             System.out.println(ex);
         } 
-    }
-    
-    private ArrayList<String> collectLinesToList(Stream<String> lines) {
-        return lines.collect(Collectors.toCollection(ArrayList::new));
-    }
-    
-    public ArrayList<String> getFileAsList(String ioFile) {
-        this.ioFile = ioFile;
-        collectFileToList();
-        return this.fileAsList;
+        return fileAsList;
     }
 }
+
+// Logger.getLogger(FileIO.class.getName()).log(Level.SEVERE, null, ex);

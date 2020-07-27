@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -35,7 +36,8 @@ public class FileIOTest {
             new FileOutputStream(testIOFile), "utf-8"))) {
             
             writer.write("version 1\n");
-            writer.write("0	test.map	10	10	4	1	4	2	1");
+            writer.write("a_scenario_here");
+            writer.close();
         }
     }
     
@@ -53,13 +55,22 @@ public class FileIOTest {
     }
     
     @Test
-    public void collectFileToListReturnsFileAsStringArrayList() {
-        
+    public void onlyOneInstanceOfFileIOCanExist() {
+        FileIO comparisonTestIO;
+        comparisonTestIO = FileIO.getInstance();
+        assertEquals(testFileIO, comparisonTestIO);
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    
+    @Test
+    public void fileIsReturnedStringArrayList() throws IOException {
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("version 1");
+        expectedList.add("a_scenario_here");
+        assertEquals(expectedList, testFileIO.collectFileToList(testIOFile.getPath()));
+    }
+    
+    @Test
+    public void fileNotFoundExceptionIsCaught() {
+        testFileIO.collectFileToList("nonExistingFile.map");
+    }
 }

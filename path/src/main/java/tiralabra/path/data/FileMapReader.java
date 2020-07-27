@@ -28,8 +28,8 @@ public class FileMapReader {
         this.fileIO = FileIO.getInstance();
     }
     
-    public int[][] getGridMap(String filePath) {
-        gridMapFileAsList = fileIO.getFileAsList(filePath);
+    public int[][] getGridMap(String mapFile) {
+        gridMapFileAsList = fileIO.collectFileToList(mapFile);
         return createGridMap();
     }
     

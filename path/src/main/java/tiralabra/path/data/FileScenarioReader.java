@@ -17,8 +17,8 @@ public class FileScenarioReader {
         this.fileIO = FileIO.getInstance();
     }
     
-    public ArrayList<Scenario> getScenarios(String fileLocation) {
-        scenarioFileAsList = fileIO.getFileAsList(fileLocation);
+    public ArrayList<Scenario> getScenarios(String scenFile) {
+        scenarioFileAsList = fileIO.collectFileToList(scenFile);
         return collectScenarios();
     }
     
