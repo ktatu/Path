@@ -22,7 +22,5 @@ public class ui {
             System.out.println("");
         }
     */    
-        FileScenarioReader scenReader = new FileScenarioReader();
-        ArrayList<Scenario> scens = scenReader.getScenarios("src/battleground.map.scen");
     }
 }

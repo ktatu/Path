@@ -1,5 +1,6 @@
 package tiralabra.path.data;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import tiralabra.path.logic.Scenario;
 
@@ -9,31 +10,34 @@ import tiralabra.path.logic.Scenario;
  */
 public class FileScenarioReader {
     
-    private ArrayList<String> scenarioFileAsList;
-    
     FileIO fileIO;
     
     public FileScenarioReader() {
         this.fileIO = FileIO.getInstance();
     }
     
-    public ArrayList<Scenario> getScenarios(String scenFile) {
-        scenarioFileAsList = fileIO.collectFileToList(scenFile);
-        return collectScenarios();
-    }
-    
-    private ArrayList<Scenario> collectScenarios() {
+    public ArrayList<Scenario> collectScenarios(String scenFile) {
+        ArrayList<String> scenFileAsList = fileIO.collectFileToList(scenFile);
         ArrayList<Scenario> scenarios = new ArrayList<>();
-        for (int i = 1; i < scenarioFileAsList.size(); i++) {
-            scenarios.add(readScenarioFromRow(scenarioFileAsList.get(i)));
+        
+        for (int i = 1; i < scenFileAsList.size(); i++) {
+            try {
+                scenarios.add(readScenarioFromRow(scenFileAsList.get(i), i));
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
         }
         return scenarios;
     }
     
-    private Scenario readScenarioFromRow(String row) {
+    private Scenario readScenarioFromRow(String row, int rowNumber) throws IOException {
         String[] rowColSplit = row.split("	");
         
-        int startX = Integer.valueOf(rowColSplit[4]);
+        if (rowColSplit.length != 9) {
+            throw new IOException("readScenarioFromRow(): row " + rowNumber + " is incorrectly formatted");
+        }
+        
+        int startX = Integer.valueOf(rowColSplit[4]);   
         int startY = Integer.valueOf(rowColSplit[5]);
         int goalX = Integer.valueOf(rowColSplit[6]);
         int goalY = Integer.valueOf(rowColSplit[7]);

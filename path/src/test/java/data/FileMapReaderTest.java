@@ -1,5 +1,6 @@
 package data;
 
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,9 +12,10 @@ import static org.junit.Assert.*;
  *
  * @author Tatu
  */
-public class FileMapReaderTest {
+public class FileMapReaderTest extends FileManagement {
     
     public FileMapReaderTest() {
+        super();
     }
     
     @BeforeClass
@@ -31,10 +33,5 @@ public class FileMapReaderTest {
     @After
     public void tearDown() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    
 }

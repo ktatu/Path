@@ -17,6 +17,22 @@ public class Scenario {
         this.goalY = goalY;
     }
 
+    public int getStartX() {
+        return startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public int getGoalX() {
+        return goalX;
+    }
+
+    public int getGoalY() {
+        return goalY;
+    }
+
     @Override
     public String toString() {
         return "Start coordinates: " + startX + "," + startY + " goal coordinates: " + goalX + "," + goalY;
