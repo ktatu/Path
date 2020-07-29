@@ -48,7 +48,7 @@ public abstract class FileManagement {
     
     @Before
     public void setUp() {
-        testIOFile = new File("testIOFile.map.scen");
+        testIOFile = new File("testIOFile.test");
         testArrayList = new ArrayList<>();
     }
     

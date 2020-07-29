@@ -36,7 +36,5 @@ public class Scenario {
     @Override
     public String toString() {
         return "Start coordinates: " + startX + "," + startY + " goal coordinates: " + goalX + "," + goalY;
-    }
-    
-    
+    } 
 }

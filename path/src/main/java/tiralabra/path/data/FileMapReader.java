@@ -34,15 +34,15 @@ public class FileMapReader {
     }
     
     private int[][] createGridMap() {
-        int width = Integer.valueOf(gridMapFileAsList.get(widthRow).split(" ")[1]);
         int height = Integer.valueOf(gridMapFileAsList.get(heightRow).split(" ")[1]);
+        int width = Integer.valueOf(gridMapFileAsList.get(widthRow).split(" ")[1]);
         
         int[][] gridMap = new int[height][width];
         
         int fileY = mapStartRow;
         
-        for (int y = 0; y < gridMap.length; y++) {
-            for (int x = 0; x < gridMap[0].length; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 gridMap[y][x] = convertTerrainTypeToInteger(gridMapFileAsList.get(fileY).charAt(x));
             }
             fileY++;
