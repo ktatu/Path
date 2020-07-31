@@ -1,6 +1,8 @@
 package tiralabra.path.ui;
 
 import java.util.ArrayList;
+import tiralabra.path.algorithms.Algorithm;
+import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.data.FileMapReader;
 import tiralabra.path.data.FileScenarioReader;
 import tiralabra.path.logic.Scenario;
@@ -22,5 +24,13 @@ public class ui {
             System.out.println("");
         }
     */    
+    
+        
+        Scenario scen = new Scenario(0, 9, 0, 7);
+        int[][] map = mapReader.getGridMap("src/test.map");
+        
+        Algorithm bfs = new BreadthFirstSearch(map, scen);
+        bfs.initializeAlgorithm();
+        bfs.runAlgorithm();
     }
 }

@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
- *
- * @author Tatu
+ * All file related functionalities happen through FileIO
+ * 
  */
 public class FileIO {
 
+    // FileIO is a Singleton, meaning only one instance of the class can exist
     private static FileIO instance = null;
     
     // private constructor prevents other classes from creating instances of FileIO using parameterless constructor
@@ -27,10 +28,15 @@ public class FileIO {
         return instance;
     }
     
-    public ArrayList<String> collectFileToList(String ioFile) {
+    /**
+     * Reads every line of a file and collects them into an ArrayList
+     * @param filePath path to the file
+     * @return the file collected into an ArrayList
+     */
+    public ArrayList<String> collectFileToList(String filePath) {
         ArrayList<String> fileAsList = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(ioFile), "UTF-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
             fileAsList = reader.lines().collect(Collectors.toCollection(ArrayList::new));
             reader.close();
         } catch (IOException ex) {
@@ -39,5 +45,3 @@ public class FileIO {
         return fileAsList;
     }
 }
-
-// Logger.getLogger(FileIO.class.getName()).log(Level.SEVERE, null, ex);

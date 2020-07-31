@@ -1,24 +1,17 @@
 package tiralabra.path.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
+
 /**
- *
+ * Creates and returns an Integer matrix out of a .map file
  * @author Tatu
  */
-/*
-To implement different cost terrain types: HashSets into HashMaps that store char and cost
-Store cost alongside terrain types in config-file (e.g .:1,S:3)
-modify map-creation functions
-*/
 public class FileMapReader {
-    
-    private ArrayList<String> gridMapFileAsList;
     
     FileIO fileIO;
     
-    // variables related to Moving Ai file format
+    // Variables related to Moving Ai file format
     private Set<Character> passableTerrain = Set.of('.', 'G', 'S');
     private int heightRow = 1;
     private int widthRow = 2;
@@ -28,12 +21,14 @@ public class FileMapReader {
         this.fileIO = FileIO.getInstance();
     }
     
-    public int[][] getGridMap(String mapFile) {
-        gridMapFileAsList = fileIO.collectFileToList(mapFile);
-        return createGridMap();
-    }
-    
-    private int[][] createGridMap() {
+    /**
+     * Converts the ArrayList into a matrix map by going through every cell of the map
+     * @param mapFilePath directory for the .map file path to be converted into a map
+     * @return the int[][] map which will be used by pathfinding algorithms
+     */
+    public int[][] getGridMap(String mapFilePath) {
+        ArrayList<String> gridMapFileAsList = fileIO.collectFileToList(mapFilePath);
+        
         int height = Integer.valueOf(gridMapFileAsList.get(heightRow).split(" ")[1]);
         int width = Integer.valueOf(gridMapFileAsList.get(widthRow).split(" ")[1]);
         
@@ -50,6 +45,11 @@ public class FileMapReader {
         return gridMap;
     }
     
+    /**
+     * 
+     * @param terrain is a cell read from the file ArrayList
+     * @return passable terrain is converted into 1, otherwise 0
+     */
     private int convertTerrainTypeToInteger(Character terrain) {
         if (passableTerrain.contains(terrain)) {
             return 1;

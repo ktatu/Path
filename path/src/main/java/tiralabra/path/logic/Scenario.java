@@ -1,7 +1,7 @@
 package tiralabra.path.logic;
 
 /**
- *
+ * Scenario gives an algorithm start- and endpoints on a map
  * @author Tatu
  */
 public class Scenario {
@@ -10,7 +10,7 @@ public class Scenario {
     private int goalX;
     private int goalY;
     
-    public Scenario(int startX, int startY, int goalX, int goalY) {
+    public Scenario(int startY, int startX, int goalY, int goalX) {
         this.startX = startX;
         this.startY = startY;
         this.goalX = goalX;

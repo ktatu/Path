@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import tiralabra.path.logic.Scenario;
 
 /**
- *
+ * Converts a .scen file into a list of Scenario objects
  * @author Tatu
  */
 public class FileScenarioReader {
@@ -16,8 +16,13 @@ public class FileScenarioReader {
         this.fileIO = FileIO.getInstance();
     }
     
-    public ArrayList<Scenario> collectScenarios(String scenFile) {
-        ArrayList<String> scenFileAsList = fileIO.collectFileToList(scenFile);
+    /**
+     * Gets the .scen file as an ArrayList from FileIO and collects them into a list of scenarios
+     * @param scenFilePath directory for the .scen file
+     * @return list of Scenarios
+     */
+    public ArrayList<Scenario> collectScenarios(String scenFilePath) {
+        ArrayList<String> scenFileAsList = fileIO.collectFileToList(scenFilePath);
         ArrayList<Scenario> scenarios = new ArrayList<>();
         
         for (int i = 1; i < scenFileAsList.size(); i++) {
@@ -30,11 +35,18 @@ public class FileScenarioReader {
         return scenarios;
     }
     
-    private Scenario readScenarioFromRow(String row, int rowNumber) throws IOException {
-        String[] rowColSplit = row.split("	");
+    /**
+     * Converts a line from the file into a scenario
+     * @param line the current scenario line
+     * @param lineNumber is explicitly given so that exception prints out which line was malformatted
+     * @return a Scenario object made out of the line
+     * @throws IOException 
+     */
+    private Scenario readScenarioFromRow(String line, int lineNumber) throws IOException {
+        String[] rowColSplit = line.split("	");
         
         if (rowColSplit.length != 9) {
-            throw new IOException("readScenarioFromRow(): row " + rowNumber + " is incorrectly formatted");
+            throw new IOException("readScenarioFromRow(): row " + lineNumber + " is incorrectly formatted");
         }
         
         int startX = Integer.valueOf(rowColSplit[4]);   
