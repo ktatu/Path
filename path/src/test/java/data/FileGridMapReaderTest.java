@@ -10,20 +10,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tiralabra.path.data.FileMapReader;
+import tiralabra.path.data.FileGridMapReader;
+import tiralabra.path.logic.GridMap;
 
 /**
  *
  * @author Tatu
  */
-public class FileMapReaderTest extends FileManagement {
+public class FileGridMapReaderTest extends FileManagement {
     
-    FileMapReader testMapReader = new FileMapReader();
+    FileGridMapReader testMapReader = new FileGridMapReader();
     
     File formatTestFile;
     ArrayList<String> formatTestList;
     
-    public FileMapReaderTest() {
+    public FileGridMapReaderTest() {
         super();
     }
     
@@ -62,19 +63,19 @@ public class FileMapReaderTest extends FileManagement {
     
     @Test
     public void mapInFileIsConvertedIntoIntegerBasedMap() {
-        int[] expectedIntegers = new int[]{0,0,0,1,1,1,0,0,1};
+        char[] expectedCharacters = new char[]{'@', 'T', 'W', '.', 'G', 'S', 'U', '?', '.'};
+        int expectedIndex = 0;
         
         testArrayList.add("@TW");
         testArrayList.add(".GS");
         testArrayList.add("U?.");
         writeIntoFile(testIOFile, testArrayList);
         
-        int[][] testMap = testMapReader.getGridMap(testIOFile.getPath());
+        GridMap gridMap = testMapReader.getGridMap(testIOFile.getPath());
         
-        int expectedIndex = 0;
-        for (int y = 0; y < testMap.length; y++) {
-            for (int x = 0; x < testMap[0].length; x++) {
-                assertEquals(expectedIntegers[expectedIndex], testMap[y][x]);
+        for (int y = 0; y < gridMap.getMapHeight(); y++) {
+            for (int x = 0; x < gridMap.getMapWidth(); x++) {
+                assertEquals(expectedCharacters[expectedIndex], gridMap.getGrid(y, x));
                 expectedIndex++;
             }
         }

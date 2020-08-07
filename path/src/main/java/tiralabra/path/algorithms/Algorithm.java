@@ -1,10 +1,12 @@
 package tiralabra.path.algorithms;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
 /**
- * 
+ * Methods and data structures used by all algorithms
  * @author Tatu
  */
 public abstract class Algorithm {
@@ -12,63 +14,128 @@ public abstract class Algorithm {
     protected long startTime;
     protected long endTime;
     
-    protected Scenario scen;
-    
-    // grids (coordinates) are stored as integers for the purpose of tracking algorithms' movement on the map
-    // e.g in a 3x3 map (0,0) is 0, (0,2) is 2 and (2,2) is 5
+    // Keeps track of what was each grid's predecessor
+    // Each cell in prevGrid[] represents a grid, which has been converted into an integer based on its coordinates
     protected int[] prevGrid;
-    protected int[][] distance;
-    protected int[][] gridMap;
+    // Distance from start grid to others
+    protected float[][] distance;
+    protected boolean[][] visited;
     
-    public Algorithm(int[][] gridMap, Scenario scen) {
-        this.gridMap = gridMap.clone();
-        this.distance = new int[this.gridMap.length][this.gridMap[0].length];
+    protected Scenario scen;
+    protected GridMap gridMap;
+    
+    float sqrtTwo = (float) Math.sqrt(2);
+    
+    /**
+     * Sets up data structures for algorithms
+     * @param gridMap the map the algorithm is running on
+     * @param scen start and goal coordinates of algorithm
+     */
+    public Algorithm(GridMap gridMap, Scenario scen) {
+        this.gridMap = gridMap;
+        this.distance = new float[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
+        this.visited = new boolean[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
         this.scen = scen;
         
-        this.prevGrid = new int[gridMap.length * gridMap[0].length];
-        // prevGrid is also used to keep track of visited grids, -1 == unvisited
+        // Same initialization for all algorithms so done in constructor instead of initializeAlgorithm()
+        this.prevGrid = new int[this.gridMap.getMapHeight() * this.gridMap.getMapWidth()];
         for (int i = 0; i < prevGrid.length; i++) {
             prevGrid[i] = -1;
         }
     }
     
-    abstract public void runAlgorithm();
+    // Operations needed before algorithm can be run are made here. Not included in algorithm runtime
     abstract public void initializeAlgorithm();
+    // Run the algorithm until the shortest path is found or all viable grids have been visited
+    abstract public void runAlgorithm();
     
-    protected double getRunTime() {
-        return ((endTime - startTime) / 1e9);
-    }
-    
-    /*
-    protected boolean validDiagonalMove() {
-        return true;
-    }
-    
-    protected boolean validOctogonalMove(int gridY, int gridX) {
-        if (gridY < 0 || gridY >= gridMap.length) {
+    /**
+     * Check if coordinates are within map boundaries and the grid in these coordinates is passable terrain
+     * @param y coordinate
+     * @param x coordinate
+     * @return true if grid can be moved to, otherwise false
+     */
+    protected boolean isValidHorOrVerMove(int y, int x) {
+        if (y < 0 || y >= gridMap.getMapHeight() || x < 0 || x >= gridMap.getMapWidth()) {
             return false;
-        } else if (gridX < 0 || gridX >= gridMap[0].length) {
-            return false;
-        } else if (gridMap[gridY][gridX] == 0) {
+        }
+        if (!gridMap.isPassable(gridMap.getGrid(y, x))) {
             return false;
         }
         return true;
     }
-    */
 
+    /**
+     * Grid's coordinates are converted into an integer
+     * @param y coordinate
+     * @param x coordinate
+     * @return Grid's value as integer.
+     */
     protected int gridToInt(int y, int x) {
-        return y * gridMap[0].length + x;
+        return y * gridMap.getMapWidth() + x;
     }
     
+    /**
+     * Reads a grid's y coordinate from an integer 
+     * @param gridAsInteger grid's integer value
+     * @return y coordinate of the grid
+     */
     protected int intToGridY(int gridAsInteger) {
-        return gridAsInteger / gridMap[0].length;
+        return gridAsInteger / gridMap.getMapWidth();
     }
     
+    /**
+     * Reads a grid's x coordinate from an integer
+     * @param gridAsInteger grid's integer value
+     * @return x coordinate of the grid
+     */
     protected int intToGridX(int gridAsInteger) {
-        return gridAsInteger % gridMap[0].length;
+        return gridAsInteger % gridMap.getMapWidth();
     }
     
-    protected ArrayList<String> tracePath() {
-        return new ArrayList<>();
+    /**
+     * Checks from visited[][] whether algorithm has gone over the goal grid
+     * @return true if it has
+     */
+    public boolean goalVisited() {
+        return visited[scen.getGoalY()][scen.getGoalX()];
+    }
+    
+    /**
+     * Runtime of algorithm
+     * @return runtime in seconds
+     */
+    public double getRunTime() {
+        return ((endTime - startTime) / 1e9);
+    }
+    
+    /**
+     * Distance from start grid to goal grid
+     * @return distance as float retrieved from distance matrix
+     */
+    public float getPathLength() {
+        return distance[scen.getGoalY()][scen.getGoalX()];
+    }
+    
+    /**
+     * Prints coordinates of every grid on the shortest path from start grid to end grid
+     */
+    public void printPath() {
+        ArrayList<Integer> path = new ArrayList<>();
+        int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
+        
+        while (prevGrid[goalGridAsInt] != -1) {
+            path.add(goalGridAsInt);
+            goalGridAsInt = prevGrid[goalGridAsInt];
+        }
+        
+        path.add(gridToInt(scen.getStartY(), scen.getStartX()));
+        Collections.reverse(path);
+        
+        for (int grid : path) {
+            int y = intToGridY(grid);
+            int x = intToGridX(grid);
+            System.out.println("y: " + y + ", x: " + x);
+        }
     }
 }

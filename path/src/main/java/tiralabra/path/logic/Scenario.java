@@ -11,10 +11,10 @@ public class Scenario {
     private int goalY;
     
     public Scenario(int startY, int startX, int goalY, int goalX) {
-        this.startX = startX;
         this.startY = startY;
-        this.goalX = goalX;
+        this.startX = startX;
         this.goalY = goalY;
+        this.goalX = goalX;
     }
 
     public int getStartX() {

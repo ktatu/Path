@@ -13,14 +13,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import tiralabra.path.data.FileIO;
 /**
- *
+ * Used by test classes for creating tested files
  * @author Tatu
  */
-public abstract class FileManagement {
+public class FileManagement {
     
-    static File testIOFile;
-    static FileIO testFileIO;
-    static ArrayList<String> testArrayList;
+    public static File testIOFile;
+    public static FileIO testFileIO;
+    public static ArrayList<String> testArrayList;
     
     public FileManagement() {
     }

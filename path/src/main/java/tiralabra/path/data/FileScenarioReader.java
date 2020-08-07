@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import tiralabra.path.logic.Scenario;
 
 /**
- * Converts a .scen file into a list of Scenario objects
+ * Creates a list of Scenarios from a .scen file
  * @author Tatu
  */
 public class FileScenarioReader {
@@ -49,10 +49,10 @@ public class FileScenarioReader {
             throw new IOException("readScenarioFromRow(): row " + lineNumber + " is incorrectly formatted");
         }
         
-        int startX = Integer.valueOf(rowColSplit[4]);   
         int startY = Integer.valueOf(rowColSplit[5]);
-        int goalX = Integer.valueOf(rowColSplit[6]);
+        int startX = Integer.valueOf(rowColSplit[4]);   
         int goalY = Integer.valueOf(rowColSplit[7]);
+        int goalX = Integer.valueOf(rowColSplit[6]);
         
         return new Scenario(startX, startY, goalX, goalY);
     }
