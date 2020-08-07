@@ -6,4 +6,6 @@ Ohjelma vertailee reitinhakualgoritmien tehokkuutta kaksiulotteisissa ruudukkoka
 
 [Raportti viikko 2](https://github.com/ktatu/Path/blob/master/documentation/viikko2_raportti.md)
 
+[Raportti viikko3](https://github.com/ktatu/Path/blob/master/documentation/viikko3_raportti.md)
+
 [Määrittelydokumentti](https://github.com/ktatu/Path/blob/master/documentation/maarittely.md)
