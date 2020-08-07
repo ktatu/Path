@@ -16,3 +16,5 @@ kartan ja skenaarion. Tätä varten pitää myös alkaa rakentaa
 sovelluslogiikkaa. Aloitan myös omia tietorakenteita koska näin 
 aikataulussa vaaditaan, mutta luultavasti en ehdi niissä kovinkaan 
 pitkälle.
+
+<b>Käytetty aika 11 h</b>
