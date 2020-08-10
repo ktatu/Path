@@ -119,19 +119,19 @@ public class Dijkstra extends Algorithm {
         if (!isValidHorOrVerMove(y, x)) return false;
         
         if (y > prevY && x > prevX) {
-            if (!isValidHorOrVerMove(y - 1, x) || !isValidHorOrVerMove(y, x - 1)) {
+            if (!isValidHorOrVerMove(y - 1, x) && !isValidHorOrVerMove(y, x - 1)) {
                 return false;
             }
         } else if (y < prevY && x > prevX) {
-            if (!isValidHorOrVerMove(y, x - 1) || !isValidHorOrVerMove(y + 1, x)) {
+            if (!isValidHorOrVerMove(y, x - 1) && !isValidHorOrVerMove(y + 1, x)) {
                 return false;
             }
         } else if (y < prevY && x < prevX) {
-            if (!isValidHorOrVerMove(y, x + 1) || !isValidHorOrVerMove(y + 1, x)) {
+            if (!isValidHorOrVerMove(y, x + 1) && !isValidHorOrVerMove(y + 1, x)) {
                 return false;
             }
         } else if (y > prevY && x < prevX) {
-            if (!isValidHorOrVerMove(y - 1, x) || !isValidHorOrVerMove(y, x + 1)) {
+            if (!isValidHorOrVerMove(y - 1, x) && !isValidHorOrVerMove(y, x + 1)) {
                 return false;
             }
         }

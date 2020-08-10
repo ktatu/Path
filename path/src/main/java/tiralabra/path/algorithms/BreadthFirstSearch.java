@@ -1,6 +1,6 @@
 package tiralabra.path.algorithms;
 
-import java.util.ArrayDeque;
+import tiralabra.path.datastructures.Queue;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
@@ -10,8 +10,8 @@ import tiralabra.path.logic.Scenario;
  */
 public class BreadthFirstSearch extends Algorithm {
     
-    // Grids are stored as integers into a first-in-first-out queue for BFS algorithm
-    private ArrayDeque<Integer> queue;
+    // Grids are stored as integers into a first-in-first-out queue
+    private Queue queue;
     
     /**
      * Makes a call to Algorithm to set data structures and initializes queue
@@ -20,7 +20,7 @@ public class BreadthFirstSearch extends Algorithm {
      */
     public BreadthFirstSearch(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
-        this.queue = new ArrayDeque<>();
+        this.queue = new Queue(gridMap.getMapHeight() * gridMap.getMapWidth());
     }
     
     /**
@@ -49,7 +49,7 @@ public class BreadthFirstSearch extends Algorithm {
             if (goalVisited()) {
                 break;
             }
-            int gridAsInt = queue.pollFirst();
+            int gridAsInt = queue.poll();
             
             int gridY = intToGridY(gridAsInt);
             int gridX = intToGridX(gridAsInt);

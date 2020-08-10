@@ -42,13 +42,11 @@ public class DijkstraTest extends AlgorithmSetup {
     
     @Test
     public void dijkstraFindsShortestPathsOnCustomMap() {
-        float[] expectedResults = {2, 4, 2, Integer.MAX_VALUE, sqrtTwo};
-        
         for (int i = 0; i < customScenarios.size(); i++) {
             Algorithm dij = new Dijkstra(customMap, customScenarios.get(i));
             dij.runAlgorithm();
             
-            if (Math.abs(dij.getPathLength() - expectedResults[i]) > 0.001) {
+            if (Math.abs(dij.getPathLength() - util.expectedResults[i]) > 0.001) {
                 fail("dijkstra didn't find the shortest path in custom map");
             }
         }

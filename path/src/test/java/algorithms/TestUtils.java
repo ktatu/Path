@@ -9,7 +9,7 @@ import tiralabra.path.logic.Scenario;
  */
 public class TestUtils {
     
-    public float[] expectedResults = {2, 4, 2, Integer.MAX_VALUE, sqrtTwo};
+    public float[] expectedResults = {sqrtTwo, 2*sqrtTwo, 2, Integer.MAX_VALUE, sqrtTwo};
     
     public float diagonalDistance(int startY, int startX, int goalY, int goalX) {
         int diagonalMoves = Math.min(Math.abs(goalY - startY), Math.abs(goalX - startX));

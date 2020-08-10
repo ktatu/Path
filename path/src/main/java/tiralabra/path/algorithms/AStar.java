@@ -18,7 +18,6 @@ public class AStar extends Dijkstra {
      */
     public AStar(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
-        prioQueue = new PriorityQueue<>();
     }
 
     /**
@@ -35,7 +34,7 @@ public class AStar extends Dijkstra {
             }
         }
         distance[startY][startX] = 0;
-        prioQueue.add(new Grid(startY, startX, 0, diagonalDistance(startY, startX)));
+        prioQueue.add(new Grid(startY, startX, 0, diagonalDistanceToGoal(startY, startX)));
     }
     
     private void checkGrid(int gridY, int gridX, Grid grid, boolean diagonal) {
@@ -45,11 +44,11 @@ public class AStar extends Dijkstra {
         if (newDistance < distance[gridY][gridX]) {
             distance[gridY][gridX] = newDistance;
             prevGrid[gridToInt(gridY, gridX)] = gridToInt(grid.getY(), grid.getX());
-            prioQueue.add(new Grid(gridY, gridX, newDistance, diagonalDistance(gridY, gridX)));
+            prioQueue.add(new Grid(gridY, gridX, newDistance, diagonalDistanceToGoal(gridY, gridX)));
         }
     }
     
-    private float diagonalDistance(int y, int x) {
+    private float diagonalDistanceToGoal(int y, int x) {
         int distanceY = Math.abs(scen.getGoalY() - y);
         int distanceX = Math.abs(scen.getGoalX() - x);
         

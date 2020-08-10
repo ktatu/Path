@@ -1,5 +1,6 @@
 package tiralabra.path.ui;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import tiralabra.path.algorithms.AStar;
@@ -55,20 +56,14 @@ Scenario goal: 6, 2
         */
         
         
+        
         GridMap map = mapReader.getGridMap("src/battleground.map");
-        
-        
-        // reitti n. 530, toimi 4.8 19.00
-        /*
-        Algorithm dijkstra = new Dijkstra(map, new Scenario(86, 59, 426, 414));
-        dijkstra.runAlgorithm();
-        */
         
         // sama kuin ylläoleva mutta eri mapissa
        
         Algorithm bfs = new BreadthFirstSearch(map, new Scenario(86, 59, 426, 414));
         bfs.runAlgorithm();
-        System.out.println("run time bfs " + bfs.getRunTime());
+        System.out.println("runtime bfs " + bfs.getRunTime());
         
         Algorithm dijkstra2 = new Dijkstra(map, new Scenario(86, 59, 426, 414));
         dijkstra2.runAlgorithm();
@@ -81,7 +76,15 @@ Scenario goal: 6, 2
         aStar.runAlgorithm();
         System.out.println("runtime aStar " + aStar.getRunTime());
         //aStar.printPath();
+        ArrayDeque<Integer> asd = new ArrayDeque<>();
+        int testi = (int) (6.0/7.0*9);
+        System.out.println(testi);
         
+        int[] testi2 = new int[3];
+        System.out.println(testi2[2]);
+        
+        ArrayDeque<Integer> testi3 = new ArrayDeque<>();
+        System.out.println(testi3.pollFirst());
     }
 }
 
@@ -102,3 +105,11 @@ goal(y,x): 5, 7
 start char: .
 goal char: .
 */
+
+
+        // reitti n. 530, toimi 4.8 19.00
+        /*
+        Algorithm dijkstra = new Dijkstra(map, new Scenario(86, 59, 426, 414));
+        dijkstra.runAlgorithm();
+        */
+        
