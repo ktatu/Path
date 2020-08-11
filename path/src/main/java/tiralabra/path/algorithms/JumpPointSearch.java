@@ -1,16 +1,16 @@
 package tiralabra.path.algorithms;
 
+import java.util.ArrayList;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
 /**
- *
+ * Jump Point Search based on Daniel Harabor's and Alban Grastien's paper "Online Graph Pruning for Pathfinding on Grid Maps (january 2011)"
  * @author Tatu
  */
 public class JumpPointSearch extends Dijkstra {
     
-
     public JumpPointSearch(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
     }
@@ -49,89 +49,81 @@ public class JumpPointSearch extends Dijkstra {
                 break;
             }
             
-            checkGrid(gridY - 1, gridX, current, false);
-            checkGrid(gridY + 1, gridX, current, false);
-            checkGrid(gridY, gridX - 1, current, false);
-            checkGrid(gridY, gridX + 1, current, false);
-
-            checkGrid(gridY - 1, gridX - 1, current, true);
-            checkGrid(gridY - 1, gridX + 1, current, true);
-            checkGrid(gridY + 1, gridX - 1, current, true);
-            checkGrid(gridY + 1, gridX + 1, current, true);
+            ArrayList<Integer> prunedNeighbors = pruneNeighbors(gridY, gridX);
+            for (int neighbor : prunedNeighbors) {
+                int directionY = intToGridY(neighbor) - gridY;
+                int directionX = intToGridX(neighbor) - gridX;
+                
+                checkDirection(gridY, gridX, directionY, directionX);
+            }
         }
         endTime = System.nanoTime();
     }
     
-    private void checkGrid(int y, int x, Grid grid, boolean diagonal) {
-        if (gridIsPruned(y, x, grid, diagonal)) {
-            return;
-        }
+    // pruned grids are directions from y,x that are not worth scanning with jump()
+    private ArrayList<Integer> pruneNeighbors(int y, int x) {
+        ArrayList<Integer> prunedNeighbors = new ArrayList<>();
+        // if (y,x) is start grid then nothing should be pruned
+        boolean isStartGrid = (scen.getStartY() == y && scen.getStartX() == x);
         
-        int directionY = y - grid.getY();
-        int directionX = x - grid.getX();
-        
-        int jumpPoint = jump(y, x, directionY, directionX, grid, diagonal);
-        if (jumpPoint != -1) {
-            int jumpPointY = intToGridY(jumpPoint);
-            int jumpPointX = intToGridX(jumpPoint);
-            
-            float distToNewJumpPoint = distance[grid.getY()][grid.getX()] + diagonalDistance(grid.getY(), grid.getX(), jumpPointY, jumpPointX);
-            float heuristicDistToGoal = diagonalDistance(jumpPointY, jumpPointX, scen.getGoalY(), scen.getGoalX());
-            
-            prioQueue.add(new Grid(jumpPointY, jumpPointX, distToNewJumpPoint, heuristicDistToGoal));
-            distance[jumpPointY][jumpPointX] = distToNewJumpPoint;
-            prevGrid[gridToInt(y, x)] = gridToInt(grid.getY(), grid.getX());
+        for (int neighborY = y - 1; neighborY <= y + 1; neighborY++) {
+            for (int neighborX = x - 1; neighborX <= x + 1; neighborX++) {
+                if (neighborY == y && neighborX == x || outOfBounds(neighborY, neighborX)) {
+                    continue;
+                }
+                if (isStartGrid) {
+                    prunedNeighbors.add(gridToInt(neighborY, neighborX));
+                } else {
+                    if (!pruneByDistance(y, x, neighborY, neighborX)) {
+                        prunedNeighbors.add(gridToInt(neighborY, neighborX));
+                    }
+                }
+            }
         }
+        return prunedNeighbors;
     }
     
-    /**
-     * Grids that don't survive pruning are not needed for finding optimal path and thus don't require scanning with jump()
-     * Pruning only eliminates based on movement direction, terrain related elimination happens in jump()
-     * @param y coordinate of the grid being pruned
-     * @param x coordinate of the grid being pruned
-     * @param grid whose neighbors are being pruned
-     * @param diagonal
-     * @return 
-     */
-    private boolean gridIsPruned(int y, int x, Grid grid, boolean diagonal) {
-        int parentGrid = prevGrid[gridToInt(grid.getY(), grid.getX())];
+    private boolean pruneByDistance(int y, int x, int neighborY, int neighborX) {
+        int parentAsInt = prevGrid[gridToInt(y, x)];
+        int parentY = intToGridY(parentAsInt);
+        int parentX = intToGridX(parentAsInt);
         
-        // parentGrid being -1 means that parameter grid is the start of algorithm and no pruning should be made 
-        if (parentGrid == -1) {
-            return false;
-        }
+        boolean diagonalMove = (y - parentY != 0 && x - parentX != 0);
         
-        int parentY = intToGridY(parentGrid);
-        int parentX = intToGridX(parentGrid);
-        float distThroughGrid = diagonalDistance(parentY, parentX, grid.getY(), grid.getX()) + diagonalDistance(grid.getY(), grid.getX(), y, x);
-        
-        // Grids are pruned by comparing distances parent(grid)->grid->neighborGrid and parent(grid)->neighborGrid
-        if (diagonal) {
-            if (diagonalDistance(parentY, parentX, y, x) < distThroughGrid) {
+        float distThroughGrid = diagonalDistance(parentY, parentX, y, x) + diagonalDistance(y, x, neighborY, neighborX);
+        if (diagonalMove) {
+            if (diagonalDistance(parentY, parentX, neighborY, neighborX) < distThroughGrid) {
                 return true;
-            }            
+            }
         } else {
-            if (diagonalDistance(parentY, parentX, y, x) <= distThroughGrid) {
+            if (diagonalDistance(parentY, parentX, neighborY, neighborX) < distThroughGrid) {
                 return true;
-            }            
+            }
         }
-        
         return false;
     }
     
-    /**
-     * Recursively scans a direction determined by a grid and its predecessor, returns a jump point (grid as integer) if it finds one
-     * @param y
-     * @param x
-     * @param directionY
-     * @param directionX
-     * @param pred
-     * @param diagonal
-     * @return 
-     */
-    private int jump(int y, int x, int directionY, int directionX, Grid pred, boolean diagonal) {
+    private void checkDirection(int y, int x, int directionY, int directionX) {
+        int jumpPoint = jump(y, x, directionY, directionX);
+        if (jumpPoint != -1) {
+            int jumpPointY = intToGridY(jumpPoint);
+            int jumpPointX = intToGridX(jumpPoint);
+            //System.out.println("lisätään jump point " + jumpPointY + ", " + jumpPointX);
+            
+            float distToNewJumpPoint = distance[y][x] + diagonalDistance(y, x, jumpPointY, jumpPointX);
+            float heuristicEstimate = diagonalDistance(jumpPointY, jumpPointX, scen.getGoalY(), scen.getGoalX());
+            
+            distance[jumpPointY][jumpPointX] = distToNewJumpPoint;
+            prevGrid[gridToInt(jumpPointY, jumpPointX)] = gridToInt(y, x);
+            prioQueue.add(new Grid(jumpPointY, jumpPointX, distToNewJumpPoint, heuristicEstimate));
+            jumpPoints++;
+        }
+    }
+    
+    private int jump(int y, int x, int directionY, int directionX) {
         int nextY = y + directionY;
         int nextX = x + directionX;
+        boolean diagonal = (directionY != 0 && directionX != 0);
         
         if (!isMovePossible(nextY, nextX, y, x, diagonal)) {
             return -1;
@@ -141,76 +133,70 @@ public class JumpPointSearch extends Dijkstra {
             return gridToInt(nextY, nextX);
         }
         
-        if (anyForcedNeighbors(nextY, nextX, pred.getY(), pred.getX())) {
-            return gridToInt(nextY, nextX);
-        }
-        
         if (diagonal) {
-            if (jump(nextY, nextX, directionY, 0, pred, false) != -1 || jump(nextY, nextX, 0, directionX, pred, false) != -1) {
+            if (forcedGridOnDiagonal(nextY, nextX, y, x)) {
+                return gridToInt(nextY, nextX);
+            }
+        } else {
+            if (forcedVerticalOrHorizontal(nextY, nextX, (directionY != 0))) {
                 return gridToInt(nextY, nextX);
             }
         }
         
-        return jump(nextY, nextX, directionY, directionX, pred, diagonal);
-    }
-    
-    // Node n' of neighbors(n) is forced if:
-    // 1) n' is not a natural neighbor of n
-    // 2) len p(n)->n->n' < len p(n)->n' \ n
-    /**
-     * Goes through grid(y,x)'s neighbors and checks if any are forced
-     * @param y coordinate
-     * @param x coordinate
-     * @return true if any of the neighboring grids are forced
-     */
-    private boolean anyForcedNeighbors(int y, int x, int parentY, int parentX) {
-        for (int y2 = y - 1; y2 <= y + 1; y2++) {
-            for (int x2 = x - 1; x2 <= x + 1; x2++) {
-                if (y2 == y && x2 == x) {
-                    continue;
-                }
-                if (checkIfForced(y, x, y2, x2, parentY, parentX)) {
-                    return true;
-                }
+        if (diagonal) {
+            if (jump(nextY, nextX, directionY, 0) != -1 || jump(nextY, nextX, 0, directionX) != -1) {
+                return gridToInt(nextY, nextX);
             }
         }
-        return false;
-    }
-    
-    // testi: riittääkö tarkastaa, että x:n ja sen naapurin vieressä on blokattu ruutu, kun lyhin reitti parent(x):stä on <= reitti p(x)->x->naapuri?
-    private boolean checkIfForced(int y, int x, int neighborY, int neighborX, int parentY, int parentX) {
-        float distThroughGrid = diagonalDistance(parentY, parentX, y, x) + diagonalDistance(y, x, neighborY, neighborX);
-        if (distThroughGrid <= diagonalDistance(parentY, parentX, y, x)) {
-            if (adjacentGridIsUnpassable(y, x, neighborY, neighborX)) {
-                return true;
-            }
-        }
-        return false;
+        
+        return jump(nextY, nextX, directionY, directionX);
     }
     
     /**
      * Forced neighbors only occur when a grid adjacent to x and its neighbor is unpassable
      * @param y coordinate
      * @param x coordinate
-     * @param neighborY coordinate of neighbor being checked
-     * @param neighborX coordinate of neighbor being checked
+     * @param prevY coordinate of neighbor being checked
+     * @param prevX coordinate of neighbor being checked
      * @return true if there is an adjacent unpassable grid
      */
-    private boolean adjacentGridIsUnpassable(int y, int x, int neighborY, int neighborX) {
-        if (y > neighborY && x > neighborX) {
+    private boolean forcedGridOnDiagonal(int y, int x, int prevY, int prevX) {
+        if (y > prevY && x > prevX) {
             if (!isValidHorOrVerMove(y - 1, x) || !isValidHorOrVerMove(y, x - 1)) {
                 return true;
             }
-        } else if (y < neighborY && x > neighborX) {
+        } else if (y < prevY && x > prevX) {
             if (!isValidHorOrVerMove(y, x - 1) || !isValidHorOrVerMove(y + 1, x)) {
                 return true;
             }
-        } else if (y < neighborY && x < neighborX) {
+        } else if (y < prevY && x < prevX) {
             if (!isValidHorOrVerMove(y, x + 1) || !isValidHorOrVerMove(y + 1, x)) {
                 return true;
             }
-        } else if (y > neighborY && x < neighborX) {
+        } else if (y > prevY && x < prevX) {
             if (!isValidHorOrVerMove(y - 1, x) || !isValidHorOrVerMove(y, x + 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean forcedVerticalOrHorizontal(int y, int x, boolean verticalMove) {
+        if (verticalMove) {
+            if (isForced(y, x - 1) || isForced(y, x + 1)) {
+                return true;
+            }
+        } else {
+            if (isForced(y - 1, x) || isForced(y + 1, x)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean isForced(int y, int x) {
+        if (!outOfBounds(y, x)) {
+            if (!gridMap.isPassable(gridMap.getGrid(y, x))) {
                 return true;
             }
         }

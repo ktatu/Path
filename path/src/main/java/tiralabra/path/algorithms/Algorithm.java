@@ -11,6 +11,8 @@ import tiralabra.path.logic.Scenario;
  */
 public abstract class Algorithm {
     
+    public int jumpPoints = 1;
+    
     protected long startTime;
     protected long endTime;
     
@@ -56,13 +58,17 @@ public abstract class Algorithm {
      * @return true if grid can be moved to, otherwise false
      */
     protected boolean isValidHorOrVerMove(int y, int x) {
+        if (outOfBounds(y, x)) {
+            return false;
+        }
+        return gridMap.isPassable(gridMap.getGrid(y, x));
+    }
+    
+    protected boolean outOfBounds(int y, int x) {
         if (y < 0 || y >= gridMap.getMapHeight() || x < 0 || x >= gridMap.getMapWidth()) {
-            return false;
+            return true;
         }
-        if (!gridMap.isPassable(gridMap.getGrid(y, x))) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     /**
@@ -137,5 +143,9 @@ public abstract class Algorithm {
             int x = intToGridX(grid);
             System.out.println("y: " + y + ", x: " + x);
         }
+    }
+
+    public int getJumpPoints() {
+        return jumpPoints;
     }
 }
