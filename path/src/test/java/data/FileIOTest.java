@@ -28,19 +28,13 @@ public class FileIOTest extends FileManagement {
         testArrayList.add("version 1");
         testArrayList.add("a_scenario_here");
         writeIntoFile(testIOFile, testArrayList);
-        assertEquals(testArrayList, testFileIO.collectFileToList(testIOFile.getPath()));
+        assertEquals(testArrayList, testFileIO.collectFileToList(testIOFile));
     }
     
     @Test
     public void emptyArrayListIsReturnedDueToEmptyFile() throws IOException {
         writeIntoFile(testIOFile, testArrayList);
-        ArrayList<String> returnedList = testFileIO.collectFileToList(testIOFile.getPath());
+        ArrayList<String> returnedList = testFileIO.collectFileToList(testIOFile);
         assertTrue(returnedList.isEmpty());
-    }
-    
-    // exception message can be read in output
-    @Test
-    public void fileNotFoundExceptionIsCaught() {
-        testFileIO.collectFileToList("nonExistentFile.map");
     }
 }

@@ -62,12 +62,12 @@ public class Grid implements Comparable<Grid> {
             }
             return 1;
         } else {
-            if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) <= 0) {
+            if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) < 0) {
                 return -1;
+            } else if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) == 0) {
+                return 0;
             }
             return 1;
         }
     }
-    
-    
 }

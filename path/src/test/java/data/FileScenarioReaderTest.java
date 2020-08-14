@@ -29,7 +29,7 @@ public class FileScenarioReaderTest extends FileManagement {
         testArrayList.add("0	test.map	10	10	3	2	0	3	0");
         writeIntoFile(testIOFile, testArrayList);
         
-        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile.getPath());
+        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile);
         
         assertEquals(4, scenList.get(0).getStartY());
         assertEquals(1, scenList.get(0).getStartX());
@@ -50,7 +50,7 @@ public class FileScenarioReaderTest extends FileManagement {
         testArrayList.add("0	test.map	10	10	3	2	0	3	0");
         writeIntoFile(testIOFile, testArrayList);
         
-        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile.getPath());
+        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile);
         assertEquals(1, scenList.size());
     }
     
@@ -59,7 +59,7 @@ public class FileScenarioReaderTest extends FileManagement {
         testArrayList.add("version 1");
         writeIntoFile(testIOFile, testArrayList);
         
-       ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile.getPath());
+       ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile);
        assertEquals(0, scenList.size());
     }
     
@@ -67,7 +67,7 @@ public class FileScenarioReaderTest extends FileManagement {
     public void emptyFileMakesReaderReturnEmptyArrayList() {
         writeIntoFile(testIOFile, testArrayList);
         
-        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile.getPath());
+        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile);
         assertEquals(0, scenList.size());
     }
     
@@ -77,7 +77,7 @@ public class FileScenarioReaderTest extends FileManagement {
         testArrayList.add("0	test.map	10	10	3	2	0	3	0	1");
         writeIntoFile(testIOFile, testArrayList);
         
-        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile.getPath());
+        ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile);
         assertEquals(0, scenList.size());
     }
     
@@ -87,6 +87,6 @@ public class FileScenarioReaderTest extends FileManagement {
         testArrayList.add("0	test.map	10	10	@	2	0	3	0");
         writeIntoFile(testIOFile, testArrayList);
         
-        testScenReader.collectScenarios(testIOFile.getPath());
+        testScenReader.collectScenarios(testIOFile);
     }
 }

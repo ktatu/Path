@@ -3,7 +3,6 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.Random;
 import org.junit.BeforeClass;
-import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 import tiralabra.path.logic.ScenarioValidation;
@@ -49,7 +48,7 @@ public class AlgorithmSetup {
     
     // if distanceTest is true then method returns a map consisting of only passable terrain
     public static GridMap createTestMap(boolean distanceTest) {
-        char[][] gridMap = new char[10][10];
+        char[][] gridMap = new char[20][20];
         
         for (int y = 0; y < gridMap.length; y++) {
             for (int x = 0; x < gridMap[0].length; x++) {
@@ -73,7 +72,7 @@ public class AlgorithmSetup {
     private static ArrayList<Scenario> createValidScenarios(GridMap testMap) {
         ArrayList<Scenario> newScenarios = new ArrayList<>();
         
-        while (newScenarios.size() < 1) {
+        while (newScenarios.size() < 5) {
             int hLimit = testMap.getMapHeight();
             int wLimit = testMap.getMapWidth();
             

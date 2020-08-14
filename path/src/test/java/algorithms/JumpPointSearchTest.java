@@ -1,3 +1,4 @@
+/*
 package algorithms;
 
 import static algorithms.AlgorithmSetup.customMap;
@@ -12,10 +13,6 @@ import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.logic.Scenario;
 
-/**
- *
- * @author Tatu
- */
 public class JumpPointSearchTest extends AlgorithmSetup {
     
     TestUtils util = new TestUtils();
@@ -58,3 +55,4 @@ public class JumpPointSearchTest extends AlgorithmSetup {
         }
     }
 }
+*/

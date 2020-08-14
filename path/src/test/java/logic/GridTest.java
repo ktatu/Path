@@ -14,8 +14,6 @@ import tiralabra.path.logic.Grid;
  */
 public class GridTest {
     
-    // the one being compared to should always be lesser in cases of equal values, no reason to implement equality between grids for algorithms
-    
     @Test
     public void gridsWithNoHeuristicAreComparedCorrectly() {
         Grid dijGrid1 = new Grid(5, 5, 10);
@@ -41,8 +39,8 @@ public class GridTest {
         
         Grid heurGrid3 = new Grid(0, 0, 4, 6);
         Grid heurGrid4 = new Grid(0, 1, 6, 4);
-        assertEquals(-1, heurGrid3.compareTo(heurGrid4));
-        assertEquals(-1, heurGrid4.compareTo(heurGrid3));
+        assertEquals(0, heurGrid3.compareTo(heurGrid4));
+        assertEquals(0, heurGrid4.compareTo(heurGrid3));
         
         Grid heurGrid5 = new Grid(0, 0, 1, 10);
         Grid heurGrid6 = new Grid(2, 2, 4, 4);

@@ -6,6 +6,7 @@ import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
 /**
+ * Ei toimi vielä kunnolla
  * Jump Point Search based on Daniel Harabor's and Alban Grastien's paper "Online Graph Pruning for Pathfinding on Grid Maps (january 2011)"
  * @author Tatu
  */

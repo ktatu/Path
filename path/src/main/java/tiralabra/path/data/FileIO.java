@@ -1,6 +1,7 @@
 package tiralabra.path.data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +10,6 @@ import java.util.stream.Collectors;
 
 /**
  * All file related functionalities happen through FileIO
- * 
  */
 public class FileIO {
 
@@ -30,13 +30,13 @@ public class FileIO {
     
     /**
      * Reads every line of a file and collects them into an ArrayList
-     * @param filePath path to the file
+     * @param file 
      * @return the file collected into an ArrayList
      */
-    public ArrayList<String> collectFileToList(String filePath) {
+    public ArrayList<String> collectFileToList(File file) {
         ArrayList<String> fileAsList = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
             fileAsList = reader.lines().collect(Collectors.toCollection(ArrayList::new));
             reader.close();
         } catch (IOException ex) {

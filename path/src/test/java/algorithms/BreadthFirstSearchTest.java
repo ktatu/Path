@@ -31,11 +31,16 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
     // shortest path for BFS means manhattan distance from start to goal
     @Test
     public void bfsFindsShortestPathOnEmptyMap() {
+        System.out.println("leveys "+distanceTestMap.getMapHeight());
+        System.out.println("pituus "+distanceTestMap.getMapWidth());
         for (Scenario scen : scenarios) {
+            System.out.println(scen.getGoalX());
+            System.out.println(scen.getGoalY());
+            System.out.println(scen.getStartX());
+            System.out.println(scen.getStartY());
             Algorithm bfs = new BreadthFirstSearch(distanceTestMap, scen);
             bfs.runAlgorithm();
             if (Math.abs(bfs.getPathLength() - manhattanDistance(scen)) > 0.1) {
-                System.out.println(Math.abs(bfs.getPathLength() - manhattanDistance(scen)));
                 fail("bfs didn't find the shortest path");
             }
         }

@@ -1,5 +1,6 @@
 package tiralabra.path.data;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import tiralabra.path.logic.Scenario;
@@ -18,11 +19,11 @@ public class FileScenarioReader {
     
     /**
      * Gets the .scen file as an ArrayList from FileIO and collects them into a list of scenarios
-     * @param scenFilePath directory for the .scen file
+     * @param file .scen file
      * @return list of Scenarios
      */
-    public ArrayList<Scenario> collectScenarios(String scenFilePath) {
-        ArrayList<String> scenFileAsList = fileIO.collectFileToList(scenFilePath);
+    public ArrayList<Scenario> collectScenarios(File file) {
+        ArrayList<String> scenFileAsList = fileIO.collectFileToList(file);
         ArrayList<Scenario> scenarios = new ArrayList<>();
         
         for (int i = 1; i < scenFileAsList.size(); i++) {

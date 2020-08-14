@@ -1,5 +1,6 @@
 package tiralabra.path.data;
 
+import java.io.File;
 import java.util.ArrayList;
 import tiralabra.path.logic.GridMap;
 
@@ -9,7 +10,7 @@ import tiralabra.path.logic.GridMap;
  */
 public class FileGridMapReader {
     
-    FileIO fileIO;
+    private FileIO fileIO;
     
     // Variables related to Moving Ai file format
     private int heightRow = 1;
@@ -25,11 +26,11 @@ public class FileGridMapReader {
     
     /**
      * Creates a matrix map for a GridMap by going through every cell of the map and returns the GridMap
-     * @param mapFilePath directory for the .map file to be converted into a map
+     * @param file the file to be converted into a map
      * @return GridMap which will be used by pathfinding algorithms
      */
-    public GridMap getGridMap(String mapFilePath) {
-        ArrayList<String> gridMapFileAsList = fileIO.collectFileToList(mapFilePath);
+    public GridMap getGridMap(File file) throws IndexOutOfBoundsException, NumberFormatException {
+        ArrayList<String> gridMapFileAsList = fileIO.collectFileToList(file);
         
         int height = Integer.valueOf(gridMapFileAsList.get(heightRow).split(" ")[1]);
         int width = Integer.valueOf(gridMapFileAsList.get(widthRow).split(" ")[1]);

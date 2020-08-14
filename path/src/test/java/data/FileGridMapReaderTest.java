@@ -71,7 +71,7 @@ public class FileGridMapReaderTest extends FileManagement {
         testArrayList.add("U?.");
         writeIntoFile(testIOFile, testArrayList);
         
-        GridMap gridMap = testMapReader.getGridMap(testIOFile.getPath());
+        GridMap gridMap = testMapReader.getGridMap(testIOFile);
         
         for (int y = 0; y < gridMap.getMapHeight(); y++) {
             for (int x = 0; x < gridMap.getMapWidth(); x++) {
@@ -124,6 +124,6 @@ public class FileGridMapReaderTest extends FileManagement {
     
     public void writeFileThenReadIt(File file, ArrayList<String> testList) {
         writeIntoFile(file, testList);
-        testMapReader.getGridMap(file.getPath());
+        testMapReader.getGridMap(file);
     }
 }
