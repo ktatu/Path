@@ -71,12 +71,12 @@ public class FifoQueueTest {
     */
     @Test
     public void queueIsEmptyAsExpected() {
-        assertEquals(true, testQueue.isEmpty());
+        assertTrue(testQueue.isEmpty());
         
         testQueue.add(1);
-        assertEquals(false, testQueue.isEmpty());
+        assertFalse(testQueue.isEmpty());
         
         testQueue.poll();
-        assertEquals(true, testQueue.isEmpty());
+        assertTrue(testQueue.isEmpty());
     }
 }

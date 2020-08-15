@@ -54,6 +54,8 @@ public class Grid implements Comparable<Grid> {
      * @param o comparable object
      * @return the result of comparison
      */
+    
+    /*
     @Override
     public int compareTo(Grid o) {
         if (estimation == 0) {
@@ -70,4 +72,45 @@ public class Grid implements Comparable<Grid> {
             return 1;
         }
     }
+    */
+    
+    
+    @Override
+    public int compareTo(Grid o) {
+        if (this.getEstimation() == 0 && o.getEstimation() == 0) {
+            if (this.getDistance() <= o.getDistance()) {
+                return -1;
+            }
+            return 1;
+        } else {
+            float sumThis = Float.sum(this.getDistance(), this.getEstimation());
+            float sumO = Float.sum(o.getDistance(), o.getEstimation());
+            
+            if (sumThis < sumO) {
+                return -1;
+            } else if (sumThis == sumO) {
+                return 0;
+            }
+            return 1;
+        }
+    }
+    
+    /*
+    @Override
+    public int compareTo(Grid o) {
+        if (estimation == 0) {
+            if (this.getDistance() - o.getDistance() <= 0) {
+                return -1;
+            }
+            return 1;
+        } else {
+            if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) < 0) {
+                return -1;
+            } else if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) == 0) {
+                return 0;
+            }
+            return 1;
+        }
+    }
+    */
 }

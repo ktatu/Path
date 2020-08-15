@@ -1,6 +1,7 @@
 package tiralabra.path.algorithms;
 
 import java.util.PriorityQueue;
+import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -12,10 +13,12 @@ import tiralabra.path.logic.Scenario;
 public class Dijkstra extends Algorithm {
 
     protected PriorityQueue<Grid> prioQueue;
+      //protected PrioQueue prioQueue;
     
     public Dijkstra(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
         this.prioQueue = new PriorityQueue<>();
+        //this.prioQueue = new PrioQueue(gridMap.getMapHeight() * gridMap.getMapWidth());
     }
 
     /**
@@ -82,6 +85,7 @@ public class Dijkstra extends Algorithm {
         if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal) || visited[y][x]) {
             return;
         }
+        
         
         float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
         if (newDistance < distance[y][x]) {

@@ -11,6 +11,7 @@ import tiralabra.path.logic.Scenario;
  */
 public abstract class Algorithm {
     
+    // tilapäinen
     public int jumpPoints = 1;
     
     protected long startTime;
@@ -18,15 +19,16 @@ public abstract class Algorithm {
     
     // Keeps track of what was each grid's predecessor
     // Each cell in prevGrid[] represents a grid, which has been converted into an integer based on its coordinates
-    protected int[] prevGrid;
+    public int[] prevGrid;
     // Distance from start grid to others
     protected float[][] distance;
-    protected boolean[][] visited;
+    public boolean[][] visited;
     
     protected Scenario scen;
     protected GridMap gridMap;
     
-    float sqrtTwo = (float) Math.sqrt(2);
+    //float sqrtTwo = (float) Math.sqrt(2);
+    float sqrtTwo = (float) 1.4;
     
     /**
      * Sets up data structures for algorithms
@@ -77,7 +79,7 @@ public abstract class Algorithm {
      * @param x coordinate
      * @return Grid's value as integer.
      */
-    protected int gridToInt(int y, int x) {
+    public int gridToInt(int y, int x) {
         return y * gridMap.getMapWidth() + x;
     }
     
@@ -86,7 +88,7 @@ public abstract class Algorithm {
      * @param gridAsInteger grid's integer value
      * @return y coordinate of the grid
      */
-    protected int intToGridY(int gridAsInteger) {
+    public int intToGridY(int gridAsInteger) {
         return gridAsInteger / gridMap.getMapWidth();
     }
     
@@ -95,7 +97,7 @@ public abstract class Algorithm {
      * @param gridAsInteger grid's integer value
      * @return x coordinate of the grid
      */
-    protected int intToGridX(int gridAsInteger) {
+    public int intToGridX(int gridAsInteger) {
         return gridAsInteger % gridMap.getMapWidth();
     }
     

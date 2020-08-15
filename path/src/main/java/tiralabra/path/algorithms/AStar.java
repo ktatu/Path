@@ -30,11 +30,46 @@ public class AStar extends Dijkstra {
         
         for (int y = 0; y < gridMap.getMapHeight(); y++) {
             for (int x = 0; x < gridMap.getMapWidth(); x++) {
-                distance[y][x] = Integer.MAX_VALUE;
+                distance[y][x] = 1000000;
             }
         }
         distance[startY][startX] = 0;
         prioQueue.add(new Grid(startY, startX, 0, diagonalDistanceToGoal(startY, startX)));
+    }
+    
+    @Override
+    public void runAlgorithm() {
+        initializeAlgorithm();
+        
+        startTime = System.nanoTime();
+        while (!prioQueue.isEmpty()) {
+            Grid current = prioQueue.poll(); 
+            int gridY = current.getY();
+            int gridX = current.getX();
+            
+            //System.out.println("x,y "+ gridX+","+gridY);
+            
+            if (visited[gridY][gridX]) {
+                continue;
+            }
+            
+            visited[gridY][gridX] = true;
+            
+            if (goalVisited()) {
+                break;
+            }
+            
+            checkGrid(gridY - 1, gridX, current, false);
+            checkGrid(gridY + 1, gridX, current, false);
+            checkGrid(gridY, gridX - 1, current, false);
+            checkGrid(gridY, gridX + 1, current, false);
+
+            checkGrid(gridY - 1, gridX - 1, current, true);
+            checkGrid(gridY - 1, gridX + 1, current, true);
+            checkGrid(gridY + 1, gridX - 1, current, true);
+            checkGrid(gridY + 1, gridX + 1, current, true);
+        }
+        endTime = System.nanoTime();
     }
     
     private void checkGrid(int gridY, int gridX, Grid grid, boolean diagonal) {

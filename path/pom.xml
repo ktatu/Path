@@ -12,6 +12,14 @@
     </properties>
     
     <dependencies>
+        
+        <!-- Tilapäinen algoritmin kuvan tallennusta varten, poista myöhemmin -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

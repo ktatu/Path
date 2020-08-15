@@ -1,13 +1,7 @@
 package datastructures;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.PriorityQueue;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tiralabra.path.datastructures.PrioQueue;
@@ -27,32 +21,99 @@ public class PrioQueueTest {
         testQueue = new PrioQueue(1000);
     }
 
+    
     @Test
-    public void prioQueueReturnsIntegersInCorrectOrder() {
-        PriorityQueue<Grid> comparisonQueue = new PriorityQueue<>(10, Collections.reverseOrder());
+    public void correctPrioQueueOrderWithTwoGrids() {
+        testQueue.add(new Grid(0, 0, 0, 5));
+        testQueue.add(new Grid(0, 0, 4, 0));
+        
+        Grid polled = testQueue.poll();
+        System.out.println(polled.getDistance()+"------------"+polled.getEstimation());
+    }
+    
+    
+    @Test
+    public void prioQueueReturnsIntegersInCorrectOrderUsingDistanceVariable() {
+        float min;
         
         for (int i = 0; i < 1000; i++) {
-            int rDistance = r.nextInt(1000);
-            int rEstimation = r.nextInt(1000);
-            testQueue.add(new Grid(0, 0, rDistance, rEstimation));
+            testQueue.add(new Grid(0, 0, r.nextInt(1000000), 0));
         }
         
-        comparisonQueue.add(testQueue.poll());
-        // Tests that every polled grid from min heap (testQueue) is bigger than every grid in max heap of already polled grids
+        min = testQueue.poll().getDistance();
+        
         while(!testQueue.isEmpty()) {
             Grid polled = testQueue.poll();
-            Grid biggestInMaxHeap = comparisonQueue.peek();
-            
-            System.out.println("--------");
-            System.out.println("prion suurin " + biggestInMaxHeap.getDistance() + ", " + biggestInMaxHeap.getEstimation());
-            System.out.println("pollattu " + polled.getDistance() + ", " + polled.getEstimation());
-            System.out.println("--------");
-
-            testQueue.printFirstOpenCell();
-            if (Math.abs(polled.getDistance() + polled.getEstimation() - biggestInMaxHeap.getDistance() - biggestInMaxHeap.getEstimation()) > 0.0001) {
-                assertEquals(-1, biggestInMaxHeap.compareTo(polled));
-            }
-            comparisonQueue.add(polled);
+            assertTrue(min < polled.getDistance() || min == polled.getDistance());
+            // Min should always end up being the next polled grid's value
+            min = Math.max(min, polled.getDistance());
         }
+    }
+    
+    @Test
+    public void prioQueueReturnsIntegersInCorrectOrderUsingEstimationVariable() {
+        float min;
+        
+        for (int i = 0; i < 1000; i++) {
+            testQueue.add(new Grid(0, 0, 0, r.nextInt(1000000)));
+        }
+        
+        min = testQueue.poll().getDistance();
+        
+        while(!testQueue.isEmpty()) {
+            Grid polled = testQueue.poll();
+            assertTrue(min < polled.getEstimation()|| min == polled.getEstimation());
+            // Min should always end up being the next polled grid's value
+            min = Math.max(min, polled.getDistance());
+        }
+    }
+    
+    /*
+    @Test
+    public void prioQueueReturnsIntegersInCorrectOrderUsingBothVariables() {
+        float min;
+        
+        for (int i = 0; i < 100; i++) {
+            testQueue.add(new Grid(0, 0, r.nextInt(100), r.nextInt(100)));
+        }
+        
+        Grid firstPoll = testQueue.poll();
+        
+        min = Float.sum(firstPoll.getDistance(), firstPoll.getEstimation());
+        
+        int i = 1;
+        while(!testQueue.isEmpty()) {
+            Grid polled = testQueue.poll();
+            
+            float polledSum = Float.sum(polled.getDistance(), polled.getEstimation());
+            
+            System.out.println("min "+min);
+            System.out.println("polled "+polledSum);
+            System.out.println(i);
+            assertTrue(min < polledSum || min == polledSum);
+            // Min should always end up being the next polled grid's value
+            min = Math.max(min, Float.sum(polled.getDistance(), polled.getEstimation()));
+            i++;
+        }
+    }
+    */
+    @Test
+    public void prioQueueIsEmptyAsExpected() {
+        assertTrue(testQueue.isEmpty());
+        
+        testQueue.add(new Grid(0, 0, 1, 1));
+        assertFalse(testQueue.isEmpty());
+        
+        testQueue.poll();
+        assertTrue(testQueue.isEmpty());
+    }
+    
+    @Test
+    public void prioQueueReturnsNullWhenPolledAndEmpty() {
+        assertNull(testQueue.poll());
+        
+        testQueue.add(new Grid(0, 0, 1, 1));
+        testQueue.poll();
+        assertNull(testQueue.poll());
     }
 }

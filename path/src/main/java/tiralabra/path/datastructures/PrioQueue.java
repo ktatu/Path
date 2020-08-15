@@ -31,6 +31,9 @@ public class PrioQueue {
      * @return the smallest Grid in queue which is always the root node
      */
     public Grid poll() {
+        if (isEmpty()) {
+            return null;
+        }
         Grid gridToReturn = prioQueue[1];
         sortQueueAfterPolling();
         return gridToReturn;

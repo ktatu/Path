@@ -1,12 +1,8 @@
 package tiralabra.path.ui;
 
-import java.io.File;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -22,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.converter.NumberStringConverter;
@@ -42,6 +37,7 @@ import tiralabra.path.logic.PathService;
 import tiralabra.path.logic.Scenario;
 import tiralabra.path.logic.ScenarioValidation;
 import tiralabra.path.logic.exceptions.InvalidScenarioException;
+import tiralabra.path.logic.exceptions.MissingUserInputException;
 
 /**
  * Graphical user interface for running algorithms and observing results
@@ -70,7 +66,7 @@ public class ui extends Application {
         topPanel.setSpacing(20);
         topPanel.setAlignment(Pos.CENTER);
         
-        Button executeProgram = new Button("Run algorithm");
+        Button executeProgram = programExecution();
         
         topPanel.getChildren().addAll(userInput, executeProgram);
         
@@ -99,9 +95,11 @@ public class ui extends Application {
         progExecution.setOnAction(
             (event) -> {
                 try {
-                    // executeProgram();, ehkä erillinen metodi kutsulle jossa otetaan kiinni poikkeukset
-                } catch(Exception e) {
-                    // popup window joka kertoo mikä input puuttuu
+                    //pathService.dijkstraTest();
+                    pathService.executeProgram();
+                } catch(InvalidScenarioException | MissingUserInputException e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("tapahtui virhe");
                 }
         });
         
@@ -129,10 +127,10 @@ public class ui extends Application {
         
         field.setPromptText(promptText);
         field.setId(id);
-        field.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        //field.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         field.setPrefWidth(50);
         
-        field.setOnMouseReleased((event) -> {
+        field.setOnKeyTyped((event) -> {
             pathService.setCoordinate(id, Integer.valueOf(field.getText()));
         });
         
@@ -148,6 +146,7 @@ public class ui extends Application {
         bfs.setToggleGroup(algos);
         bfs.setId("bfs");
         bfs.setSelected(true);
+        pathService.setAlgorithmId("bfs");
         
         RadioButton dijkstra = new RadioButton("Dijkstra");
         dijkstra.setId("dijkstra");
@@ -163,7 +162,7 @@ public class ui extends Application {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle prevToggle, Toggle newToggle) {
                 RadioButton testi = (RadioButton)newToggle.getToggleGroup().getSelectedToggle();
-                pathService.setAlgorithm(testi.getId());
+                pathService.setAlgorithmId(testi.getId());
              } 
         });
         
@@ -176,3 +175,7 @@ public class ui extends Application {
 }
 
         
+
+/*
+21.897959183
+*/

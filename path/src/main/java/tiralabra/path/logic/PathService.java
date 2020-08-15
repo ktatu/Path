@@ -2,7 +2,9 @@ package tiralabra.path.logic;
 
 import java.io.File;
 import java.util.List;
+import tiralabra.path.algorithms.AStar;
 import tiralabra.path.algorithms.Algorithm;
+import tiralabra.path.algorithms.Dijkstra;
 import tiralabra.path.data.FileGridMapReader;
 import tiralabra.path.logic.exceptions.InvalidScenarioException;
 import tiralabra.path.logic.exceptions.MissingUserInputException;
@@ -15,6 +17,7 @@ public class PathService {
     
     private final FileGridMapReader mapReader = new FileGridMapReader();
     private final ScenarioValidation scenValidator = new ScenarioValidation();
+    private final AlgorithmService algoService = new AlgorithmService();
     
     private File mapFile;
     private String algoId;
@@ -23,15 +26,16 @@ public class PathService {
     public String errorMsg;
     public boolean error;
     
-    public void executeProgram(File mapFile, List<String> scenCoordinates) throws MissingUserInputException, InvalidScenarioException {
+    public void executeProgram() throws MissingUserInputException, InvalidScenarioException {
         if (missingUserInput()) {
             throw new MissingUserInputException("Choose a map, type coordinates and select algorithm before pressing the button");
         }
         
         GridMap map = getMapFromFile();
-        scenValidator.validateScenario(map, scen);
+        // isoissa mapeissa DFS heittää stackoverflow
+        //scenValidator.validateScenario(map, scen);
         
-        
+        algoService.executeAlgorithm(algoId, map, scen);
     }
     
     /**
@@ -70,7 +74,7 @@ public class PathService {
      * set algorithm to be run on a global variable
      * @param algoId string identifier of the algorithm to be run
      */
-    public void setAlgorithm(String algoId) {
+    public void setAlgorithmId(String algoId) {
         this.algoId = algoId;
     }
     
@@ -79,6 +83,29 @@ public class PathService {
     }
     
     private boolean missingUserInput() {
+        if (mapFile == null) {
+            System.out.println("null mapfile");
+        }
+        if (algoId == null) {
+            System.out.println("null algoId");
+        }
+        if (scen.getStartX() == 0 || scen.getStartY() == 0 || scen.getGoalX() == 0 || scen.getGoalY() == 0) {
+            System.out.println("vika koordinaateissa");
+        }
         return (mapFile == null || algoId == null || scen.getStartX() == 0 || scen.getStartY() == 0 || scen.getGoalX() == 0 || scen.getGoalY() == 0);
     }
+    
+    public void dijkstraTest() {
+        if (mapFile == null) {
+            return;
+        }
+        GridMap map = mapReader.getGridMap(mapFile);
+        Scenario scena = new Scenario(436, 396, 77, 57);
+        Algorithm test = new AStar(map, scena);
+        
+        test.runAlgorithm();
+        System.out.println(test.getPathLength());
+    }
 }
+
+//529.2936
