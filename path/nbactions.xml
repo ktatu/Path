@@ -34,9 +34,13 @@
                 <packaging>jar</packaging>
             </packagings>
             <goals>
-                <goal>clean</goal>
-                <goal>javafx:run</goal>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
+            <properties>
+                <exec.args>-classpath %classpath ${packageClassName} gui</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
     </action>
     <action>
             <actionName>debug</actionName>
@@ -67,4 +71,12 @@
                 <exec.executable>java</exec.executable>
             </properties>
     </action>
+    <action>
+            <actionName>CUSTOM-jafafx run</actionName>
+            <displayName>jafafx run</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>javafx:run</goal>
+            </goals>
+        </action>
 </actions>

@@ -47,6 +47,12 @@ public class AStarTest extends AlgorithmSetup {
             aStar.runAlgorithm();
             
             if (Math.abs(aStar.getPathLength() - util.expectedResults[i]) > 0.001) {
+                
+                System.out.println("alku " + customScenarios.get(i).getStartX() + ", " + customScenarios.get(i).getStartY());
+                System.out.println("loppu " + customScenarios.get(i).getGoalX() + ", " + customScenarios.get(i).getGoalY());
+                
+                System.out.println("löydetyn reitin pituus" + aStar.getPathLength());
+                System.out.println("expected result " + util.expectedResults[i]);
                 fail("AStar didn't find the shortest path on custom map");
             }
         }

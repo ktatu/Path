@@ -17,7 +17,7 @@ public class AlgorithmSetup {
     static Random r = new Random();
     static ScenarioValidation validator = new ScenarioValidation();
     
-    final static float sqrtTwo = (float)Math.sqrt(2);
+    final static float sqrtTwo = (float) 1.4;
     
     static GridMap testMap;
     static GridMap distanceTestMap;
@@ -41,8 +41,6 @@ public class AlgorithmSetup {
         customScenarios.add(new Scenario(2,0,1,1));
         customScenarios.add(new Scenario(2,0,2,2));
         customScenarios.add(new Scenario(2,2,0,2));
-        // scenarioValidation should never allow this scenario to go through but even if it did the algo should run fine
-        customScenarios.add(new Scenario(1,3,0,4));
         customScenarios.add(new Scenario(2,2,1,3));
     }
     

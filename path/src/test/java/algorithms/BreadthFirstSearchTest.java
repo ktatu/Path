@@ -48,7 +48,7 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
     
     @Test
     public void bfsFindsShortestPathOnCustomMap() {
-        float[] expectedResults = {2, 4, 2, 0, 2};
+        float[] expectedResults = {2, 4, 2, 2};
         
         for (int i = 0; i < customScenarios.size(); i++) {
             Scenario scen = customScenarios.get(i);
