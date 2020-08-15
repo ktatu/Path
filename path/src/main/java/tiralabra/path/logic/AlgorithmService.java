@@ -11,6 +11,7 @@ import tiralabra.path.algorithms.AStar;
 import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.algorithms.Dijkstra;
+import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 
 /**
@@ -25,14 +26,17 @@ public class AlgorithmService {
     public AlgorithmService() {
     }
     
-    public void executeAlgorithm(String algoId, GridMap map, Scenario scen) {
+    public void executeAlgorithm(String algoId, GridMap map, Scenario scen) throws NoPathFoundException {
         this.gridMap = map;
         this.scen = scen;
         
         Algorithm algo = getAlgorithm(algoId);
         System.out.println("Running " + algoId);
         algo.runAlgorithm();
-        System.out.println(algo.getPathLength());
+        
+        if (!algo.goalVisited()) {
+            throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
+        }
         
         getImageOfAlgorithm(algo);
     }

@@ -27,8 +27,6 @@ public class ScenarioValidation {
             throw new InvalidScenarioException("Scenario coordinates were not within map boundaries");
         } else if (!passableTerrainInScenCoordinates()) {
             throw new InvalidScenarioException("Scenario either started or ended in unpassable terrain");
-        } else if (!unobstructedPath()) {
-            throw new InvalidScenarioException("No path existed between start and goal coordinates");
         }
     }
     
@@ -62,36 +60,5 @@ public class ScenarioValidation {
             return false;
         }
         return true;
-    }
-    
-    /**
-     * Uses DFS to check if a path between start and end grids exists
-     * @return true if a path exists
-     */
-    private boolean unobstructedPath() {
-        boolean[][] visited = new boolean[gridMap.getMapHeight()][gridMap.getMapWidth()];
-        depthFirstSearch(scen.getStartY(), scen.getStartX(), visited);
-        return visited[scen.getGoalY()][scen.getGoalX()];
-    }
-    
-    /**
-     * DFS
-     * Algorithm is only used as an utility tool since the found path length is completely random
-     * @param y start coordinate from Scenario
-     * @param x start coordinate from Scenario
-     * @param visited boolean array for DFS to keep track of where it has been
-     */
-    private void depthFirstSearch(int y, int x, boolean[][] visited) {
-        if (y < 0 || y >= gridMap.getMapHeight() || x < 0 || x >= gridMap.getMapWidth()) {
-            return;
-        } else if (!gridMap.isPassable(gridMap.getGrid(y, x)) || visited[y][x]) {
-            return;
-        }
-        visited[y][x] = true;
-        
-        depthFirstSearch(y - 1, x, visited);
-        depthFirstSearch(y + 1, x, visited);
-        depthFirstSearch(y, x - 1, visited);
-        depthFirstSearch(y, x + 1, visited);
     }
 }

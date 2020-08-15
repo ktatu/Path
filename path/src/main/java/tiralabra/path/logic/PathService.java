@@ -33,7 +33,7 @@ public class PathService {
         
         GridMap map = getMapFromFile();
         // isoissa mapeissa DFS heittää stackoverflow
-        //scenValidator.validateScenario(map, scen);
+        scenValidator.validateScenario(map, scen);
         
         algoService.executeAlgorithm(algoId, map, scen);
     }
