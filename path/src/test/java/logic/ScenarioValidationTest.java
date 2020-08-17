@@ -27,16 +27,6 @@ public class ScenarioValidationTest {
         
         testGridMap = new GridMap(testMatrix);
     }
-    
-    @Test
-    public void unobstructedPathIsFound() {
-        try {
-            validator.validateScenario(testGridMap, new Scenario(3, 0, 0, 3));
-        } catch (InvalidScenarioException ex) {
-            fail("validator didn't find the valid path");
-        }
-    }
-    
     @Test
     public void identicalCoordinatesAsStartAndGoalCauseThrownInvalidScenarioException() {
         try {
@@ -95,15 +85,6 @@ public class ScenarioValidationTest {
         try {
             validator.validateScenario(testGridMap, new Scenario(0, 3, 3, 3));
             fail("validator didn't throw exception when goal grid was unpassable terrain");
-        } catch (InvalidScenarioException ex) {
-        }
-    }
-    
-    @Test
-    public void obstructedPathCausesThrownInvalidScenarioException() {
-        try {
-            validator.validateScenario(testGridMap, new Scenario(3, 0, 0, 0));
-            fail("validator didn't throw exception when no path exists");
         } catch (InvalidScenarioException ex) {
         }
     }

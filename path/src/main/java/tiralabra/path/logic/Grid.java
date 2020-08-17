@@ -74,25 +74,35 @@ public class Grid implements Comparable<Grid> {
     }
     */
     
-    
+    /**
+     * Comparing grids. First if statement is for pure Dijkstra's grids, other Dijkstra variations consider estimation as well
+     * @param o comparable object
+     * @return -1 if smaller
+     */
     @Override
     public int compareTo(Grid o) {
         if (this.getEstimation() == 0 && o.getEstimation() == 0) {
-            if (this.getDistance() <= o.getDistance()) {
+            if (this.getDistance() < o.getDistance()) {
                 return -1;
-            }
-            return 1;
-        } else {
-            float sumThis = Float.sum(this.getDistance(), this.getEstimation());
-            float sumO = Float.sum(o.getDistance(), o.getEstimation());
-            
-            if (sumThis < sumO) {
-                return -1;
-            } else if (sumThis == sumO) {
-                return 0;
             }
             return 1;
         }
+        
+        float sumThis = this.getDistance() + this.getEstimation();
+        float sumO = o.getDistance() + o.getEstimation();
+            
+        if (sumThis < sumO) {
+            return -1;
+        } else if (sumThis == sumO) {
+            if (this.getEstimation() < o.getEstimation()) {
+                return -1;
+            } else if (this.getEstimation() > o.getEstimation()) {
+                return 1;
+            }
+            return -1;
+        }
+            
+        return 1;
     }
     
     /*

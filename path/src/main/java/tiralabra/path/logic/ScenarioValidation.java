@@ -12,7 +12,7 @@ public class ScenarioValidation {
     private GridMap gridMap;
     
     /**
-     * Called by app logic to validate a scenario
+     * Called by PathService to ensure that the Scenario can be run
      * @param gridMap the map on which the Scenario would be run
      * @param scen Scenario to be validated
      * @throws InvalidScenarioException  if Scenario cannot be run on given GridMap

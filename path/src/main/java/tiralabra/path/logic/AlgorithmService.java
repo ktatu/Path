@@ -42,7 +42,7 @@ public class AlgorithmService {
     }
     
     private Algorithm getAlgorithm(String algoId) {
-        switch(algoId) {
+        switch (algoId) {
             case "bfs":
                 return new BreadthFirstSearch(gridMap, scen);
             case "dijkstra":
@@ -89,7 +89,7 @@ public class AlgorithmService {
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(result, null),
                     "png", testFile);
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("image saving failed");
         }
         return result;

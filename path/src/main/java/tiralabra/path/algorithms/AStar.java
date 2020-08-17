@@ -73,7 +73,9 @@ public class AStar extends Dijkstra {
     }
     
     private void checkGrid(int gridY, int gridX, Grid grid, boolean diagonal) {
-        if (!isMovePossible(gridY, gridX, grid.getY(), grid.getX(), diagonal)) return;
+        if (!isMovePossible(gridY, gridX, grid.getY(), grid.getX(), diagonal)) {
+            return;
+        }
         
         float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
         if (newDistance < distance[gridY][gridX]) {

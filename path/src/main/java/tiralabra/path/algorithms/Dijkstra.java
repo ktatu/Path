@@ -13,7 +13,7 @@ import tiralabra.path.logic.Scenario;
 public class Dijkstra extends Algorithm {
 
     protected PriorityQueue<Grid> prioQueue;
-      //protected PrioQueue prioQueue;
+    //protected PrioQueue prioQueue;
     
     public Dijkstra(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
@@ -86,7 +86,6 @@ public class Dijkstra extends Algorithm {
             return;
         }
         
-        
         float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
         if (newDistance < distance[y][x]) {
             distance[y][x] = newDistance;
@@ -120,7 +119,9 @@ public class Dijkstra extends Algorithm {
      * @return true if the grid can be moved into
      */
     protected boolean isValidDiagonalMove(int y, int x, int prevY, int prevX) {
-        if (!isValidHorOrVerMove(y, x)) return false;
+        if (!isValidHorOrVerMove(y, x)) {
+            return false;
+        }
         
         if (y > prevY && x > prevX) {
             if (!isValidHorOrVerMove(y - 1, x) && !isValidHorOrVerMove(y, x - 1)) {
