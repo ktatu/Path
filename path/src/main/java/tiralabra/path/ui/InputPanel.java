@@ -1,38 +1,43 @@
 package tiralabra.path.ui;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tiralabra.path.logic.PathService;
+import tiralabra.path.logic.InputData;
 import tiralabra.path.logic.exceptions.InvalidScenarioException;
 import tiralabra.path.logic.exceptions.MissingUserInputException;
 import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 /**
- * Nodes related to submitting user input and executing the algorithm
+ * Nodes related to submitting user input
  * @author Tatu
  */
 public class InputPanel {
     
-    private final PathService pathService;
+    private final InputData dataCollector;
     private final Stage stage;
     
-    public InputPanel(Stage stage) {
-        this.pathService = new PathService();
+    public InputPanel(Stage stage, InputData dataCollector) {
+        this.dataCollector = dataCollector;
         this.stage = stage;
+    }
+    
+    public InputData getPathService() {
+        return this.dataCollector;
     }
     
     public VBox getInputPanel() {
@@ -41,32 +46,39 @@ public class InputPanel {
         userInput.setHgap(15);
         
         Button mapSelection = mapChooser(stage);
+        CheckBox saveImage = saveImage();
         HBox inputCoordinates = inputCoordinates();
         HBox algoSelection = algorithmSelection();
         
-        userInput.getChildren().addAll(mapSelection, inputCoordinates, algoSelection);
+        userInput.getChildren().addAll(mapSelection, saveImage, inputCoordinates, algoSelection);
         
         VBox inputPanel = new VBox();
         inputPanel.setSpacing(20);
         inputPanel.setAlignment(Pos.CENTER);
         
-        Button executeProgram = programExecution();
-        
-        inputPanel.getChildren().addAll(userInput, executeProgram);
+        inputPanel.getChildren().add(userInput);
         
         return inputPanel;
     }
     
     private Button mapChooser(Stage stage) {
         Button mapFileSelection = new Button("Choose a map");
-        mapFileSelection.setOnAction(
-            (event) -> {
+        mapFileSelection.setOnAction((event) -> {
                 FileChooser mapChooser = new FileChooser();
                 mapChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Map Files", "*.map"));
-                pathService.setMapFile(mapChooser.showOpenDialog(stage));
+                dataCollector.setMapFile(mapChooser.showOpenDialog(stage));
         });
         
         return mapFileSelection;
+    }
+    
+    private CheckBox saveImage() {
+        CheckBox saveImage = new CheckBox("Save image?");
+        saveImage.setOnAction((event) -> {
+            dataCollector.setSaveImage(saveImage.isSelected());
+        });
+        
+        return saveImage;
     }
     
     private HBox inputCoordinates() {
@@ -94,7 +106,7 @@ public class InputPanel {
         field.setPrefWidth(50);
         
         field.setOnKeyTyped((event) -> {
-            pathService.setCoordinate(id, Integer.valueOf(field.getText()));
+            dataCollector.setCoordinate(id, Integer.valueOf(field.getText()));
         });
         
         return field;
@@ -109,7 +121,7 @@ public class InputPanel {
         bfs.setToggleGroup(algos);
         bfs.setId("bfs");
         bfs.setSelected(true);
-        pathService.setAlgorithmId("bfs");
+        dataCollector.setAlgorithmId("bfs");
         
         RadioButton dijkstra = new RadioButton("Dijkstra");
         dijkstra.setId("dijkstra");
@@ -125,26 +137,49 @@ public class InputPanel {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle prevToggle, Toggle newToggle) {
                 RadioButton testi = (RadioButton)newToggle.getToggleGroup().getSelectedToggle();
-                pathService.setAlgorithmId(testi.getId());
+                dataCollector.setAlgorithmId(testi.getId());
              } 
         });
         
         return algoBox;
     }
     
+    /*
     private Button programExecution() {
         Button progExecution = new Button("Run algorithm");
-        progExecution.setOnAction(
-            (event) -> {
+        progExecution.setOnAction((event) -> {
                 try {
-                    pathService.executeProgram();
-                } catch(InvalidScenarioException | MissingUserInputException e) {
-                    System.out.println(e.getMessage());
-                    System.out.println("tapahtui virhe");
-                } catch (NoPathFoundException ex) {
-                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+                    dataCollector.dataVerification();
+                } catch(InvalidScenarioException | MissingUserInputException | NoPathFoundException e) {
+                    System.out.println(e);
+                    exceptionPopup(e.getMessage());
                 }
         });
         return progExecution;
+    }
+    */
+
+    private void exceptionPopup(String message) {
+        Stage popup = new Stage();
+        popup.alwaysOnTopProperty();
+        popup.setMinHeight(100);
+        popup.setMinWidth(350);
+        
+        BorderPane popupPane = new BorderPane();
+        
+        Button ok = new Button("OK");
+        ok.setOnAction((event) -> {
+            popup.close();
+        });
+        
+        Label exceptionMsg = new Label(message);
+        exceptionMsg.setAlignment(Pos.CENTER);
+        
+        popupPane.setTop(exceptionMsg);
+        popupPane.setCenter(ok);
+        
+        popup.setTitle("Exception occurred");
+        popup.setScene(new Scene(popupPane));
+        popup.show();
     }
 }

@@ -7,29 +7,29 @@ import tiralabra.path.logic.exceptions.MissingUserInputException;
 import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 /**
- * Main class of program logic. Ties ui, algorithm and data packages together.
+ * Data from gui is collected and verified here
  * @author Tatu
  */
-public class PathService {
+public class InputData {
     
     private final FileGridMapReader mapReader = new FileGridMapReader();
     private final ScenarioValidation scenValidator = new ScenarioValidation();
-    private final AlgorithmService algoService = new AlgorithmService();
     
     // User input from gui
     private File mapFile;
     private String algoId;
+    private boolean saveImage = false;
     private final Scenario scen = new Scenario();
     
-    public void executeProgram() throws MissingUserInputException, InvalidScenarioException, NoPathFoundException {
+    private GridMap map;
+    
+    public void dataVerification() throws MissingUserInputException, InvalidScenarioException, NoPathFoundException, IndexOutOfBoundsException, NumberFormatException {
         if (missingUserInput()) {
             throw new MissingUserInputException("Choose a map, type coordinates and select algorithm before pressing the button");
         }
         
-        GridMap map = getMapFromFile();
-
+        map = getMapFromFile();
         scenValidator.validateScenario(map, scen);
-        algoService.executeAlgorithm(algoId, map, scen);
     }
     
     public void setMapFile(File file) {
@@ -63,6 +63,28 @@ public class PathService {
     public void setAlgorithmId(String algoId) {
         this.algoId = algoId;
     }
+    
+    public void setSaveImage(boolean value) {
+        saveImage = value;
+    }
+
+    public String getAlgoId() {
+        return algoId;
+    }
+
+    public Scenario getScen() {
+        return scen;
+    }
+    
+    public boolean getSaveImage() {
+        return saveImage;
+    }
+
+    public GridMap getMap() {
+        return map;
+    }
+    
+    
     
     private GridMap getMapFromFile() throws IndexOutOfBoundsException, NumberFormatException {
         return mapReader.getGridMap(mapFile);

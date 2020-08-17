@@ -1,7 +1,5 @@
 package tiralabra.path.algorithms;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
@@ -14,18 +12,17 @@ public abstract class Algorithm {
     // tilapäinen
     public int jumpPoints = 1;
     
-    protected long startTime;
-    protected long endTime;
-    
-    // Keeps track of what was each grid's predecessor
-    // Each cell in prevGrid[] represents a grid, which has been converted into an integer based on its coordinates
+    /**
+     * Keeps track of what was each grid's predecessor
+     * Each cell in prevGrid[] represents a grid, which has been converted into an integer based on its coordinates
+     */
     public int[] prevGrid;
     // Distance from start grid to others
-    protected float[][] distance;
+    public float[][] distance;
     public boolean[][] visited;
     
-    protected Scenario scen;
-    protected GridMap gridMap;
+    public Scenario scen;
+    public GridMap gridMap;
     
     //float sqrtTwo = (float) Math.sqrt(2);
     float sqrtTwo = (float) 1.4;
@@ -102,51 +99,14 @@ public abstract class Algorithm {
     }
     
     /**
-     * Checks from visited[][] whether algorithm has gone over the goal grid
-     * @return true if it has
+     * Checks from visited[][] if algorithm has visited the goal grid
+     * @return true if it has been visited
      */
     public boolean goalVisited() {
         return visited[scen.getGoalY()][scen.getGoalX()];
     }
-    
-    /**
-     * Runtime of algorithm
-     * @return runtime in seconds
-     */
-    public double getRunTime() {
-        return ((endTime - startTime) / 1e9);
-    }
-    
-    /**
-     * Distance from start grid to goal grid
-     * @return distance as float retrieved from distance matrix
-     */
-    public float getPathLength() {
-        return distance[scen.getGoalY()][scen.getGoalX()];
-    }
-    
-    /**
-     * Prints coordinates of every grid on the shortest path from start grid to end grid
-     */
-    public void printPath() {
-        ArrayList<Integer> path = new ArrayList<>();
-        int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
-        
-        while (prevGrid[goalGridAsInt] != -1) {
-            path.add(goalGridAsInt);
-            goalGridAsInt = prevGrid[goalGridAsInt];
-        }
-        
-        path.add(gridToInt(scen.getStartY(), scen.getStartX()));
-        Collections.reverse(path);
-        
-        for (int grid : path) {
-            int y = intToGridY(grid);
-            int x = intToGridX(grid);
-            System.out.println("y: " + y + ", x: " + x);
-        }
-    }
 
+    // tilapäinen
     public int getJumpPoints() {
         return jumpPoints;
     }

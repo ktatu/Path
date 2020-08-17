@@ -10,12 +10,12 @@ import tiralabra.path.logic.GridMap;
  */
 public class FileGridMapReader {
     
-    private FileIO fileIO;
+    private final FileIO fileIO;
     
     // Variables related to Moving Ai file format
-    private int heightRow = 1;
-    private int widthRow = 2;
-    private int mapStartRow = 4;
+    private final int heightRow = 1;
+    private final int widthRow = 2;
+    private final int mapStartRow = 4;
     
     /**
      * FileIO instance for getting the map

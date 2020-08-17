@@ -1,97 +1,110 @@
 package tiralabra.path.logic;
 
-import java.io.File;
-import java.io.IOException;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.PixelWriter;
+import java.util.HashSet;
 import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
-import javax.imageio.ImageIO;
 import tiralabra.path.algorithms.AStar;
 import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.algorithms.Dijkstra;
+import tiralabra.path.data.AlgorithmImageWriter;
+import tiralabra.path.data.FileIO;
 import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 
 /**
- *
+ * Running the selected algorithm and gathering result related data to display in gui
  * @author Tatu
  */
 public class AlgorithmService {
     
-    private GridMap gridMap;
-    private Scenario scen;
+    private Algorithm algo;
+    private boolean saveImage;
     
-    public AlgorithmService() {
-    }
+    private long startTime;
+    private long endTime;
     
-    public void executeAlgorithm(String algoId, GridMap map, Scenario scen) throws NoPathFoundException {
-        this.gridMap = map;
-        this.scen = scen;
+    public void executeAlgorithm(String algoId, GridMap map, Scenario scen, boolean saveImage) throws NoPathFoundException {
+        setAlgorithm(algoId, map, scen);
+        this.saveImage = saveImage;
         
-        Algorithm algo = getAlgorithm(algoId);
         System.out.println("Running " + algoId);
+        
+        startTime = System.nanoTime();
         algo.runAlgorithm();
+        endTime = System.nanoTime();
         
         if (!algo.goalVisited()) {
             throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
         }
-        
-        getImageOfAlgorithm(algo);
     }
     
-    private Algorithm getAlgorithm(String algoId) {
+    private void setAlgorithm(String algoId, GridMap gridMap, Scenario scen) {
         switch (algoId) {
             case "bfs":
-                return new BreadthFirstSearch(gridMap, scen);
+                algo = new BreadthFirstSearch(gridMap, scen);
+                break;
             case "dijkstra":
-                return new Dijkstra(gridMap, scen);
+                algo = new Dijkstra(gridMap, scen);
+                break;
             case "aStar":
-                return new AStar(gridMap, scen);
+                algo = new AStar(gridMap, scen);
+                break;
             default:
                 // Should never happen
-                return null;
         }
     }
     
-    public WritableImage getImageOfAlgorithm(Algorithm algo) {
-        WritableImage result = new WritableImage(gridMap.getMapWidth(), gridMap.getMapHeight());
-        PixelWriter writer = result.getPixelWriter();
-        
-        for (int y = 0; y < gridMap.getMapHeight(); y++) {
-            for (int x = 0; x < gridMap.getMapWidth(); x++) {
-                
-                // Draw the map with visited grids
+    public String getResultInfo() {
+        return "Runtime: " + runTime() + "s, " + "visited grids: " + numOfVisitedGrids() + ", path length: " + pathLength();
+    }
+    
+    private int numOfVisitedGrids() {
+        int visitedGrids = 0;
+        for (int y = 0; y < algo.gridMap.getMapHeight(); y++) {
+            for (int x = 0; x < algo.gridMap.getMapWidth(); x++) {
                 if (algo.visited[y][x]) {
-                    writer.setColor(x, y, Color.BLUE);
-                } else if (gridMap.isPassable(gridMap.getGrid(y, x))) {
-                    writer.setColor(x, y, Color.WHITE);
-                } else {
-                    writer.setColor(x, y, Color.BLACK);
+                    visitedGrids++;
                 }
             }
         }
+        return visitedGrids;
+    }
+    
+    /**
+     * Distance from start grid to goal grid
+     * @return distance as float retrieved from distance matrix
+     */
+    private float pathLength() {
+        return algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];
+    }
+    
+    /**
+     * Runtime of algorithm
+     * @return runtime in seconds
+     */
+    private double runTime() {
+        return ((endTime - startTime) / 1e9);
+    }
+    
+    public WritableImage getAlgoImage() {
+        final AlgorithmImageWriter algDrawer = new AlgorithmImageWriter();
         
-        // Draw the actual path on top of map
-        int grid = algo.gridToInt(scen.getGoalY(), scen.getGoalX());
-        while (algo.prevGrid[grid] != -1) {
-            int pathY = algo.intToGridY(grid);
-            int pathX = algo.intToGridX(grid);
-            writer.setColor(pathX, pathY, Color.RED);
-            grid = algo.prevGrid[grid];
+        WritableImage algoImage = algDrawer.drawAlgorithm(algo, pathAsList());
+
+        if (saveImage) {
+            FileIO.getInstance().saveImage(algoImage, algo.getClass().toGenericString());
         }
+        return algoImage;
+    }
+    
+    private HashSet<Integer> pathAsList() {
+        HashSet<Integer> pathList = new HashSet<>();
+        int goalGridAsInt = algo.gridToInt(algo.scen.getGoalY(), algo.scen.getGoalX());
         
-        writer.setColor(scen.getStartX(), scen.getStartY(), Color.GREEN);
-        writer.setColor(scen.getGoalX(), scen.getGoalY(), Color.GREEN);
-        
-        File testFile = new File("test.png");
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(result, null),
-                    "png", testFile);
-        } catch (IOException e) {
-            System.out.println("image saving failed");
+        while (algo.prevGrid[goalGridAsInt] != -1) {
+            pathList.add(goalGridAsInt);
+            goalGridAsInt = algo.prevGrid[goalGridAsInt];
         }
-        return result;
+        return pathList;
     }
 }

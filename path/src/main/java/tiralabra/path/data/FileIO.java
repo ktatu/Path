@@ -5,8 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.stream.Collectors;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.WritableImage;
+import javax.imageio.ImageIO;
 
 /**
  * All file related functionalities happen through FileIO
@@ -43,5 +48,23 @@ public class FileIO {
             System.out.println(ex);
         } 
         return fileAsList;
+    }
+    
+    public void saveImage(WritableImage image, String name) {
+        File testFile = new File(name + getTimeStamp() + ".png");
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null),
+                    "png", testFile);
+        } catch (IOException e) {
+            System.out.println("image saving failed");
+        }
+    }
+    
+    /**
+     * Gets a timestamp for the image
+     * @return timestamp in hours-minutes-days-month-years format 
+     */
+    private String getTimeStamp() {
+        return new SimpleDateFormat("HH.mm.dd.MM.yyyy").format(new Date());
     }
 }

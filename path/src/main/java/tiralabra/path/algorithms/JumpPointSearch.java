@@ -34,7 +34,6 @@ public class JumpPointSearch extends Dijkstra {
     public void runAlgorithm() {
         initializeAlgorithm();
         
-        startTime = System.nanoTime();
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 
             int gridY = current.getY();
@@ -58,7 +57,6 @@ public class JumpPointSearch extends Dijkstra {
                 checkDirection(gridY, gridX, directionY, directionX);
             }
         }
-        endTime = System.nanoTime();
     }
     
     // pruned grids are directions from y,x that are not worth scanning with jump()

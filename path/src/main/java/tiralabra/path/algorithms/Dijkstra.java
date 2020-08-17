@@ -45,7 +45,6 @@ public class Dijkstra extends Algorithm {
     public void runAlgorithm() {
         initializeAlgorithm();
         
-        startTime = System.nanoTime();
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 
             int gridY = current.getY();
@@ -71,7 +70,6 @@ public class Dijkstra extends Algorithm {
             checkGrid(gridY + 1, gridX - 1, current, true);
             checkGrid(gridY + 1, gridX + 1, current, true);
         }
-        endTime = System.nanoTime();
     }
     
     /**

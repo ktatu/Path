@@ -41,7 +41,6 @@ public class AStar extends Dijkstra {
     public void runAlgorithm() {
         initializeAlgorithm();
         
-        startTime = System.nanoTime();
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 
             int gridY = current.getY();
@@ -69,14 +68,12 @@ public class AStar extends Dijkstra {
             checkGrid(gridY + 1, gridX - 1, current, true);
             checkGrid(gridY + 1, gridX + 1, current, true);
         }
-        endTime = System.nanoTime();
     }
     
     private void checkGrid(int gridY, int gridX, Grid grid, boolean diagonal) {
         if (!isMovePossible(gridY, gridX, grid.getY(), grid.getX(), diagonal)) {
             return;
         }
-        
         float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
         if (newDistance < distance[gridY][gridX]) {
             distance[gridY][gridX] = newDistance;

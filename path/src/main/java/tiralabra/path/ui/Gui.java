@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import tiralabra.path.logic.InputData;
 
 /**
  * Graphical user interface for running algorithms and observing results
@@ -11,16 +12,23 @@ import javafx.stage.Stage;
  */
 public class Gui extends Application {
     
+    private InputData dataCollector;
     private InputPanel inputPanel;
+    private AlgorithmPanel resPanel;
     
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
+        
+        this.dataCollector = new InputData();
+        this.inputPanel = new InputPanel(stage, dataCollector);
+        this.resPanel = new AlgorithmPanel(dataCollector);
         
         BorderPane uiPane = new BorderPane();
-        this.inputPanel = new InputPanel(stage);
         
         uiPane.setTop(inputPanel.getInputPanel());
-        uiPane.setPrefSize(750, 500);
+        uiPane.setCenter(resPanel.getAlgorithmPanel());
+        
+        uiPane.setPrefSize(850, 500);
         
         stage.setTitle("Path");
         stage.setScene(new Scene(uiPane));

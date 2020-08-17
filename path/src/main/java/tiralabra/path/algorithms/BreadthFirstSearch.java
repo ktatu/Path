@@ -44,7 +44,6 @@ public class BreadthFirstSearch extends Algorithm {
     public void runAlgorithm() {
         initializeAlgorithm();
         
-        startTime = System.nanoTime();
         while (!queue.isEmpty()) {
             if (goalVisited()) {
                 break;
@@ -56,7 +55,6 @@ public class BreadthFirstSearch extends Algorithm {
             
             checkAdjacentGrids(gridY, gridX);
         }
-        endTime = System.nanoTime();
     }
     
     /**
@@ -82,6 +80,7 @@ public class BreadthFirstSearch extends Algorithm {
         if (!isValidHorOrVerMove(gridY, gridX)) return;
         if (visited[gridY][gridX]) return;
         
+        System.out.println("ollaan bfs");
         visited[gridY][gridX] = true;
         queue.add(gridToInt(gridY, gridX));
         prevGrid[gridToInt(gridY, gridX)] = gridToInt(prevGridY, prevGridX);
