@@ -1,5 +1,5 @@
 # Path
-Ohjelma vertailee reitinhakualgoritmien tehokkuutta kaksiulotteisissa ruudukkokartoissa
+Ohjelma piirtää eri reitinhakualgoritmien reittejä kaksiulotteisissa ruudukkokartoissa
 
 ## Dokumentaatio
 [Raportti viikko 1](https://github.com/ktatu/Path/blob/master/documentation/viikko1_raportti.md)
