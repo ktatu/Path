@@ -1,9 +1,6 @@
 # Path
 Ohjelma vertailee reitinhakualgoritmien tehokkuutta kaksiulotteisissa ruudukkokartoissa
 
-### Vertaisarvioijille
-Ohjelmaa ei vielä pysty suorittamaan. Ohjelmassa on kyllä graafinen käyttöliittymä, mutta siitä ei tällä hetkellä pysty tekemään mitään.
-
 ## Dokumentaatio
 [Raportti viikko 1](https://github.com/ktatu/Path/blob/master/documentation/viikko1_raportti.md)
 
