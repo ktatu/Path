@@ -23,9 +23,12 @@ public class AlgorithmService {
     private long startTime;
     private long endTime;
     
+    private String algoId;
+    
     public void executeAlgorithm(String algoId, GridMap map, Scenario scen, boolean saveImage) throws NoPathFoundException {
         setAlgorithm(algoId, map, scen);
         this.saveImage = saveImage;
+        this.algoId = algoId;
         
         System.out.println("Running " + algoId);
         
@@ -92,7 +95,7 @@ public class AlgorithmService {
         WritableImage algoImage = algDrawer.drawAlgorithm(algo, pathAsList());
 
         if (saveImage) {
-            FileIO.getInstance().saveImage(algoImage, algo.getClass().toGenericString());
+            FileIO.getInstance().saveImage(algoImage, algoId);
         }
         return algoImage;
     }

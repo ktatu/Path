@@ -34,7 +34,7 @@ public class DijkstraTest extends AlgorithmSetup {
         for (Scenario scen: scenarios) {
             Algorithm dij = new Dijkstra(distanceTestMap, scen);
             dij.runAlgorithm();
-            if (!util.correctDistance(dij.getPathLength(), scen)) {
+            if (!util.correctDistance(util.resultDistance(dij, scen), scen)) {
                 fail("dijkstra didn't find the shortest path");
             }
         }
@@ -46,7 +46,7 @@ public class DijkstraTest extends AlgorithmSetup {
             Algorithm dij = new Dijkstra(customMap, customScenarios.get(i));
             dij.runAlgorithm();
             
-            if (Math.abs(dij.getPathLength() - util.expectedResults[i]) > 0.001) {
+            if (Math.abs(util.resultDistance(dij, customScenarios.get(i)) - util.expectedResults[i]) > 0.001) {
                 fail("dijkstra didn't find the shortest path in custom map");
             }
         }

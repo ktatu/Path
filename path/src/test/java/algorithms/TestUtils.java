@@ -1,6 +1,7 @@
 package algorithms;
 
 import static algorithms.AlgorithmSetup.sqrtTwo;
+import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.logic.Scenario;
 
 /**
@@ -22,5 +23,9 @@ public class TestUtils {
             return false;
         }
         return true;
+    }
+    
+    public float resultDistance(Algorithm algo, Scenario scen) {
+        return algo.distance[scen.getGoalY()][scen.getGoalX()];
     }
 }

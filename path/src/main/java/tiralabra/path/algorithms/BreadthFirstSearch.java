@@ -77,10 +77,12 @@ public class BreadthFirstSearch extends Algorithm {
      * @param prevGridX x cooordinate of the previous grid
      */
     private void checkGrid(int gridY, int gridX, int prevGridY, int prevGridX) {
-        if (!isValidHorOrVerMove(gridY, gridX)) return;
-        if (visited[gridY][gridX]) return;
+        if (!isValidHorOrVerMove(gridY, gridX)) {
+            return;
+        } else if (visited[gridY][gridX]) {
+            return;
+        }
         
-        System.out.println("ollaan bfs");
         visited[gridY][gridX] = true;
         queue.add(gridToInt(gridY, gridX));
         prevGrid[gridToInt(gridY, gridX)] = gridToInt(prevGridY, prevGridX);

@@ -12,6 +12,7 @@ import tiralabra.path.logic.Scenario;
  */
 public class BreadthFirstSearchTest extends AlgorithmSetup {
     
+    TestUtils util = new TestUtils();
     
     public BreadthFirstSearchTest() {
         super();
@@ -31,16 +32,10 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
     // shortest path for BFS means manhattan distance from start to goal
     @Test
     public void bfsFindsShortestPathOnEmptyMap() {
-        System.out.println("leveys "+distanceTestMap.getMapHeight());
-        System.out.println("pituus "+distanceTestMap.getMapWidth());
         for (Scenario scen : scenarios) {
-            System.out.println(scen.getGoalX());
-            System.out.println(scen.getGoalY());
-            System.out.println(scen.getStartX());
-            System.out.println(scen.getStartY());
             Algorithm bfs = new BreadthFirstSearch(distanceTestMap, scen);
             bfs.runAlgorithm();
-            if (Math.abs(bfs.getPathLength() - manhattanDistance(scen)) > 0.1) {
+            if (Math.abs(util.resultDistance(bfs, scen) - manhattanDistance(scen)) > 0.001) {
                 fail("bfs didn't find the shortest path");
             }
         }
@@ -55,7 +50,7 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
             Algorithm bfs = new BreadthFirstSearch(customMap, scen);
             bfs.runAlgorithm();
             
-            if (bfs.getPathLength() != expectedResults[i]) {
+            if (util.resultDistance(bfs, scen) != expectedResults[i]) {
                 fail("bfs didn't find the shortest path in custom map");
             }
         } 

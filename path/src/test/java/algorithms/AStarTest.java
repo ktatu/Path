@@ -34,7 +34,7 @@ public class AStarTest extends AlgorithmSetup {
         for (Scenario scen : scenarios) {
             Algorithm aStar = new AStar(distanceTestMap, scen);
             aStar.runAlgorithm();
-            if (!util.correctDistance(aStar.getPathLength(), scen)) {
+            if (!util.correctDistance(util.resultDistance(aStar, scen), scen)) {
                 fail("AStar didn't find the shortest path on empty map");
             }
         }
@@ -46,13 +46,7 @@ public class AStarTest extends AlgorithmSetup {
             Algorithm aStar = new AStar(customMap, customScenarios.get(i));
             aStar.runAlgorithm();
             
-            if (Math.abs(aStar.getPathLength() - util.expectedResults[i]) > 0.001) {
-                
-                System.out.println("alku " + customScenarios.get(i).getStartX() + ", " + customScenarios.get(i).getStartY());
-                System.out.println("loppu " + customScenarios.get(i).getGoalX() + ", " + customScenarios.get(i).getGoalY());
-                
-                System.out.println("löydetyn reitin pituus" + aStar.getPathLength());
-                System.out.println("expected result " + util.expectedResults[i]);
+            if (Math.abs(util.resultDistance(aStar, customScenarios.get(i)) - util.expectedResults[i]) > 0.001) {
                 fail("AStar didn't find the shortest path on custom map");
             }
         }
