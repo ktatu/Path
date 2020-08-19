@@ -1,12 +1,10 @@
 package datastructures;
 
+import java.util.ArrayDeque;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import tiralabra.path.datastructures.FifoQueue;
 
 /**
@@ -16,6 +14,7 @@ import tiralabra.path.datastructures.FifoQueue;
 public class FifoQueueTest {
     
     private FifoQueue testQueue;
+    Random r = new Random(1337);
     
     @Before
     public void setUp() {
@@ -24,17 +23,20 @@ public class FifoQueueTest {
 
     @Test
     public void queueReturnsIntegersInCorrectOrder() {
-        testQueue.add(5);
-        testQueue.add(5);
-        testQueue.add(10);
-        testQueue.add(8);
-        testQueue.add(7);
+        int testSize = 1000000;
+        testQueue = new FifoQueue(testSize);
         
-        assertEquals(5, testQueue.poll());
-        assertEquals(5, testQueue.poll());
-        assertEquals(10, testQueue.poll());
-        assertEquals(8, testQueue.poll());
-        assertEquals(7, testQueue.poll());
+        ArrayDeque comparisonQueue = new ArrayDeque<>();
+        
+        for (int i = 0; i < testSize; i++) {
+            int randomInt = r.nextInt(1000000);
+            testQueue.add(randomInt);
+            comparisonQueue.add(randomInt);
+        }
+        
+        while (!testQueue.isEmpty()) {
+            assertEquals(comparisonQueue.poll(), testQueue.poll());
+        }
     }
     
     @Test

@@ -7,14 +7,20 @@ import javafx.scene.paint.Color;
 import tiralabra.path.algorithms.Algorithm;
 
 /**
- * Creating an image from an algorithm's movement on given map
+ * Creating an image from an algorithm's movement on a map
  * @author Tatu
  */
 public class AlgorithmImageWriter {
     
     private Algorithm algo;
     
-    public WritableImage drawAlgorithm(Algorithm algo, HashSet<Integer> pathAsList) {
+    /**
+     * Writes an image by going through every grid
+     * @param algo from which the image is made
+     * @param pathAsSet the path found by algorithm
+     * @return 
+     */
+    public WritableImage drawAlgorithm(Algorithm algo, HashSet<Integer> pathAsSet) {
         this.algo = algo;
         
         int height = algo.gridMap.getMapHeight();
@@ -25,7 +31,7 @@ public class AlgorithmImageWriter {
         
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                writer.setColor(x, y, determineGridColor(x, y, pathAsList));
+                writer.setColor(x, y, determineGridColor(x, y, pathAsSet));
             }
         }
         return result;

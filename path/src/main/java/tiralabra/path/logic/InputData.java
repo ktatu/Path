@@ -8,6 +8,7 @@ import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 /**
  * Data from gui is collected and verified here
+ * Luultavasti poistan myöhemmin, data suoraan gui-luokassa globaaleihin muuttujiin
  * @author Tatu
  */
 public class InputData {
@@ -83,8 +84,6 @@ public class InputData {
     public GridMap getMap() {
         return map;
     }
-    
-    
     
     private GridMap getMapFromFile() throws IndexOutOfBoundsException, NumberFormatException {
         return mapReader.getGridMap(mapFile);

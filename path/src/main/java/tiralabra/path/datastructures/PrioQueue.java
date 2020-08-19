@@ -3,59 +3,76 @@ package tiralabra.path.datastructures;
 import tiralabra.path.logic.Grid;
 
 /**
- * Minimum heap, Grids ordered by distances
+ * PriorityQueue for Grids. Used by Dijkstra variations
  * @author Tatu
  */
 public class PrioQueue {
     
-    private final Grid[] prioQueue;
-    private int firstOpenCell;
+    // PrioQueue is a binary heap in the form of an array. If n is a grid's index, then its children are 2*n and 2*n+1
+    Grid[] queue;
+    private int firstOpen;
     
-    public PrioQueue(int mapSize) {
-        prioQueue = new Grid[mapSize + 1];
-        this.firstOpenCell = 1;
+    public PrioQueue() {
+        this.queue = new Grid[128];
+        this.firstOpen = 1;
     }
     
     /**
-     * Adds a grid to prioQueue, increases index and calls sorting function
-     * @param grid to be added into queue 
+     * Adding a grid to the PriorityQueue
+     * @param grid to be added to queue
      */
     public void add(Grid grid) {
-        prioQueue[firstOpenCell] = grid;
-        firstOpenCell++;
-        sortQueueAfterAdding();
+        sizeCheck();
+        queue[firstOpen] = grid;
+        firstOpen++;
+        sortAfterAdding();
     }
     
     /**
-     * Grabs the smallest Grid from queue, calls for a (different) sorting function and return the grid
-     * @return the smallest Grid in queue which is always the root node
+     * Check if the queue is currectly empty
+     * @return 
+     */
+    public boolean isEmpty() {
+        return queue[1] == null;
+    }
+    
+    /**
+     * Remove the grid with smallest value (distance + estimation)
+     * @return 
      */
     public Grid poll() {
         if (isEmpty()) {
             return null;
         }
-        Grid gridToReturn = prioQueue[1];
-        sortQueueAfterPolling();
-        return gridToReturn;
+        Grid toReturn = queue[1];
+        moveLatestGrid();
+        sortAfterPolling();
+        return toReturn;
     }
     
     /**
-     * Check whether queue is empty. Cell zero is kept empty for ease of managing the queue, so the first available cell is 1
-     * @return true if empty 
+     * Check if the queue size needs to be expanded. Always power of 2 for ease of handling PrioQueue's tree structure
      */
-    public boolean isEmpty() {
-        return (firstOpenCell == 1);
+    private void sizeCheck() {
+        if (firstOpen == queue.length) {
+            Grid[] newQueue = new Grid[queue.length * 2];
+            System.arraycopy(queue, 1, newQueue, 1, queue.length - 1);
+            queue = newQueue;
+        }
     }
     
     /**
-     * Swaps the recently added Grid with its parent until it's in the correct position priority-wise
+     * Sort queue after add() was called
+     * Sorting done by moving the recently added Grid up the tree until it no longer is bigger than its parent
      */
-    private void sortQueueAfterAdding() {
-        int pos = firstOpenCell - 1;
-        while (pos > 1) {
-            if (prioQueue[pos].compareTo(prioQueue[pos / 2]) == -1) {
-                swapPositions(pos, pos / 2);
-                pos /= 2;
+    private void sortAfterAdding() {
+        int posIndex = firstOpen - 1;
+        while (posIndex > 1) {
+            Grid childGrid = queue[posIndex];
+            Grid parentGrid = queue[posIndex / 2];
+            if (childGrid.compareTo(parentGrid) == -1) {
+                swapPositions(posIndex, posIndex / 2);
+                posIndex /= 2;
             } else {
                 break;
             }
@@ -63,38 +80,74 @@ public class PrioQueue {
     }
     
     /**
-     * Places the biggest Grid in queue to root position and swaps it with its children until queue is in order
+     * Sort queue after poll() was called
+     * Sorting happens by moving the newest gridin queue to root and moving it downwards
      */
-    private void sortQueueAfterPolling() {
-        prioQueue[1] = prioQueue[firstOpenCell - 1];
-        prioQueue[firstOpenCell - 1] = null;
-        int indexOfLastGrid = firstOpenCell - 1;
-        firstOpenCell--;
-        
+    private void sortAfterPolling() {
         int pos = 1;
-        while (pos < indexOfLastGrid - 1) {
-            int newPos = swapDownwards(pos);
-            if (newPos != -1) {
-                pos = newPos;
+        while (pos != -1) {
+            Grid leftChild = initializeGrid(pos * 2);
+            Grid rightChild = initializeGrid(pos * 2 + 1);
+            
+            int leftIndex = 2 * pos;
+            int rightIndex = 2 * pos + 1;
+            
+            if (leftChild == null || rightChild == null) {
+                pos = nullChildSwap(pos, leftChild, rightChild, leftIndex, rightIndex);
             } else {
-                break;
+                pos = pollSwap(pos, leftChild, rightChild, leftIndex, rightIndex);
             }
         }
     }
     
     /**
-     * Checks the possible swapping scenarios and does the operation if necessary
-     * @param idxParent index of Grid that is currently being compared to its children
-     * @return -1 if no swapping happened, otherwise the index of position where the parent ended up after it occurred
+     * Swap positions of a parent and child grid in the queue
+     * @param parentIndex of first grid
+     * @param childIndex of second grid
+     * @return childIndex to make calling methods' code cleaner
      */
-    private int swapDownwards(int idxParent) {
-        Grid parent = prioQueue[idxParent];
-        
-        int idxLeftChild = idxParent * 2;
-        int idxRightChild = idxParent * 2 + 1;
-        
-        Grid leftChild = idxLeftChild > firstOpenCell ? null : prioQueue[idxParent * 2];
-        Grid rightChild = leftChild == null ? null : prioQueue[idxParent * 2 + 1];
+    private int swapPositions(int parentIndex, int childIndex) {
+        Grid first = queue[parentIndex];
+        queue[parentIndex] = queue[childIndex];
+        queue[childIndex] = first;
+        return childIndex;
+    }
+    
+    /**
+     * After polling the last grid added to the queue is moved to the root for sorting
+     * The grid's position is made available for a new grid
+     */
+    private void moveLatestGrid() {
+        queue[1] = queue[firstOpen - 1];
+        queue[firstOpen - 1] = null;
+        firstOpen--;
+    }
+    
+    /**
+     * Index could be out of bounds so fetching a grid from queue requires exception handling
+     * @param index
+     * @return grid if there was one in the position of index, otherwise null
+     */
+    private Grid initializeGrid(int index) {
+        try {
+            Grid grid = queue[index];
+            return grid;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+    
+    /**
+     * Checking for swap when one of parent grid's children is null
+     * @param parentIndex index of grid whose children are being checked
+     * @param leftChild grid in position 2 * parentIndex
+     * @param rightChild grid in position 2 * parentIndex + 1
+     * @param leftIndex index of left grid
+     * @param rightIndex index of right grid
+     * @return -1 if no swap happened, otherwise the index of the child that swap happened with
+     */
+    private int nullChildSwap(int parentIndex, Grid leftChild, Grid rightChild, int leftIndex, int rightIndex) {
+        Grid parent = queue[parentIndex];
         
         if (leftChild == null && rightChild == null) {
             return -1;
@@ -102,80 +155,62 @@ public class PrioQueue {
         
         if (leftChild == null) {
             if (parent.compareTo(rightChild) == 1) {
-                swapPositions(idxParent, idxRightChild);
-                return idxRightChild;
+                return swapPositions(parentIndex, rightIndex);
+            } else {
+                return -1;
             }
         } else if (rightChild == null) {
             if (parent.compareTo(leftChild) == 1) {
-                swapPositions(idxParent, idxLeftChild);
-                return idxLeftChild;
+                return swapPositions(parentIndex, leftIndex);
+            } else {
+                return -1;
+            }
+        }
+        // This return should never happen
+        return -1;
+    }
+    
+    /**
+     * Checking for swap when neither child was null
+     * @param parentIndex index of grid whose children are being checked
+     * @param leftChild grid in position 2 * parentIndex
+     * @param rightChild grid in position 2 * parentIndex + 1
+     * @param leftIndex index of left grid
+     * @param rightIndex index of right grid
+     * @return -1 if no swap happened, otherwise the index of the child that swap happened with
+     */
+    private int pollSwap(int parentIndex, Grid leftChild, Grid rightChild, int leftIndex, int rightIndex) {
+        Grid parent = queue[parentIndex];
+        
+        if (leftChild.compareTo(rightChild) == -1) {
+            if (parent.compareTo(leftChild) == 1) {
+                return swapPositions(parentIndex, leftIndex);
+            } else {
+                if (parent.compareTo(rightChild) == 1) {
+                    return swapPositions(parentIndex, rightIndex);
+                }
             }
         } else {
-            int idxSmallestChild = prioQueue[idxLeftChild].compareTo(prioQueue[idxRightChild]) == -1 ? idxLeftChild : idxRightChild;
-            if (prioQueue[idxParent].compareTo(prioQueue[idxSmallestChild]) == 1) {
-                swapPositions(idxParent, idxSmallestChild);
-                return idxSmallestChild;
+            if (parent.compareTo(rightChild) == 1) {
+                swapPositions(parentIndex, rightIndex);
+                return rightIndex;
+            } else {
+                if (parent.compareTo(leftChild) == 1) {
+                    swapPositions(parentIndex, leftIndex);
+                    return leftIndex;
+                }
             }
         }
         return -1;
     }
     
-    /**
-     * Swapping operation
-     * @param idx1 index of first Grid
-     * @param idx2 index of second Grid
-     */
-    private void swapPositions(int idx1, int idx2) {
-        Grid first = prioQueue[idx1];
-        prioQueue[idx1] = prioQueue[idx2];
-        prioQueue[idx2] = first;
-    }
-    
-    // poista tämä kun valmista
+    /*
     public void printQueue() {
-        for (int i = 1; i < firstOpenCell; i++) {
-            System.out.println(prioQueue[i].getDistance() + prioQueue[i].getEstimation());
+        for (int i = 1; i < queue.length; i++) {
+            if (queue[i] != null) {
+                System.out.println(queue[i].getDistance());
+            }
         }
     }
-    
-    public void printFirstOpenCell() {
-        System.out.println(this.firstOpenCell);
-    }
-
+    */
 }
-
-
-/*
-    private int swapDownwards(int idxParent) {
-        Grid parent = prioQueue[idxParent];
-        
-        int idxLeftChild = idxParent * 2;
-        int idxRightChild = idxParent * 2 + 1;
-        
-        Grid leftChild = idxLeftChild > queueSize ? null : prioQueue[idxParent * 2];
-        Grid rightChild = leftChild == null ? null : prioQueue[idxParent * 2 + 1];
-        
-        if (leftChild == null && rightChild == null) {
-            return -1;
-        }
-        
-        if (leftChild == null) {
-            if (parent.compareTo(rightChild) == 1) {
-                swapPositions(idxParent, idxRightChild);
-                return idxRightChild;
-            }
-        } else if (rightChild == null) {
-            if (parent.compareTo(leftChild) == 1) {
-                swapPositions(idxParent, idxLeftChild);
-                return idxLeftChild;
-            }
-        } else {
-            int idxSmallestChild = prioQueue[idxLeftChild].compareTo(prioQueue[idxRightChild]) == -1 ? idxLeftChild : idxRightChild;
-            if (prioQueue[idxParent].compareTo(prioQueue[idxSmallestChild]) == 1) {
-                swapPositions(idxParent, idxSmallestChild);
-                return idxSmallestChild;
-            }
-        }
-        return -1;
-    }
-*/

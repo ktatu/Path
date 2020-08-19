@@ -13,107 +13,109 @@ import tiralabra.path.logic.Grid;
  */
 public class PrioQueueTest {
     
-    private PrioQueue testQueue;
-    private Random r = new Random(553);
+    private PrioQueue testPrio;
+
+    private Random r = new Random(1427);
     
     @Before
     public void setUp() {
-        testQueue = new PrioQueue(1000);
+        testPrio = new PrioQueue();
     }
 
-    
     @Test
-    public void correctPrioQueueOrderWithTwoGrids() {
-        testQueue.add(new Grid(0, 0, 0, 5));
-        testQueue.add(new Grid(0, 0, 4, 0));
+    public void prioQueueInCorrectOrderWithTwoGrids() {
+        testPrio.add(new Grid(0, 0, 10, 0));
+        testPrio.add(new Grid(0, 0, 5, 0));
         
-        Grid polled = testQueue.poll();
-        System.out.println(polled.getDistance()+"------------"+polled.getEstimation());
+        Grid polled = testPrio.poll();
+        assertEquals(5, (int)polled.getDistance());
     }
     
-    
     @Test
-    public void prioQueueReturnsIntegersInCorrectOrderUsingDistanceVariable() {
+    public void prioQueueReturnsGridsInCorrectOrderUsingDistanceVariable() {
         float min;
         
-        for (int i = 0; i < 1000; i++) {
-            testQueue.add(new Grid(0, 0, r.nextInt(1000000), 0));
+        for (int i = 0; i < 1000000; i++) {
+            int rand = r.nextInt(1000000);
+            testPrio.add(new Grid(0, 0, rand, 0));
         }
         
-        min = testQueue.poll().getDistance();
+        min = testPrio.poll().getDistance();
         
-        while(!testQueue.isEmpty()) {
-            Grid polled = testQueue.poll();
-            assertTrue(min < polled.getDistance() || min == polled.getDistance());
-            // Min should always end up being the next polled grid's value
+        int pollIndex = 1;
+        while (!testPrio.isEmpty()) {
+            Grid polled = testPrio.poll();
+            
+            if (min > polled.getDistance()) {
+                System.out.println("min: " + min);
+                System.out.println("polled: " + polled.getDistance());
+                System.out.println("index: " + pollIndex);
+                fail("PrioQueue is not in correct order after polling grids using distance variable");
+            }
+            pollIndex++;
             min = Math.max(min, polled.getDistance());
         }
     }
     
     @Test
-    public void prioQueueReturnsIntegersInCorrectOrderUsingEstimationVariable() {
+    public void prioQueueReturnsGridsInCorrectOrderUsingEstimationVariable() {
         float min;
         
-        for (int i = 0; i < 1000; i++) {
-            testQueue.add(new Grid(0, 0, 0, r.nextInt(1000000)));
+        for (int i = 0; i < 1000000; i++) {
+            int rand = r.nextInt(1000000);
+            testPrio.add(new Grid(0, 0, 0, rand));
         }
         
-        min = testQueue.poll().getDistance();
+        min = testPrio.poll().getDistance();
         
-        while(!testQueue.isEmpty()) {
-            Grid polled = testQueue.poll();
-            assertTrue(min < polled.getEstimation()|| min == polled.getEstimation());
-            // Min should always end up being the next polled grid's value
+        while (!testPrio.isEmpty()) {
+            Grid polled = testPrio.poll();
+            
+            if (min > polled.getDistance()) {
+                fail("PrioQueue is not in correct order after polling grids using estimation variable");
+            }
             min = Math.max(min, polled.getDistance());
         }
     }
     
-    /*
     @Test
-    public void prioQueueReturnsIntegersInCorrectOrderUsingBothVariables() {
-        float min;
+    public void prioQueueReturnsGridsInCorrectOrderUsingBothVariables() {
+        Grid min;
         
-        for (int i = 0; i < 100; i++) {
-            testQueue.add(new Grid(0, 0, r.nextInt(100), r.nextInt(100)));
+        for (int i = 0; i < 1000000; i++) {
+            testPrio.add(new Grid(0, 0, r.nextInt(500000), r.nextInt(500000)));
         }
         
-        Grid firstPoll = testQueue.poll();
+        min = testPrio.poll();
         
-        min = Float.sum(firstPoll.getDistance(), firstPoll.getEstimation());
-        
-        int i = 1;
-        while(!testQueue.isEmpty()) {
-            Grid polled = testQueue.poll();
+        while (!testPrio.isEmpty()) {
+            Grid polled = testPrio.poll();
             
-            float polledSum = Float.sum(polled.getDistance(), polled.getEstimation());
-            
-            System.out.println("min "+min);
-            System.out.println("polled "+polledSum);
-            System.out.println(i);
-            assertTrue(min < polledSum || min == polledSum);
-            // Min should always end up being the next polled grid's value
-            min = Math.max(min, Float.sum(polled.getDistance(), polled.getEstimation()));
-            i++;
+            if (min.compareTo(polled) == 1) {
+                fail("PrioQueue is not in correct order after polling grids using both variables");
+            }
+            min = polled;
         }
     }
-    */
+    
     @Test
     public void prioQueueIsEmptyAsExpected() {
-        assertTrue(testQueue.isEmpty());
+        assertTrue(testPrio.isEmpty());
         
-        testQueue.add(new Grid(0, 0, 1, 1));
-        assertFalse(testQueue.isEmpty());
+        testPrio.add(new Grid(0, 0, 1, 1));
+        assertFalse(testPrio.isEmpty());
         
-        testQueue.poll();
-        assertTrue(testQueue.isEmpty());
+        testPrio.poll();
+        assertTrue(testPrio.isEmpty());
     }
     
     @Test
     public void prioQueueReturnsNullWhenPolledAndEmpty() {
-        assertNull(testQueue.poll());
+        assertNull(testPrio.poll());
         
-        testQueue.add(new Grid(0, 0, 1, 1));
-        testQueue.poll();
-        assertNull(testQueue.poll());
+        testPrio.add(new Grid(0, 0, 1, 1));
+        testPrio.poll();
+        assertNull(testPrio.poll());
     }
+    
 }

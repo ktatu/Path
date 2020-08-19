@@ -27,6 +27,13 @@ public class FifoQueue {
         indexFirstOpenCell++;
     }
     
+/*
+    188421
+137359
+813609
+530303
+885227
+    */
     public boolean isEmpty() {
         return indexFirstEntry == indexFirstOpenCell;
     }

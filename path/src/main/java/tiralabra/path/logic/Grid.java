@@ -10,12 +10,13 @@ public class Grid implements Comparable<Grid> {
     private int y;
     private int x;
     private float distance;
-    private float estimation = 0;
+    private float estimation;
     
     public Grid(int y, int x, float distance) {
         this.y = y;
         this.x = x;
         this.distance = distance;
+        this.estimation = -1;
     }
     /**
      * Separate constructors for Dijkstra and algorithms that use heuristic (estimation)
@@ -58,7 +59,7 @@ public class Grid implements Comparable<Grid> {
     /*
     @Override
     public int compareTo(Grid o) {
-        if (estimation == 0) {
+        if (estimation == -1) {
             if (this.getDistance() - o.getDistance() <= 0) {
                 return -1;
             }
@@ -75,19 +76,38 @@ public class Grid implements Comparable<Grid> {
     */
     
     /**
-     * Comparing grids. First if statement is for pure Dijkstra's grids, other Dijkstra variations consider estimation as well
+     * Comparing grids. Only distance to the grid from start is taken into account when comparing pure Dijkstra's grids
      * @param o comparable object
      * @return -1 if smaller
      */
     @Override
     public int compareTo(Grid o) {
-        if (this.getEstimation() == 0 && o.getEstimation() == 0) {
-            if (this.getDistance() < o.getDistance()) {
-                return -1;
-            }
-            return 1;
+        // Check if comparison comes from a pure Dijkstra
+        if (this.getEstimation() == -1 && o.getEstimation() == -1) {
+            return dijkstraComparison(o);
+        } else {
+            return comparisonWithHeuristic(o);
         }
-        
+    }
+    
+    /**
+     * Comparing grids for pure Dijkstra
+     * @param o comparable grid
+     * @return -1 if this grid is smaller than o
+     */
+    private int dijkstraComparison(Grid o) {
+        if (this.getDistance() < o.getDistance()) {
+            return -1;
+        }
+        return 1;
+    }
+    
+    /**
+     * Comparing grids when they include a heuristic
+     * @param o comparable grid
+     * @return -1 if this grid is smaller than o
+     */
+    private int comparisonWithHeuristic(Grid o) {
         float sumThis = this.getDistance() + this.getEstimation();
         float sumO = o.getDistance() + o.getEstimation();
             
@@ -101,26 +121,6 @@ public class Grid implements Comparable<Grid> {
             }
             return -1;
         }
-            
         return 1;
     }
-    
-    /*
-    @Override
-    public int compareTo(Grid o) {
-        if (estimation == 0) {
-            if (this.getDistance() - o.getDistance() <= 0) {
-                return -1;
-            }
-            return 1;
-        } else {
-            if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) < 0) {
-                return -1;
-            } else if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) == 0) {
-                return 0;
-            }
-            return 1;
-        }
-    }
-    */
 }

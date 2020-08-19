@@ -1,6 +1,5 @@
 package tiralabra.path.algorithms;
 
-import java.util.PriorityQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -11,18 +10,10 @@ import tiralabra.path.logic.Scenario;
  */
 public class AStar extends Dijkstra {
     
-    /**
-     * 
-     * @param gridMap
-     * @param scen
-     */
     public AStar(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
     }
 
-    /**
-     *
-     */
     @Override
     public void initializeAlgorithm() {
         int startY = scen.getStartY();
@@ -45,8 +36,6 @@ public class AStar extends Dijkstra {
             Grid current = prioQueue.poll(); 
             int gridY = current.getY();
             int gridX = current.getX();
-            
-            //System.out.println("x,y "+ gridX+","+gridY);
             
             if (visited[gridY][gridX]) {
                 continue;
@@ -74,6 +63,7 @@ public class AStar extends Dijkstra {
         if (!isMovePossible(gridY, gridX, grid.getY(), grid.getX(), diagonal)) {
             return;
         }
+        
         float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
         if (newDistance < distance[gridY][gridX]) {
             distance[gridY][gridX] = newDistance;

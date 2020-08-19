@@ -107,7 +107,6 @@ public class JumpPointSearch extends Dijkstra {
         if (jumpPoint != -1) {
             int jumpPointY = intToGridY(jumpPoint);
             int jumpPointX = intToGridX(jumpPoint);
-            //System.out.println("lisätään jump point " + jumpPointY + ", " + jumpPointX);
             
             float distToNewJumpPoint = distance[y][x] + diagonalDistance(y, x, jumpPointY, jumpPointX);
             float heuristicEstimate = diagonalDistance(jumpPointY, jumpPointX, scen.getGoalY(), scen.getGoalX());
