@@ -28,6 +28,8 @@ public class JumpPointSearch extends Dijkstra {
         }
         distance[startY][startX] = 0;
         prioQueue.add(new Grid(startY, startX, 0, 0));
+        
+        jumpPoints = new ArrayList<>();
     }
     
     @Override
@@ -114,7 +116,7 @@ public class JumpPointSearch extends Dijkstra {
             distance[jumpPointY][jumpPointX] = distToNewJumpPoint;
             prevGrid[gridToInt(jumpPointY, jumpPointX)] = gridToInt(y, x);
             prioQueue.add(new Grid(jumpPointY, jumpPointX, distToNewJumpPoint, heuristicEstimate));
-            jumpPoints++;
+            jumpPoints.add(gridToInt(jumpPointY, jumpPointX));
         }
     }
     

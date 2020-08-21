@@ -1,5 +1,6 @@
 package tiralabra.path.algorithms;
 
+import java.util.ArrayList;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
@@ -9,8 +10,8 @@ import tiralabra.path.logic.Scenario;
  */
 public abstract class Algorithm {
     
-    // tilapäinen
-    public int jumpPoints = 1;
+    // tilapäinen taulukko jps:lle
+    public ArrayList<Integer> jumpPoints;
     
     /**
      * Keeps track of what was each grid's predecessor
@@ -104,10 +105,5 @@ public abstract class Algorithm {
      */
     public boolean goalVisited() {
         return visited[scen.getGoalY()][scen.getGoalX()];
-    }
-
-    // tilapäinen
-    public int getJumpPoints() {
-        return jumpPoints;
     }
 }

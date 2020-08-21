@@ -28,6 +28,7 @@ public class AStar extends Dijkstra {
         prioQueue.add(new Grid(startY, startX, 0, diagonalDistanceToGoal(startY, startX)));
     }
     
+    
     @Override
     public void runAlgorithm() {
         initializeAlgorithm();
@@ -59,16 +60,17 @@ public class AStar extends Dijkstra {
         }
     }
     
-    private void checkGrid(int gridY, int gridX, Grid grid, boolean diagonal) {
-        if (!isMovePossible(gridY, gridX, grid.getY(), grid.getX(), diagonal)) {
+    
+    private void checkGrid(int y, int x, Grid grid, boolean diagonal) {
+        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal)) {
             return;
         }
         
         float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
-        if (newDistance < distance[gridY][gridX]) {
-            distance[gridY][gridX] = newDistance;
-            prevGrid[gridToInt(gridY, gridX)] = gridToInt(grid.getY(), grid.getX());
-            prioQueue.add(new Grid(gridY, gridX, newDistance, diagonalDistanceToGoal(gridY, gridX)));
+        if (newDistance < distance[y][x]) {
+            distance[y][x] = newDistance;
+            prevGrid[gridToInt(y, x)] = gridToInt(grid.getY(), grid.getX());
+            prioQueue.add(new Grid(y, x, newDistance, diagonalDistanceToGoal(y, x)));
         }
     }
     

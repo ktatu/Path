@@ -3,7 +3,6 @@ package tiralabra.path.ui;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -11,16 +10,12 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tiralabra.path.logic.InputData;
-import tiralabra.path.logic.exceptions.InvalidScenarioException;
-import tiralabra.path.logic.exceptions.MissingUserInputException;
-import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 /**
  * Nodes related to submitting user input
@@ -40,7 +35,7 @@ public class InputPanel {
         return this.dataCollector;
     }
     
-    public VBox getInputPanel() {
+    public FlowPane getInputPanel() {
         FlowPane userInput = new FlowPane();
         userInput.setAlignment(Pos.CENTER);
         userInput.setHgap(15);
@@ -52,13 +47,7 @@ public class InputPanel {
         
         userInput.getChildren().addAll(mapSelection, saveImage, inputCoordinates, algoSelection);
         
-        VBox inputPanel = new VBox();
-        inputPanel.setSpacing(20);
-        inputPanel.setAlignment(Pos.CENTER);
-        
-        inputPanel.getChildren().add(userInput);
-        
-        return inputPanel;
+        return userInput;
     }
     
     private Button mapChooser(Stage stage) {
@@ -102,11 +91,13 @@ public class InputPanel {
         
         field.setPromptText(promptText);
         field.setId(id);
-        //field.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         field.setPrefWidth(50);
         
         field.setOnKeyTyped((event) -> {
-            dataCollector.setCoordinate(id, Integer.valueOf(field.getText()));
+            try {
+                dataCollector.setCoordinate(id, Integer.valueOf(field.getText()));
+            } catch(NumberFormatException e) {
+            }
         });
         
         return field;
@@ -131,7 +122,11 @@ public class InputPanel {
         aStar.setId("aStar");
         aStar.setToggleGroup(algos);
         
-        algoBox.getChildren().addAll(bfs, dijkstra, aStar);
+        RadioButton jps = new RadioButton("JPS");
+        jps.setId("jps");
+        jps.setToggleGroup(algos);
+        
+        algoBox.getChildren().addAll(bfs, dijkstra, aStar, jps);
         
         algos.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
             @Override
@@ -142,44 +137,5 @@ public class InputPanel {
         });
         
         return algoBox;
-    }
-    
-    /*
-    private Button programExecution() {
-        Button progExecution = new Button("Run algorithm");
-        progExecution.setOnAction((event) -> {
-                try {
-                    dataCollector.dataVerification();
-                } catch(InvalidScenarioException | MissingUserInputException | NoPathFoundException e) {
-                    System.out.println(e);
-                    exceptionPopup(e.getMessage());
-                }
-        });
-        return progExecution;
-    }
-    */
-
-    private void exceptionPopup(String message) {
-        Stage popup = new Stage();
-        popup.alwaysOnTopProperty();
-        popup.setMinHeight(100);
-        popup.setMinWidth(350);
-        
-        BorderPane popupPane = new BorderPane();
-        
-        Button ok = new Button("OK");
-        ok.setOnAction((event) -> {
-            popup.close();
-        });
-        
-        Label exceptionMsg = new Label(message);
-        exceptionMsg.setAlignment(Pos.CENTER);
-        
-        popupPane.setTop(exceptionMsg);
-        popupPane.setCenter(ok);
-        
-        popup.setTitle("Exception occurred");
-        popup.setScene(new Scene(popupPane));
-        popup.show();
     }
 }

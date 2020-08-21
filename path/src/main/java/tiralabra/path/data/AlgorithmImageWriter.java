@@ -34,6 +34,14 @@ public class AlgorithmImageWriter {
                 writer.setColor(x, y, determineGridColor(x, y, pathAsSet));
             }
         }
+        
+        // tilapäinen jps:n kartoitusta varten
+        if (algo.jumpPoints != null) {
+            for (int grid: algo.jumpPoints) {
+                writer.setColor(algo.intToGridX(grid), algo.intToGridY(grid), Color.YELLOW);
+            }
+        }
+        
         return result;
     }
     

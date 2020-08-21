@@ -77,11 +77,12 @@ public class Dijkstra extends Algorithm {
      * @param diagonal whether the move is diagonal or not
      */
     private void checkGrid(int y, int x, Grid grid, boolean diagonal) {
-        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal) || visited[y][x]) {
+        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal)) {
             return;
         }
         
-        float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
+        float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1.0f;
+        
         if (newDistance < distance[y][x]) {
             distance[y][x] = newDistance;
             prevGrid[gridToInt(y, x)] = gridToInt(grid.getY(), grid.getX());

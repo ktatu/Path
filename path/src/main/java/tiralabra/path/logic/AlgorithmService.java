@@ -1,11 +1,16 @@
 package tiralabra.path.logic;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashSet;
+import java.util.Locale;
 import javafx.scene.image.WritableImage;
 import tiralabra.path.algorithms.AStar;
 import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.algorithms.Dijkstra;
+import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.data.AlgorithmImageWriter;
 import tiralabra.path.data.FileIO;
 import tiralabra.path.logic.exceptions.NoPathFoundException;
@@ -17,7 +22,7 @@ import tiralabra.path.logic.exceptions.NoPathFoundException;
  */
 public class AlgorithmService {
     
-    private Algorithm algo;
+    public Algorithm algo;
     private boolean saveImage;
     
     private long startTime;
@@ -52,6 +57,8 @@ public class AlgorithmService {
             case "aStar":
                 algo = new AStar(gridMap, scen);
                 break;
+            case "jps":
+                algo = new JumpPointSearch(gridMap, scen);
             default:
                 // Should never happen
         }
@@ -74,11 +81,18 @@ public class AlgorithmService {
     }
     
     /**
-     * Distance from start grid to goal grid
-     * @return distance as float retrieved from distance matrix
+     * Distance from start grid to goal grid rounded to ceiling at accuracy of 1 decimal
+     * @return rounded distance
      */
-    private float pathLength() {
-        return algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];
+    private String pathLength() {
+        DecimalFormat dFormat = new DecimalFormat("#.#");
+        dFormat.setRoundingMode(RoundingMode.CEILING);
+        dFormat.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+        
+        float dist = algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];
+        System.out.println(dist);
+        
+        return dFormat.format(dist);
     }
     
     /**
