@@ -1,7 +1,6 @@
 package tiralabra.path.algorithms;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
@@ -11,11 +10,8 @@ import tiralabra.path.logic.Scenario;
  */
 public abstract class Algorithm {
     
-    // tilapäinen taulukko jps:lle
-    public HashSet<Integer> jumpPoints;
-    
     /**
-     * Keeps track of what was each grid's predecessor
+     * Keeps track of each grid's predecessor
      * Each cell in prevGrid[] represents a grid, which has been converted into an integer based on its coordinates
      */
     public int[] prevGrid;
@@ -28,7 +24,6 @@ public abstract class Algorithm {
     
     public ArrayList<Integer> path;
     
-    //float sqrtTwo = (float) Math.sqrt(2);
     float sqrtTwo = (float) 1.4;
     
     /**
@@ -51,9 +46,13 @@ public abstract class Algorithm {
         }
     }
     
-    // Operations needed before algorithm can be run are made here. Not included in algorithm runtime
+    /**
+     * Necessary operations for running the algorithm
+     */
     abstract public void initializeAlgorithm();
-    // Run the algorithm until the shortest path is found or all viable grids have been visited
+    /**
+     * Running the algorithm
+     */
     abstract public void runAlgorithm();
     
     protected void constructPath() {
@@ -84,7 +83,7 @@ public abstract class Algorithm {
         }
         return false;
     }
-
+    
     /**
      * Grid's coordinates are converted into an integer
      * @param y coordinate
@@ -92,6 +91,9 @@ public abstract class Algorithm {
      * @return Grid's value as integer.
      */
     public int gridToInt(int y, int x) {
+        if (outOfBounds(y, x)) {
+            return -1;
+        }
         return y * gridMap.getMapWidth() + x;
     }
     

@@ -1,6 +1,7 @@
 package tiralabra.path.algorithms;
 
 import tiralabra.path.datastructures.PrioQueue;
+import tiralabra.path.datastructures.GridList;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -44,52 +45,45 @@ public class Dijkstra extends Algorithm {
         
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 
-            int gridY = current.getY();
-            int gridX = current.getX();
+            int y = current.getY();
+            int x = current.getX();
             
-            if (visited[gridY][gridX]) {
+            if (visited[y][x]) {
                 continue;
             }
             
-            visited[gridY][gridX] = true;
+            visited[y][x] = true;
             
             if (goalVisited()) {
                 break;
             }
             
-            checkGrid(gridY - 1, gridX, current, false);
-            checkGrid(gridY + 1, gridX, current, false);
-            checkGrid(gridY, gridX - 1, current, false);
-            checkGrid(gridY, gridX + 1, current, false);
-
-            checkGrid(gridY - 1, gridX - 1, current, true);
-            checkGrid(gridY - 1, gridX + 1, current, true);
-            checkGrid(gridY + 1, gridX - 1, current, true);
-            checkGrid(gridY + 1, gridX + 1, current, true);
+            GridList neighbors = neighborList(y, x);
+            while (neighbors.canIterate()) {
+                int neighbor = neighbors.getNext();
+                checkGrid(neighbor, current);
+            }
         }
-        
         if (goalVisited()) {
             constructPath();
         }
     }
     
-    /**
-     * Checks whether the grid can be moved into and does related Dijkstra operations if so
-     * @param y coordinate of grid being checked
-     * @param x coordinate of grid being checked
-     * @param grid the grid from which the move is happening
-     * @param diagonal whether the move is diagonal or not
-     */
-    private void checkGrid(int y, int x, Grid grid, boolean diagonal) {
-        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal) || visited[y][x]) {
+    private void checkGrid(int nbor, Grid prev) {
+        int x = intToGridX(nbor);
+        int y = intToGridY(nbor);
+        
+        boolean diagonal = (x != prev.getX() && y != prev.getY());
+        
+        if (!isMovePossible(y, x, prev.getY(), prev.getX(), diagonal) || visited[y][x]) {
             return;
         }
         
-        float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1.0f;
+        float newDistance = diagonal ? prev.getDistance() + sqrtTwo : prev.getDistance() + 1.0f;
         
         if (newDistance < distance[y][x]) {
             distance[y][x] = newDistance;
-            prevGrid[gridToInt(y, x)] = gridToInt(grid.getY(), grid.getX());
+            prevGrid[nbor] = gridToInt(prev.getY(), prev.getX());
             prioQueue.add(new Grid(y, x, newDistance));
         }
     }
@@ -176,5 +170,20 @@ public class Dijkstra extends Algorithm {
         } else {
             return -1;
         }
+    }
+    
+    protected GridList neighborList(int y, int x) {
+        GridList nList = new GridList(8);
+        
+        nList.add(gridToInt(y - 1, x));
+        nList.add(gridToInt(y + 1, x));
+        nList.add(gridToInt(y, x - 1));
+        nList.add(gridToInt(y, x + 1));
+        nList.add(gridToInt(y - 1, x - 1));
+        nList.add(gridToInt(y - 1, x + 1));
+        nList.add(gridToInt(y + 1, x - 1));
+        nList.add(gridToInt(y + 1, x + 1));
+        
+        return nList;
     }
 }

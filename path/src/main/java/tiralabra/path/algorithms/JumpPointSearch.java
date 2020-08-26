@@ -1,6 +1,6 @@
 package tiralabra.path.algorithms;
 
-import java.util.ArrayList;
+import tiralabra.path.datastructures.GridList;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -61,14 +61,17 @@ public class JumpPointSearch extends Dijkstra {
     private void scanNeighbors(int y, int x) {
         boolean isStartGrid = (y == scen.getStartY() && x == scen.getStartX());
                 
-        ArrayList<Integer> neighbors = prunedNeighbors(y, x, isStartGrid);
-        for (int neighbor: neighbors) {
-                int nY = intToGridY(neighbor);
-                int nX = intToGridX(neighbor);
-                int jumpPoint = jump(nY, nX, nY - y, nX - x);
-                if (jumpPoint != -1) {
-                    addNewJumpPoint(jumpPoint, y, x);
-                }
+        GridList neighbors = prunedNeighbors(y, x, isStartGrid);
+        while (neighbors.canIterate()) {
+            int nbor = neighbors.getNext();
+            
+            int nY = intToGridY(nbor);
+            int nX = intToGridX(nbor);
+            
+            int jumpPoint = jump(nY, nX, nY - y, nX - x);
+            if (jumpPoint != -1) {
+                addNewJumpPoint(jumpPoint, y, x);
+            }
         }
     }
 
@@ -170,22 +173,13 @@ public class JumpPointSearch extends Dijkstra {
         return diagonalMoves * sqrtTwo + horAndVerMoves;
     }
     
-    private ArrayList<Integer> prunedNeighbors(int y, int x, boolean isStartGrid) {
-        ArrayList<Integer> neighborList = new ArrayList<>();
-        
+    private GridList prunedNeighbors(int y, int x, boolean isStartGrid) {
         // No pruning when grid (x,y) is the starting grid
         if (isStartGrid) {
-            neighborList.add(gridToInt(y - 1, x));
-            neighborList.add(gridToInt(y + 1, x));
-            neighborList.add(gridToInt(y, x - 1));
-            neighborList.add(gridToInt(y, x + 1));
-            neighborList.add(gridToInt(y - 1, x - 1));
-            neighborList.add(gridToInt(y + 1, x - 1));
-            neighborList.add(gridToInt(y + 1, x + 1));
-            neighborList.add(gridToInt(y - 1, x + 1));
-            return neighborList;
+            return neighborList(y, x);
         }
         
+        GridList neighbors = new GridList(8);
         
         int parent = prevGrid[gridToInt(y, x)];
         int pY = intToGridY(parent);
@@ -193,37 +187,32 @@ public class JumpPointSearch extends Dijkstra {
         
         int dirY = getDirectionY(y, pY);
         int dirX = getDirectionX(x, pX);
-        
-        
-        if (dirY != 0 && dirX != 0) {
-            
-        }
 
         if (dirY != 0 && dirX != 0) {
             if (forcedDiagonal(y, x, dirY, dirX)) {
                 int prevY = y - dirY;
                 int prevX = x - dirX;
-                neighborList.add(gridToInt(prevY + 2, prevX));
-                neighborList.add(gridToInt(prevY, prevX + 2));
+                neighbors.add(gridToInt(prevY + 2, prevX));
+                neighbors.add(gridToInt(prevY, prevX + 2));
             }
-            neighborList.add(gridToInt(y + dirY, x + dirX));
-            neighborList.add(gridToInt(y + dirY, x));
-            neighborList.add(gridToInt(y, x + dirX));
+            neighbors.add(gridToInt(y + dirY, x + dirX));
+            neighbors.add(gridToInt(y + dirY, x));
+            neighbors.add(gridToInt(y, x + dirX));
         } else if (dirY == 0) {
             if (checkForcedHorizontal(y, x, dirX)) {
-                neighborList.add(gridToInt(y - 1, x + dirX));
-                neighborList.add(gridToInt(y + 1, x + dirX));
+                neighbors.add(gridToInt(y - 1, x + dirX));
+                neighbors.add(gridToInt(y + 1, x + dirX));
             }
-            neighborList.add(gridToInt(y, x + dirX));
+            neighbors.add(gridToInt(y, x + dirX));
         } else {
             if (checkForcedVertical(y, x, dirY)) {
-                neighborList.add(gridToInt(y + dirY, x + 1));
-                neighborList.add(gridToInt(y + dirY, x - 1));
+                neighbors.add(gridToInt(y + dirY, x + 1));
+                neighbors.add(gridToInt(y + dirY, x - 1));
             }
-            neighborList.add(gridToInt(y + dirY, x));
+            neighbors.add(gridToInt(y + dirY, x));
 
         }
-        return neighborList;
+        return neighbors;
     }
     
     // JPS requires a separate implementation of constructing path because of the gaps between jump points

@@ -1,5 +1,6 @@
 package tiralabra.path.algorithms;
 
+import tiralabra.path.datastructures.GridList;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -28,51 +29,50 @@ public class AStar extends Dijkstra {
         prioQueue.add(new Grid(startY, startX, 0, diagonalDistanceToGoal(startY, startX)));
     }
     
-    
     @Override
     public void runAlgorithm() {
         initializeAlgorithm();
         
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 
-            int gridY = current.getY();
-            int gridX = current.getX();
+            int y = current.getY();
+            int x = current.getX();
             
-            if (visited[gridY][gridX]) {
+            if (visited[y][x]) {
                 continue;
             }
             
-            visited[gridY][gridX] = true;
+            visited[y][x] = true;
             
             if (goalVisited()) {
                 break;
             }
             
-            checkGrid(gridY - 1, gridX, current, false);
-            checkGrid(gridY + 1, gridX, current, false);
-            checkGrid(gridY, gridX - 1, current, false);
-            checkGrid(gridY, gridX + 1, current, false);
-
-            checkGrid(gridY - 1, gridX - 1, current, true);
-            checkGrid(gridY - 1, gridX + 1, current, true);
-            checkGrid(gridY + 1, gridX - 1, current, true);
-            checkGrid(gridY + 1, gridX + 1, current, true);
+            GridList neighbors = neighborList(y, x);
+            while (neighbors.canIterate()) {
+                int neighbor = neighbors.getNext();
+                checkGrid(neighbor, current);
+            }
         }
         if (goalVisited()) {
             constructPath();
         }
     }
     
-    
-    private void checkGrid(int y, int x, Grid grid, boolean diagonal) {
-        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal)) {
+    private void checkGrid(int nbor, Grid prev) {
+        int x = intToGridX(nbor);
+        int y = intToGridY(nbor);
+        
+        boolean diagonal = (x != prev.getX() && y != prev.getY());
+        
+        if (!isMovePossible(y, x, prev.getY(), prev.getX(), diagonal)) {
             return;
         }
         
-        float newDistance = diagonal ? grid.getDistance() + sqrtTwo : grid.getDistance() + 1;
+        float newDistance = diagonal ? prev.getDistance() + sqrtTwo : prev.getDistance() + 1;
         if (newDistance < distance[y][x]) {
             distance[y][x] = newDistance;
-            prevGrid[gridToInt(y, x)] = gridToInt(grid.getY(), grid.getX());
+            prevGrid[gridToInt(y, x)] = gridToInt(prev.getY(), prev.getX());
             prioQueue.add(new Grid(y, x, newDistance, diagonalDistanceToGoal(y, x)));
         }
     }

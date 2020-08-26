@@ -16,7 +16,6 @@ public class AlgorithmImageWriter {
     /**
      * Writes an image by going through every grid
      * @param algo from which the image is made
-     * @param pathAsSet the path found by algorithm
      * @return Image with the path, terrain and visited grids marked
      */
     public WritableImage drawAlgorithm(Algorithm algo) {
@@ -34,44 +33,28 @@ public class AlgorithmImageWriter {
             }
         }
         
-        // tilapäinen jps:n kartoitusta varten
-        /*
-        if (algo.jumpPoints != null) {
-            for (int grid: algo.jumpPoints) {
-                writer.setColor(algo.intToGridX(grid), algo.intToGridY(grid), Color.YELLOW);
-            }
-        }
-        */
-        
         return result;
     }
     
+    /**
+     * Determining color for point (x,y) in grid
+     * @param x coordinate
+     * @param y coordinate
+     * @return color
+     */
     private Color determineGridColor(int x, int y) {
-        if (isStartOrGoal(x, y)) {
+        if ((algo.scen.getStartX() == x && algo.scen.getStartY() == y) || (algo.scen.getGoalX() == x && algo.scen.getGoalY() == y)) {
             return Color.GREEN;
         } 
         if (algo.path.contains(algo.gridToInt(y, x))) {
             return Color.RED;
         } 
-        if (algo.jumpPoints != null) {
-            if (algo.jumpPoints.contains(algo.gridToInt(y, x))) {
-                return Color.YELLOW;
-            }
-        }
         if (algo.visited[y][x]) {
             return Color.BLUE;
-        } else if (algo.gridMap.isPassable(algo.gridMap.getGrid(y, x))) {
+        } 
+        if (algo.gridMap.isPassable(algo.gridMap.getGrid(y, x))) {
             return Color.LIGHTGRAY;
         }
         return Color.BLACK;
-    }
-    
-    private boolean isStartOrGoal(int x, int y) {
-        if (algo.scen.getStartX() == x && algo.scen.getStartY() == y) {
-            return true;
-        } else if (algo.scen.getGoalX() == x && algo.scen.getGoalY() == y) {
-            return true;
-        }
-        return false;
     }
 }

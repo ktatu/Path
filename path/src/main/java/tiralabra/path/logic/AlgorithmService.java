@@ -3,14 +3,12 @@ package tiralabra.path.logic;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.HashSet;
 import java.util.Locale;
 import javafx.scene.image.WritableImage;
 import tiralabra.path.algorithms.AStar;
 import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.algorithms.Dijkstra;
-import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.data.AlgorithmImageWriter;
 import tiralabra.path.data.FileIO;
@@ -40,10 +38,11 @@ public class AlgorithmService {
         algo.runAlgorithm();
         endTime = System.nanoTime();
         
+        /*
         if (!algo.goalVisited()) {
             throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
         }
-        
+        */
     }
     
     private void setAlgorithm(String algoId, GridMap gridMap, Scenario scen) {
@@ -103,6 +102,10 @@ public class AlgorithmService {
         return ((endTime - startTime) / 1e9);
     }
     
+    /**
+     * Calling AlgorithmImageWriter to draw the algorithm
+     * @return WritableImage object of the algorithm
+     */
     public WritableImage getAlgoImage() {
         final AlgorithmImageWriter algDrawer = new AlgorithmImageWriter();
         
@@ -112,16 +115,5 @@ public class AlgorithmService {
             FileIO.getInstance().saveImage(algoImage, algoId);
         }
         return algoImage;
-    }
-    
-    private HashSet<Integer> pathAsSet() {
-        HashSet<Integer> pathSet = new HashSet<>();
-        int goalGridAsInt = algo.gridToInt(algo.scen.getGoalY(), algo.scen.getGoalX());
-        
-        while (algo.prevGrid[goalGridAsInt] != -1) {
-            pathSet.add(goalGridAsInt);
-            goalGridAsInt = algo.prevGrid[goalGridAsInt];
-        }
-        return pathSet;
     }
 }
