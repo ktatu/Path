@@ -19,6 +19,10 @@ public class GridMap {
         return passableTerrain.contains(terrain);
     }
     
+    public boolean passableGrid(int y, int x) {
+        return passableTerrain.contains(gridMap[y][x]);
+    }
+    
     public char getGrid(int y, int x) {
         return gridMap[y][x];
     }

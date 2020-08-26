@@ -1,6 +1,5 @@
 package tiralabra.path.data;
 
-import java.util.HashSet;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
@@ -18,9 +17,9 @@ public class AlgorithmImageWriter {
      * Writes an image by going through every grid
      * @param algo from which the image is made
      * @param pathAsSet the path found by algorithm
-     * @return 
+     * @return Image with the path, terrain and visited grids marked
      */
-    public WritableImage drawAlgorithm(Algorithm algo, HashSet<Integer> pathAsSet) {
+    public WritableImage drawAlgorithm(Algorithm algo) {
         this.algo = algo;
         
         int height = algo.gridMap.getMapHeight();
@@ -28,29 +27,38 @@ public class AlgorithmImageWriter {
         
         WritableImage result = new WritableImage(width, height);
         PixelWriter writer = result.getPixelWriter();
-        
+
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                writer.setColor(x, y, determineGridColor(x, y, pathAsSet));
+                writer.setColor(x, y, determineGridColor(x, y));
             }
         }
         
         // tilapäinen jps:n kartoitusta varten
+        /*
         if (algo.jumpPoints != null) {
             for (int grid: algo.jumpPoints) {
                 writer.setColor(algo.intToGridX(grid), algo.intToGridY(grid), Color.YELLOW);
             }
         }
+        */
         
         return result;
     }
     
-    private Color determineGridColor(int x, int y, HashSet<Integer> pathAsList) {
+    private Color determineGridColor(int x, int y) {
         if (isStartOrGoal(x, y)) {
             return Color.GREEN;
-        } else if (pathAsList.contains(algo.gridToInt(y, x))) {
+        } 
+        if (algo.path.contains(algo.gridToInt(y, x))) {
             return Color.RED;
-        } if (algo.visited[y][x]) {
+        } 
+        if (algo.jumpPoints != null) {
+            if (algo.jumpPoints.contains(algo.gridToInt(y, x))) {
+                return Color.YELLOW;
+            }
+        }
+        if (algo.visited[y][x]) {
             return Color.BLUE;
         } else if (algo.gridMap.isPassable(algo.gridMap.getGrid(y, x))) {
             return Color.LIGHTGRAY;

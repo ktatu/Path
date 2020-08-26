@@ -19,7 +19,7 @@ public class TestUtils {
     }
     
     public boolean correctDistance(float algorithmCalculation, Scenario scen) {
-        if (Math.abs(algorithmCalculation - diagonalDistance(scen.getStartY(), scen.getStartX(), scen.getGoalY(), scen.getGoalX())) > 0.001) {
+        if (Math.abs(algorithmCalculation - diagonalDistance(scen.getStartY(), scen.getStartX(), scen.getGoalY(), scen.getGoalX())) > 0.1) {
             return false;
         }
         return true;

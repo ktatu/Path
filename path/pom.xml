@@ -57,6 +57,18 @@
                 <configuration>
                     <mainClass>tiralabra.path.ui.Gui</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <!-- Configuration for debugging -->
+                        <id>debug</id>
+                        <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=${jpda.address}</option>
+                            </options>
+                            <mainClass>tiralabra.path.ui.Gui</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

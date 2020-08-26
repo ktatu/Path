@@ -11,7 +11,7 @@ import tiralabra.path.logic.Scenario;
  */
 public class Dijkstra extends Algorithm {
 
-    protected PrioQueue prioQueue;
+    public PrioQueue prioQueue;
     
     public Dijkstra(GridMap gridMap, Scenario scen) {
         super(gridMap, scen);
@@ -28,7 +28,7 @@ public class Dijkstra extends Algorithm {
 
         for (int y = 0; y < gridMap.getMapHeight(); y++) {
             for (int x = 0; x < gridMap.getMapWidth(); x++) {
-                distance[y][x] = Integer.MAX_VALUE;
+                distance[y][x] = 1000000;
             }
         }
         distance[startY][startX] = 0;
@@ -36,7 +36,7 @@ public class Dijkstra extends Algorithm {
     }
     
     /**
-     * Runs initialization then Dijkstra. Goes through every possible adjacent grid for each grid taken from priority queue
+     * Runs initialization then Dijkstra. Goes through every neighbor of each grid polled from priority queue
      */
     @Override
     public void runAlgorithm() {
@@ -67,6 +67,10 @@ public class Dijkstra extends Algorithm {
             checkGrid(gridY + 1, gridX - 1, current, true);
             checkGrid(gridY + 1, gridX + 1, current, true);
         }
+        
+        if (goalVisited()) {
+            constructPath();
+        }
     }
     
     /**
@@ -77,7 +81,7 @@ public class Dijkstra extends Algorithm {
      * @param diagonal whether the move is diagonal or not
      */
     private void checkGrid(int y, int x, Grid grid, boolean diagonal) {
-        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal)) {
+        if (!isMovePossible(y, x, grid.getY(), grid.getX(), diagonal) || visited[y][x]) {
             return;
         }
         
@@ -103,39 +107,74 @@ public class Dijkstra extends Algorithm {
         if (diagonal) {
             return isValidDiagonalMove(y, x, prevGridY, prevGridX);
         }
-        return isValidHorOrVerMove(y, x);
+        return isPassable(y, x);
     }
-    
+
     /**
-     * Checks if a diagonal grid can be moved into
-     * @param y coordinate of grid being checked
-     * @param x coordinate of grid being checked
-     * @param prevY y coordinate of the grid where the move is happening from
-     * @param prevX x coordinate of the grid where the move is happening from
-     * @return true if the grid can be moved into
+     * Check if diagonal move can occur. The move isn't viable if the two adjacent grids next to both the grid and its parent are unpassable terrain
+     * @param y coordinate
+     * @param x coordinate
+     * @param pY parent coordinate
+     * @param pX parent coordinate
+     * @return true if the move is not blocked
      */
-    protected boolean isValidDiagonalMove(int y, int x, int prevY, int prevX) {
-        if (!isValidHorOrVerMove(y, x)) {
+    protected boolean isValidDiagonalMove(int y, int x, int pY, int pX) {
+        if (!isPassable(y, x)) {
             return false;
         }
         
-        if (y > prevY && x > prevX) {
-            if (!isValidHorOrVerMove(y - 1, x) && !isValidHorOrVerMove(y, x - 1)) {
+        int dirY = getDirectionY(y, pY);
+        int dirX = getDirectionX(x, pX);
+        
+        if (dirY == 1 && dirX == 1) { // Southeast
+            if (!isPassable(y - 1, x) && !isPassable(y, x - 1)) {
                 return false;
             }
-        } else if (y < prevY && x > prevX) {
-            if (!isValidHorOrVerMove(y, x - 1) && !isValidHorOrVerMove(y + 1, x)) {
+        } else if (dirY == -1 && dirX == 1) { // Northeast
+            if (!isPassable(y, x - 1) && !isPassable(y + 1, x)) {
                 return false;
             }
-        } else if (y < prevY && x < prevX) {
-            if (!isValidHorOrVerMove(y, x + 1) && !isValidHorOrVerMove(y + 1, x)) {
+        } else if (dirY == -1 && dirX == -1) { // Northwest
+            if (!isPassable(y, x + 1) && !isPassable(y + 1, x)) {
                 return false;
             }
-        } else if (y > prevY && x < prevX) {
-            if (!isValidHorOrVerMove(y - 1, x) && !isValidHorOrVerMove(y, x + 1)) {
+        } else if (dirY == 1 && dirX == -1) { // Southwest
+            if (!isPassable(y - 1, x) && !isPassable(y, x + 1)) {
                 return false;
             }
         }
-        return true;
+        return true;         
+    }
+    
+    /**
+     * Determines vertical direction based on two grids' y coordinates
+     * @param y coordinate
+     * @param pY parent coordinate
+     * @return 1 for upwards and -1 for downwards, 0 is no vertical movement
+     */
+    protected int getDirectionY(int y, int pY) {
+        if (y > pY) {
+            return 1;
+        } else if (y == pY) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+    
+    /**
+     * Determines horizontal direction based on two grids' x coordinates
+     * @param x coordinate
+     * @param pX parent coordinate
+     * @return  1 for right, -1 for left, 0 is no horizontal movement
+     */
+    protected int getDirectionX(int x, int pX) {
+        if (x > pX) {
+            return 1;
+        } else if (x == pX) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }

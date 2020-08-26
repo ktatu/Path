@@ -11,6 +11,7 @@ import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.algorithms.Dijkstra;
 import tiralabra.path.algorithms.JumpPointSearch;
+import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.data.AlgorithmImageWriter;
 import tiralabra.path.data.FileIO;
 import tiralabra.path.logic.exceptions.NoPathFoundException;
@@ -35,8 +36,6 @@ public class AlgorithmService {
         this.saveImage = saveImage;
         this.algoId = algoId;
         
-        System.out.println("Running " + algoId);
-        
         startTime = System.nanoTime();
         algo.runAlgorithm();
         endTime = System.nanoTime();
@@ -44,6 +43,7 @@ public class AlgorithmService {
         if (!algo.goalVisited()) {
             throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
         }
+        
     }
     
     private void setAlgorithm(String algoId, GridMap gridMap, Scenario scen) {
@@ -90,7 +90,6 @@ public class AlgorithmService {
         dFormat.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
         
         float dist = algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];
-        System.out.println(dist);
         
         return dFormat.format(dist);
     }
@@ -100,13 +99,14 @@ public class AlgorithmService {
      * @return runtime in seconds
      */
     private double runTime() {
+        System.out.println((endTime - startTime) / 1e9);
         return ((endTime - startTime) / 1e9);
     }
     
     public WritableImage getAlgoImage() {
         final AlgorithmImageWriter algDrawer = new AlgorithmImageWriter();
         
-        WritableImage algoImage = algDrawer.drawAlgorithm(algo, pathAsList());
+        WritableImage algoImage = algDrawer.drawAlgorithm(algo);
 
         if (saveImage) {
             FileIO.getInstance().saveImage(algoImage, algoId);
@@ -114,14 +114,14 @@ public class AlgorithmService {
         return algoImage;
     }
     
-    private HashSet<Integer> pathAsList() {
-        HashSet<Integer> pathList = new HashSet<>();
+    private HashSet<Integer> pathAsSet() {
+        HashSet<Integer> pathSet = new HashSet<>();
         int goalGridAsInt = algo.gridToInt(algo.scen.getGoalY(), algo.scen.getGoalX());
         
         while (algo.prevGrid[goalGridAsInt] != -1) {
-            pathList.add(goalGridAsInt);
+            pathSet.add(goalGridAsInt);
             goalGridAsInt = algo.prevGrid[goalGridAsInt];
         }
-        return pathList;
+        return pathSet;
     }
 }

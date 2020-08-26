@@ -11,7 +11,7 @@ import tiralabra.path.logic.Scenario;
 public class BreadthFirstSearch extends Algorithm {
     
     // Grids are stored as integers into a first-in-first-out queue
-    private FifoQueue queue;
+    private final FifoQueue queue;
     
     /**
      * Makes a call to Algorithm to set data structures and initializes queue
@@ -54,6 +54,10 @@ public class BreadthFirstSearch extends Algorithm {
             int gridX = intToGridX(gridAsInt);
             
             checkAdjacentGrids(gridY, gridX);
+        }
+        
+        if (goalVisited()) {
+            constructPath();
         }
     }
     

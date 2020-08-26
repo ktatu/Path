@@ -1,6 +1,7 @@
 package tiralabra.path.algorithms;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
@@ -11,7 +12,7 @@ import tiralabra.path.logic.Scenario;
 public abstract class Algorithm {
     
     // tilapäinen taulukko jps:lle
-    public ArrayList<Integer> jumpPoints;
+    public HashSet<Integer> jumpPoints;
     
     /**
      * Keeps track of what was each grid's predecessor
@@ -25,6 +26,8 @@ public abstract class Algorithm {
     public Scenario scen;
     public GridMap gridMap;
     
+    public ArrayList<Integer> path;
+    
     //float sqrtTwo = (float) Math.sqrt(2);
     float sqrtTwo = (float) 1.4;
     
@@ -34,6 +37,8 @@ public abstract class Algorithm {
      * @param scen start and goal coordinates of algorithm
      */
     public Algorithm(GridMap gridMap, Scenario scen) {
+        path = new ArrayList<>();
+        
         this.gridMap = gridMap;
         this.distance = new float[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
         this.visited = new boolean[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
@@ -50,6 +55,15 @@ public abstract class Algorithm {
     abstract public void initializeAlgorithm();
     // Run the algorithm until the shortest path is found or all viable grids have been visited
     abstract public void runAlgorithm();
+    
+    protected void constructPath() {
+        int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
+        
+        while (prevGrid[goalGridAsInt] != -1) {
+            path.add(goalGridAsInt);
+            goalGridAsInt = prevGrid[goalGridAsInt];
+        }
+    }
     
     /**
      * Check if coordinates are within map boundaries and the grid in these coordinates is passable terrain
@@ -105,5 +119,19 @@ public abstract class Algorithm {
      */
     public boolean goalVisited() {
         return visited[scen.getGoalY()][scen.getGoalX()];
+    }
+    
+    protected boolean isPassable(int y, int x) {
+        if (outOfBounds(y, x)) {
+            return false;
+        }
+        return gridMap.passableGrid(y, x);
+    }
+    
+    public int[] intToCoordinates(int grid) {
+        int[] coordinates = new int[2];
+        coordinates[0] = grid % gridMap.getMapWidth();
+        coordinates[1] = grid / gridMap.getMapWidth();
+        return coordinates;
     }
 }

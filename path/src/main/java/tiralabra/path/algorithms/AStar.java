@@ -58,6 +58,9 @@ public class AStar extends Dijkstra {
             checkGrid(gridY + 1, gridX - 1, current, true);
             checkGrid(gridY + 1, gridX + 1, current, true);
         }
+        if (goalVisited()) {
+            constructPath();
+        }
     }
     
     

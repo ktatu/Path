@@ -1,4 +1,4 @@
-/*
+
 package algorithms;
 
 import static algorithms.AlgorithmSetup.customMap;
@@ -8,8 +8,8 @@ import static algorithms.AlgorithmSetup.scenarios;
 import static algorithms.AlgorithmSetup.testMap;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tiralabra.path.algorithms.AStar;
 import tiralabra.path.algorithms.Algorithm;
+import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.logic.Scenario;
 
@@ -35,9 +35,9 @@ public class JumpPointSearchTest extends AlgorithmSetup {
     @Test
     public void jpsFindsTheShortestPathOnEmptyMap() {
         for (Scenario scen : scenarios) {
-            Algorithm jps = new AStar(distanceTestMap, scen);
+            Algorithm jps = new JumpPointSearch(distanceTestMap, scen);
             jps.runAlgorithm();
-            if (!util.correctDistance(jps.getPathLength(), scen)) {
+            if (!util.correctDistance(util.resultDistance(jps, scen), scen)) {
                 fail("JPS didn't find the shortest path on empty map");
             }
         }
@@ -46,13 +46,15 @@ public class JumpPointSearchTest extends AlgorithmSetup {
     @Test
     public void jpsFindsTheShortestPathOnCustomMap() {
         for (int i = 0; i < customScenarios.size(); i++) {
-            Algorithm jps = new AStar(customMap, customScenarios.get(i));
+            Algorithm jps = new JumpPointSearch(customMap, customScenarios.get(i));
             jps.runAlgorithm();
             
-            if (Math.abs(jps.getPathLength() - util.expectedResults[i]) > 0.001) {
+            if (Math.abs(util.resultDistance(jps, customScenarios.get(i)) - util.expectedResults[i]) > 0.1) {
+                System.out.println(i);
+                System.out.println(util.resultDistance(jps, customScenarios.get(i)));
+                System.out.println(util.expectedResults[i]);
                 fail("JPS didn't find the shortest path on custom map");
             }
         }
     }
 }
-*/

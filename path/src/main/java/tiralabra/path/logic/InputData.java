@@ -89,6 +89,6 @@ public class InputData {
     }
     
     private boolean missingUserInput() {
-        return (mapFile == null || algoId == null || scen.getStartX() == 0 || scen.getStartY() == 0 || scen.getGoalX() == 0 || scen.getGoalY() == 0);
+        return (mapFile == null || algoId == null);
     }
 }
