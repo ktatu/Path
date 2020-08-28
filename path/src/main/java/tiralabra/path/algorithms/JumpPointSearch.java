@@ -1,6 +1,7 @@
 package tiralabra.path.algorithms;
 
 import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -13,15 +14,14 @@ public class JumpPointSearch extends Dijkstra {
     
     // closed[][] performs the same duty as visited[][] in other algorithms; keeping track of which grids have been dealt with
     // JPS uses visited[][] to mark grids scanned by jump(). More convenient since AlgorithmImageWriter can access visited[][] but not closed[][]
-    private final boolean closed[][];
-    
-    public JumpPointSearch(GridMap gridMap, Scenario scen) {
-        super(gridMap, scen);
-        this.closed = new boolean[gridMap.getMapHeight()][gridMap.getMapWidth()];
-    }
+    private boolean closed[][];
 
-    @Override
-    public void initializeAlgorithm() {
+    public void initializeJPS(GridMap map, Scenario scen) {
+        initializeAlgorithm(map, scen);
+        
+        this.closed = new boolean[gridMap.getMapHeight()][gridMap.getMapWidth()];
+        this.prioQueue = new PrioQueue();
+        
         int startY = scen.getStartY();
         int startX = scen.getStartX();
         
@@ -35,8 +35,8 @@ public class JumpPointSearch extends Dijkstra {
     }
     
     @Override
-    public void runAlgorithm() {
-        initializeAlgorithm();
+    public void runAlgorithm(GridMap map, Scenario scen) {
+        initializeJPS(map, scen);
         while (!prioQueue.isEmpty()) {
             if (closed[scen.getGoalY()][scen.getGoalX()]) {
                 break;
@@ -53,6 +53,7 @@ public class JumpPointSearch extends Dijkstra {
             
             scanNeighbors(y, x);
         }
+        
         if (goalVisited()) {
             constructPath();
         }
@@ -75,6 +76,12 @@ public class JumpPointSearch extends Dijkstra {
         }
     }
 
+    /*
+y ja x: 186,422
+pY ja pX: 183,413
+jumpGrid    190886
+    422	333	470	214
+*/
     private void addNewJumpPoint(int jumpGrid, int parentY, int parentX) {
         int jumpY = intToGridY(jumpGrid);
         int jumpX = intToGridX(jumpGrid);
@@ -87,6 +94,8 @@ public class JumpPointSearch extends Dijkstra {
         }
         
         if (newDist < distance[jumpY][jumpX]) {
+            visited[jumpY][jumpX] = true;
+            
             distance[jumpY][jumpX] = newDist;
             prevGrid[gridToInt(jumpY, jumpX)] = gridToInt(parentY, parentX);
             prioQueue.add(new Grid(jumpY, jumpX, newDist, heuristicEstimate));
@@ -102,8 +111,6 @@ public class JumpPointSearch extends Dijkstra {
         if (!isMovePossible(y, x, y - dirY, x - dirX, diagonal)) {
             return -1;
         }
-
-        visited[y][x] = true; 
         
         if (y == scen.getGoalY() && x == scen.getGoalX()) {
             return gridToInt(y, x);
@@ -190,10 +197,8 @@ public class JumpPointSearch extends Dijkstra {
 
         if (dirY != 0 && dirX != 0) {
             if (forcedDiagonal(y, x, dirY, dirX)) {
-                int prevY = y - dirY;
-                int prevX = x - dirX;
-                neighbors.add(gridToInt(prevY + 2, prevX));
-                neighbors.add(gridToInt(prevY, prevX + 2));
+                neighbors.add(gridToInt(y + dirY, x - dirX));
+                neighbors.add(gridToInt(y - dirY, x + dirX));
             }
             neighbors.add(gridToInt(y + dirY, x + dirX));
             neighbors.add(gridToInt(y + dirY, x));
@@ -228,19 +233,23 @@ public class JumpPointSearch extends Dijkstra {
     }
     
     private void pathBetweenJumpPoints(int grid) {
-        if (prevGrid[grid] == -1) {
+        if (prevGrid[grid] == -1 || grid == -1) {
             return;
         }
-        int[] coord = intToCoordinates(grid);
-        int[] pCoord = intToCoordinates(prevGrid[grid]);
         
-        int dirY = getDirectionY(pCoord[1], coord[1]);
-        int dirX = getDirectionX(pCoord[0], coord[0]);
+        int y = intToGridY(grid);
+        int x = intToGridX(grid);
         
-        while ((coord[0] != pCoord[0]) || (coord[1] != pCoord[1])) {
-            coord[0] += dirX;
-            coord[1] += dirY;
-            path.add(gridToInt(coord[1], coord[0]));
+        int pY = intToGridY(prevGrid[grid]);
+        int pX = intToGridX(prevGrid[grid]);
+        
+        int dirY = getDirectionY(pY, y);
+        int dirX = getDirectionX(pX, x);
+        
+        while ((y != pY) || (x != pX)) {
+            y += dirY;
+            x += dirX;
+            path.add(gridToInt(y, x));
         }
     }
     

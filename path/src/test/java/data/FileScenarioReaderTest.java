@@ -1,3 +1,4 @@
+
 package data;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import tiralabra.path.logic.Scenario;
  *
  * @author Tatu
  */
+
 public class FileScenarioReaderTest extends FileManagement {
     
     FileScenarioReader testScenReader;
@@ -31,15 +33,15 @@ public class FileScenarioReaderTest extends FileManagement {
         
         ArrayList<Scenario> scenList = testScenReader.collectScenarios(testIOFile);
         
-        assertEquals(4, scenList.get(0).getStartY());
-        assertEquals(1, scenList.get(0).getStartX());
-        assertEquals(4, scenList.get(0).getGoalY());
-        assertEquals(2, scenList.get(0).getGoalX());
+        assertEquals(4, scenList.get(0).getStartX());
+        assertEquals(1, scenList.get(0).getStartY());
+        assertEquals(4, scenList.get(0).getGoalX());
+        assertEquals(2, scenList.get(0).getGoalY());
         
-        assertEquals(3, scenList.get(2).getStartY());
-        assertEquals(2, scenList.get(2).getStartX());
-        assertEquals(0, scenList.get(2).getGoalY());
-        assertEquals(3, scenList.get(2).getGoalX());
+        assertEquals(3, scenList.get(2).getStartX());
+        assertEquals(2, scenList.get(2).getStartY());
+        assertEquals(0, scenList.get(2).getGoalX());
+        assertEquals(3, scenList.get(2).getGoalY());
     }
     
     // incorrect spacing changes number of rows in the split String array

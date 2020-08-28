@@ -24,8 +24,8 @@ public class JumpPointSearchTest extends AlgorithmSetup {
     @Test
     public void jpsFindsAPath () {
         for (Scenario scen : scenarios) {
-            Algorithm jps = new JumpPointSearch(testMap, scen);
-            jps.runAlgorithm();
+            Algorithm jps = new JumpPointSearch();
+            jps.runAlgorithm(testMap, scen);
             if (!jps.goalVisited()) {
                 fail("JPS didn't find the path");
             }
@@ -35,8 +35,8 @@ public class JumpPointSearchTest extends AlgorithmSetup {
     @Test
     public void jpsFindsTheShortestPathOnEmptyMap() {
         for (Scenario scen : scenarios) {
-            Algorithm jps = new JumpPointSearch(distanceTestMap, scen);
-            jps.runAlgorithm();
+            Algorithm jps = new JumpPointSearch();
+            jps.runAlgorithm(distanceTestMap, scen);
             if (!util.correctDistance(util.resultDistance(jps, scen), scen)) {
                 fail("JPS didn't find the shortest path on empty map");
             }
@@ -46,8 +46,8 @@ public class JumpPointSearchTest extends AlgorithmSetup {
     @Test
     public void jpsFindsTheShortestPathOnCustomMap() {
         for (int i = 0; i < customScenarios.size(); i++) {
-            Algorithm jps = new JumpPointSearch(customMap, customScenarios.get(i));
-            jps.runAlgorithm();
+            Algorithm jps = new JumpPointSearch();
+            jps.runAlgorithm(customMap, customScenarios.get(i));
             
             if (Math.abs(util.resultDistance(jps, customScenarios.get(i)) - util.expectedResults[i]) > 0.1) {
                 System.out.println(i);

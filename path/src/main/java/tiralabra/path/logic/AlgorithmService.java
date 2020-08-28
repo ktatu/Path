@@ -27,37 +27,33 @@ public class AlgorithmService {
     private long startTime;
     private long endTime;
     
-    private String algoId;
-    
     public void executeAlgorithm(String algoId, GridMap map, Scenario scen, boolean saveImage) throws NoPathFoundException {
-        setAlgorithm(algoId, map, scen);
+        setAlgorithm(algoId);
         this.saveImage = saveImage;
-        this.algoId = algoId;
         
         startTime = System.nanoTime();
-        algo.runAlgorithm();
+        algo.runAlgorithm(map, scen);
         endTime = System.nanoTime();
         
-        /*
         if (!algo.goalVisited()) {
             throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
         }
-        */
+        
     }
     
-    private void setAlgorithm(String algoId, GridMap gridMap, Scenario scen) {
+    private void setAlgorithm(String algoId) {
         switch (algoId) {
             case "bfs":
-                algo = new BreadthFirstSearch(gridMap, scen);
+                algo = new BreadthFirstSearch();
                 break;
             case "dijkstra":
-                algo = new Dijkstra(gridMap, scen);
+                algo = new Dijkstra();
                 break;
             case "aStar":
-                algo = new AStar(gridMap, scen);
+                algo = new AStar();
                 break;
             case "jps":
-                algo = new JumpPointSearch(gridMap, scen);
+                algo = new JumpPointSearch();
             default:
                 // Should never happen
         }
@@ -112,7 +108,7 @@ public class AlgorithmService {
         WritableImage algoImage = algDrawer.drawAlgorithm(algo);
 
         if (saveImage) {
-            FileIO.getInstance().saveImage(algoImage, algoId);
+            FileIO.getInstance().saveImage(algoImage, algo.getClass().getSimpleName());
         }
         return algoImage;
     }

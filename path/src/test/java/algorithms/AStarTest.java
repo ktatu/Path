@@ -21,8 +21,8 @@ public class AStarTest extends AlgorithmSetup {
     @Test
     public void aStarFindsAPath () {
         for (Scenario scen : scenarios) {
-            Algorithm aStar = new AStar(testMap, scen);
-            aStar.runAlgorithm();
+            Algorithm aStar = new AStar();
+            aStar.runAlgorithm(testMap, scen);
             if (!aStar.goalVisited()) {
                 fail("AStar didn't find the path");
             }
@@ -32,8 +32,8 @@ public class AStarTest extends AlgorithmSetup {
     @Test
     public void aStarFindsTheShortestPathOnEmptyMap() {
         for (Scenario scen : scenarios) {
-            Algorithm aStar = new AStar(distanceTestMap, scen);
-            aStar.runAlgorithm();
+            Algorithm aStar = new AStar();
+            aStar.runAlgorithm(distanceTestMap, scen);
             if (!util.correctDistance(util.resultDistance(aStar, scen), scen)) {
                 fail("AStar didn't find the shortest path on empty map");
             }
@@ -43,8 +43,8 @@ public class AStarTest extends AlgorithmSetup {
     @Test
     public void aStarFindsTheShortestPathOnCustomMap() {
         for (int i = 0; i < customScenarios.size(); i++) {
-            Algorithm aStar = new AStar(customMap, customScenarios.get(i));
-            aStar.runAlgorithm();
+            Algorithm aStar = new AStar();
+            aStar.runAlgorithm(customMap, customScenarios.get(i));
             
             if (Math.abs(util.resultDistance(aStar, customScenarios.get(i)) - util.expectedResults[i]) > 0.001) {
                 fail("AStar didn't find the shortest path on custom map");

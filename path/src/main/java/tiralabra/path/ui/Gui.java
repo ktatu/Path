@@ -28,14 +28,18 @@ public class Gui extends Application {
     // global for adjusting size based on images
     private Stage stage;
     
+    //private PerformanceTest perf = new PerformanceTest();
+    
     @Override
     public void start(Stage stage) {
         this.stage = stage;
         
+        //stage.setScene(new Scene(perf.performanceChart()));
+        
+        
         this.algoService = new AlgorithmService();
         this.inputData = new InputData();
         this.inputPanel = new InputPanel(stage, inputData);
-
         
         VBox mainScreen = new VBox();
         
@@ -50,6 +54,7 @@ public class Gui extends Application {
         
         stage.setTitle("Path");
         stage.setScene(new Scene(mainScreen));
+        
         stage.show();
     }
     

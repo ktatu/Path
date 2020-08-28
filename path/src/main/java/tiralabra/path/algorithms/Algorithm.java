@@ -1,6 +1,6 @@
 package tiralabra.path.algorithms;
 
-import java.util.ArrayList;
+import tiralabra.path.datastructures.GridList;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
@@ -22,19 +22,19 @@ public abstract class Algorithm {
     public Scenario scen;
     public GridMap gridMap;
     
-    public ArrayList<Integer> path;
+    public GridList path;
     
-    float sqrtTwo = (float) 1.4;
+    protected final float sqrtTwo = (float) 1.4;
     
     /**
-     * Sets up data structures for algorithms
-     * @param gridMap the map the algorithm is running on
-     * @param scen start and goal coordinates of algorithm
+     * 
+     * @param map
+     * @param scen 
      */
-    public Algorithm(GridMap gridMap, Scenario scen) {
-        path = new ArrayList<>();
+    protected void initializeAlgorithm(GridMap map, Scenario scen) {
+        path = new GridList(map.getMapHeight() + map.getMapWidth());
         
-        this.gridMap = gridMap;
+        this.gridMap = map;
         this.distance = new float[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
         this.visited = new boolean[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
         this.scen = scen;
@@ -47,13 +47,11 @@ public abstract class Algorithm {
     }
     
     /**
-     * Necessary operations for running the algorithm
+     * Running the algorithm with given map and scenario
+     * @param map
+     * @param scen
      */
-    abstract public void initializeAlgorithm();
-    /**
-     * Running the algorithm
-     */
-    abstract public void runAlgorithm();
+    abstract public void runAlgorithm(GridMap map, Scenario scen);
     
     protected void constructPath() {
         int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
@@ -128,12 +126,5 @@ public abstract class Algorithm {
             return false;
         }
         return gridMap.passableGrid(y, x);
-    }
-    
-    public int[] intToCoordinates(int grid) {
-        int[] coordinates = new int[2];
-        coordinates[0] = grid % gridMap.getMapWidth();
-        coordinates[1] = grid / gridMap.getMapWidth();
-        return coordinates;
     }
 }

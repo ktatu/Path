@@ -46,6 +46,21 @@ public class GridList {
     }
     
     /**
+     * Checking if list contains a specific grid
+     * Slow (O(n)) but only used by AlgorithmImageWriter, not counted towards performance
+     * @param grid
+     * @return 
+     */
+    public boolean contains(int grid) {
+        for (int i = 0; i < firstOpen; i++) {
+            if (array[i] == grid) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
      * Expanding array size when it's full
      */
     private void sizeCheck() {

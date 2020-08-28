@@ -21,8 +21,8 @@ public class DijkstraTest extends AlgorithmSetup {
     @Test
     public void dijkstraFindsAPath(){
         for (Scenario scen: scenarios) {
-            Algorithm dij = new Dijkstra(testMap, scen);
-            dij.runAlgorithm();
+            Algorithm dij = new Dijkstra();
+            dij.runAlgorithm(testMap, scen);
             if (!dij.goalVisited()) {
                 fail("dijkstra didn't find a path to goal grid");
             }
@@ -32,8 +32,8 @@ public class DijkstraTest extends AlgorithmSetup {
     @Test
     public void dijkstraFindsTheShortestPathsOnEmptyMap() {
         for (Scenario scen: scenarios) {
-            Algorithm dij = new Dijkstra(distanceTestMap, scen);
-            dij.runAlgorithm();
+            Algorithm dij = new Dijkstra();
+            dij.runAlgorithm(distanceTestMap, scen);
             if (!util.correctDistance(util.resultDistance(dij, scen), scen)) {
                 fail("dijkstra didn't find the shortest path");
             }
@@ -43,8 +43,8 @@ public class DijkstraTest extends AlgorithmSetup {
     @Test
     public void dijkstraFindsShortestPathsOnCustomMap() {
         for (int i = 0; i < customScenarios.size(); i++) {
-            Algorithm dij = new Dijkstra(customMap, customScenarios.get(i));
-            dij.runAlgorithm();
+            Algorithm dij = new Dijkstra();
+            dij.runAlgorithm(customMap, customScenarios.get(i));
             
             if (Math.abs(util.resultDistance(dij, customScenarios.get(i)) - util.expectedResults[i]) > 0.001) {
                 fail("dijkstra didn't find the shortest path in custom map");

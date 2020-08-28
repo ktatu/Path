@@ -26,14 +26,34 @@ public class FileScenarioReader {
         ArrayList<String> scenFileAsList = fileIO.collectFileToList(file);
         ArrayList<Scenario> scenarios = new ArrayList<>();
         
+        // Return an empty list when there was no file to read
+        if (scenFileAsList.isEmpty()) {
+            return scenarios;
+        }
+        
+        if (scenFileAsList.get(0).equals("performance")) {
+            readPerformanceFileFormat(scenFileAsList, scenarios);
+        } else {
+            readMovingAiFormat(scenFileAsList, scenarios);
+        }
+        
+        return scenarios;
+    }
+    
+    private void readPerformanceFileFormat(ArrayList<String> scenFileAsList, ArrayList<Scenario> scenarios) {
+        for (int i = 1; i < scenFileAsList.size(); i++ ) {
+            scenarios.add(performanceTestLine(scenFileAsList.get(i)));
+        }
+    }
+    
+    private void readMovingAiFormat(ArrayList<String> scenFileAsList, ArrayList<Scenario> scenarios) {
         for (int i = 1; i < scenFileAsList.size(); i++) {
             try {
-                scenarios.add(readScenarioFromRow(scenFileAsList.get(i), i));
+                scenarios.add(movingAiLine(scenFileAsList.get(i), i));
             } catch (IOException ex) {
                 System.out.println(ex);
             }
         }
-        return scenarios;
     }
     
     /**
@@ -43,18 +63,36 @@ public class FileScenarioReader {
      * @return a Scenario object made out of the line
      * @throws IOException 
      */
-    private Scenario readScenarioFromRow(String line, int lineNumber) throws IOException {
+    private Scenario movingAiLine(String line, int lineNumber) throws IOException {
         String[] rowColSplit = line.split("	");
         
         if (rowColSplit.length != 9) {
             throw new IOException("readScenarioFromRow(): row " + lineNumber + " is incorrectly formatted");
         }
         
-        int startY = Integer.valueOf(rowColSplit[5]);
-        int startX = Integer.valueOf(rowColSplit[4]);   
-        int goalY = Integer.valueOf(rowColSplit[7]);
+        int startX = Integer.valueOf(rowColSplit[4]);
+        int startY = Integer.valueOf(rowColSplit[5]);   
         int goalX = Integer.valueOf(rowColSplit[6]);
+        int goalY = Integer.valueOf(rowColSplit[7]);
         
-        return new Scenario(startX, startY, goalX, goalY);
+        return new Scenario(startY, startX, goalY, goalX);
+    }
+    
+    /**
+     * Custom made performance test scenario files don't follow Moving Ai format
+     * @param line
+     * @param lineNumber
+     * @return
+     * @throws IOException 
+     */
+    private Scenario performanceTestLine(String line) {
+        String[] rowColSplit = line.split(" ");
+        
+        int startY = Integer.valueOf(rowColSplit[0]);
+        int startX = Integer.valueOf(rowColSplit[1]);
+        int goalY = Integer.valueOf(rowColSplit[2]);
+        int goalX = Integer.valueOf(rowColSplit[3]);
+        
+        return new Scenario(startY, startX, goalY, goalX);
     }
 }

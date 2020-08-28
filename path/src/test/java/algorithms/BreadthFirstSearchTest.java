@@ -21,9 +21,11 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
     @Test
     public void bfsFindsAPath() {
         for (Scenario scen : scenarios) {
-            Algorithm bfs = new BreadthFirstSearch(testMap, scen);
-            bfs.runAlgorithm();
+            Algorithm bfs = new BreadthFirstSearch();
+            bfs.runAlgorithm(testMap, scen);
             if (!bfs.goalVisited()) {
+                System.out.println("scen start: " + scen.getStartY() + " " + scen.getStartX());
+                System.out.println("scen goal: " + scen.getGoalY() + " " + scen.getGoalX());
                 fail("bfs didnt find a path to goal grid");
             }
         }
@@ -33,8 +35,8 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
     @Test
     public void bfsFindsShortestPathOnEmptyMap() {
         for (Scenario scen : scenarios) {
-            Algorithm bfs = new BreadthFirstSearch(distanceTestMap, scen);
-            bfs.runAlgorithm();
+            Algorithm bfs = new BreadthFirstSearch();
+            bfs.runAlgorithm(distanceTestMap, scen);
             if (Math.abs(util.resultDistance(bfs, scen) - manhattanDistance(scen)) > 0.001) {
                 fail("bfs didn't find the shortest path");
             }
@@ -47,8 +49,8 @@ public class BreadthFirstSearchTest extends AlgorithmSetup {
         
         for (int i = 0; i < customScenarios.size(); i++) {
             Scenario scen = customScenarios.get(i);
-            Algorithm bfs = new BreadthFirstSearch(customMap, scen);
-            bfs.runAlgorithm();
+            Algorithm bfs = new BreadthFirstSearch();
+            bfs.runAlgorithm(customMap, scen);
             
             if (util.resultDistance(bfs, scen) != expectedResults[i]) {
                 fail("bfs didn't find the shortest path in custom map");

@@ -1,6 +1,7 @@
 package tiralabra.path.algorithms;
 
 import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -10,15 +11,14 @@ import tiralabra.path.logic.Scenario;
  * @author Tatu
  */
 public class AStar extends Dijkstra {
-    
-    public AStar(GridMap gridMap, Scenario scen) {
-        super(gridMap, scen);
-    }
 
-    @Override
-    public void initializeAlgorithm() {
+    public void initializeAStar(GridMap map, Scenario scen) {
+        initializeAlgorithm(map, scen);
+        
         int startY = scen.getStartY();
         int startX = scen.getStartX();
+        
+        this.prioQueue = new PrioQueue();
         
         for (int y = 0; y < gridMap.getMapHeight(); y++) {
             for (int x = 0; x < gridMap.getMapWidth(); x++) {
@@ -30,8 +30,8 @@ public class AStar extends Dijkstra {
     }
     
     @Override
-    public void runAlgorithm() {
-        initializeAlgorithm();
+    public void runAlgorithm(GridMap map, Scenario scen) {
+        initializeAStar(map, scen);
         
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 

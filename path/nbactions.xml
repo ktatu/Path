@@ -26,6 +26,7 @@
             <displayName>javadoc</displayName>
             <goals>
                 <goal>javadoc:javadoc</goal>
+                
             </goals>
         </action>
     <action>
@@ -40,6 +41,9 @@
             <properties>
                 <exec.args>-classpath %classpath ${packageClassName} gui</exec.args>
                 <exec.executable>java</exec.executable>
+                
+                
+                
             </properties>
     </action>
     <action>
@@ -49,7 +53,7 @@
             <goal>javafx:run@debug</goal>
         </goals>
         <properties>
-            <jpda.listen>true</jpda.listen>
+                <jpda.listen>true</jpda.listen>
         </properties>
     </action>
     <action>
@@ -73,7 +77,7 @@
                 <goal>clean</goal>
                 <goal>javafx:run</goal>
             </goals>
-        </action>
+    </action>
     <action>
             <actionName>CUSTOM-debug javafx</actionName>
             <displayName>debug javafx</displayName>
@@ -89,7 +93,18 @@
             <actionName>CUSTOM-javafx run debug</actionName>
             <displayName>javafx run debug</displayName>
             <goals>
-                <goal>javafx:run@debug</goal>
+                <goal>javafx:run@debug_perf</goal> 
             </goals>
-        </action>
+            <properties>
+                <jdpa.listen>true</jdpa.listen>
+            </properties>
+    </action>
+    <action>
+        <actionName>CUSTOM-performance test</actionName>
+        <displayName>performance</displayName>
+        <goals>
+            <goal>clean</goal>
+            <goal>javafx:run@performance</goal>
+        </goals>
+    </action>
 </actions>

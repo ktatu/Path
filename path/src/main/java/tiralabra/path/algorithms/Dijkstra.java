@@ -12,18 +12,13 @@ import tiralabra.path.logic.Scenario;
  */
 public class Dijkstra extends Algorithm {
 
-    public PrioQueue prioQueue;
-    
-    public Dijkstra(GridMap gridMap, Scenario scen) {
-        super(gridMap, scen);
-        this.prioQueue = new PrioQueue();
-    }
+    protected PrioQueue prioQueue;
 
-    /**
-     * Adds the start grid to Priority Queue and sets initial grid distances to max Integer value
-     */
-    @Override
-    public void initializeAlgorithm() {
+    private void initializeDijkstra(GridMap map, Scenario scen) {
+        initializeAlgorithm(map, scen);
+        
+        this.prioQueue = new PrioQueue();
+        
         int startY = scen.getStartY();
         int startX = scen.getStartX();
 
@@ -40,8 +35,8 @@ public class Dijkstra extends Algorithm {
      * Runs initialization then Dijkstra. Goes through every neighbor of each grid polled from priority queue
      */
     @Override
-    public void runAlgorithm() {
-        initializeAlgorithm();
+    public void runAlgorithm(GridMap map, Scenario scen) {
+        initializeDijkstra(map, scen);
         
         while (!prioQueue.isEmpty()) {
             Grid current = prioQueue.poll(); 
