@@ -8,6 +8,17 @@ Avaa projekti NetBeansissa. Oikea klikkaa projektia ja valitse "Build". Nyt ohje
 
 JavaFX:n takia ohjelman suoritus "Run Project"-napista ei toimi.
 
+### .jar
+Graafinen käyttöliittymä aukeaa suorittamalla .jar komennolla 
+```
+java -jar path-1.0-SNAPSHOT.jar
+```
+Suorituskykytestejä voi suorittaa .jarista komennolla
+```
+java -jar path-1.0-SNAPSHOT.jar testityyppi karttatiedosto.map skenaariotiedosto.map.scen suoritukset_per_skenaario
+```
+Lisäohjeistusta löytyy testausdokumentista
+
 ## Käyttöliittymä
 Graafisen käyttöliittymän komponentit:
 - Choose a map-nappi
