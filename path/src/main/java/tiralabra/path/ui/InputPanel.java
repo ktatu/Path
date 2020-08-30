@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import tiralabra.path.logic.InputData;
 
 /**
- * Nodes related to submitting user input
+ * Nodes related to submitting user input visible on top in gui
  * @author Tatu
  */
 public class InputPanel {
