@@ -4,6 +4,7 @@ import tiralabra.path.datastructures.GridList;
 import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
+import tiralabra.path.logic.MathUtil;
 import tiralabra.path.logic.Scenario;
 
 /**
@@ -14,7 +15,7 @@ public class JumpPointSearch extends Dijkstra {
     
     // closed[][] performs the same duty as visited[][] in other algorithms; keeping track of which grids have been dealt with
     // JPS uses visited[][] to mark grids scanned by jump(). More convenient since AlgorithmImageWriter can access visited[][] but not closed[][]
-    private boolean closed[][];
+    public boolean closed[][];
 
     public void initializeJPS(GridMap map, Scenario scen) {
         initializeAlgorithm(map, scen);
@@ -76,12 +77,6 @@ public class JumpPointSearch extends Dijkstra {
         }
     }
 
-    /*
-y ja x: 186,422
-pY ja pX: 183,413
-jumpGrid    190886
-    422	333	470	214
-*/
     private void addNewJumpPoint(int jumpGrid, int parentY, int parentX) {
         int jumpY = intToGridY(jumpGrid);
         int jumpX = intToGridX(jumpGrid);
@@ -94,8 +89,6 @@ jumpGrid    190886
         }
         
         if (newDist < distance[jumpY][jumpX]) {
-            visited[jumpY][jumpX] = true;
-            
             distance[jumpY][jumpX] = newDist;
             prevGrid[gridToInt(jumpY, jumpX)] = gridToInt(parentY, parentX);
             prioQueue.add(new Grid(jumpY, jumpX, newDist, heuristicEstimate));
@@ -111,6 +104,8 @@ jumpGrid    190886
         if (!isMovePossible(y, x, y - dirY, x - dirX, diagonal)) {
             return -1;
         }
+        
+        visited[y][x] = true;
         
         if (y == scen.getGoalY() && x == scen.getGoalX()) {
             return gridToInt(y, x);
@@ -171,11 +166,11 @@ jumpGrid    190886
     }
     
     private float diagonalDistance(int startY, int startX, int targetY, int targetX) {
-        int distanceY = Math.abs(targetY - startY);
-        int distanceX = Math.abs(targetX - startX);
+        int distanceY = MathUtil.abs(targetY - startY);
+        int distanceX = MathUtil.abs(targetX - startX);
         
-        int diagonalMoves = Math.min(distanceY, distanceX);
-        int horAndVerMoves = Math.abs(distanceY - distanceX);
+        int diagonalMoves = MathUtil.min(distanceY, distanceX);
+        int horAndVerMoves = MathUtil.abs(distanceY - distanceX);
         
         return diagonalMoves * sqrtTwo + horAndVerMoves;
     }
@@ -280,7 +275,7 @@ jumpGrid    190886
         }
         // Southeast
         else {
-            if (!isPassable(y, x + 1) && isPassable(y - 1, x + 1)) {
+            if (!isPassable(y - 1, x) && isPassable(y - 1, x + 1)) {
                 return true;
             } else if (!isPassable(y, x - 1) && isPassable(y + 1, x - 1)) {
                 return true;

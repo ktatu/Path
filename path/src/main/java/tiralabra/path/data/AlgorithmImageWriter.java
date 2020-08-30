@@ -43,18 +43,13 @@ public class AlgorithmImageWriter {
      * @return color
      */
     private Color determineGridColor(int x, int y) {
-        if (y == 186 && x == 422) {
-            return Color.BROWN;
-        }
-        if (y == 183 && x == 413) {
-            return Color.CYAN;
-        }
         if ((algo.scen.getStartX() == x && algo.scen.getStartY() == y) || (algo.scen.getGoalX() == x && algo.scen.getGoalY() == y)) {
             return Color.GREEN;
         } 
         if (algo.path.contains(algo.gridToInt(y, x))) {
             return Color.RED;
         } 
+        
         if (algo.visited[y][x]) {
             return Color.BLUE;
         } 
@@ -64,7 +59,3 @@ public class AlgorithmImageWriter {
         return Color.BLACK;
     }
 }
-/*
-y ja x: 186,422
-pY ja pX: 183,413
-*/

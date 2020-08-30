@@ -66,7 +66,9 @@ public class GridList {
     private void sizeCheck() {
         if (firstOpen == array.length) {
             int[] newArray = new int[array.length * 2];
-            System.arraycopy(array, 1, newArray, 1, array.length - 1);
+            for (int i = 0; i < array.length; i++) {
+                newArray[i] = array[i];
+            }
             array = newArray;
         }
     }

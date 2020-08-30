@@ -35,6 +35,7 @@ public class AlgorithmService {
         algo.runAlgorithm(map, scen);
         endTime = System.nanoTime();
         
+        
         if (!algo.goalVisited()) {
             throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
         }

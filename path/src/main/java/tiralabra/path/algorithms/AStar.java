@@ -4,6 +4,7 @@ import tiralabra.path.datastructures.GridList;
 import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
+import tiralabra.path.logic.MathUtil;
 import tiralabra.path.logic.Scenario;
 
 /**
@@ -78,11 +79,11 @@ public class AStar extends Dijkstra {
     }
     
     private float diagonalDistanceToGoal(int y, int x) {
-        int distanceY = Math.abs(scen.getGoalY() - y);
-        int distanceX = Math.abs(scen.getGoalX() - x);
+        int distanceY = MathUtil.abs(scen.getGoalY() - y);
+        int distanceX = MathUtil.abs(scen.getGoalX() - x);
         
-        int diagonalMoves = Math.min(distanceY, distanceX);
-        int horAndVerMoves = Math.abs(distanceY - distanceX);
+        int diagonalMoves = MathUtil.min(distanceY, distanceX);
+        int horAndVerMoves = MathUtil.abs(distanceY - distanceX);
         
         return diagonalMoves * sqrtTwo + horAndVerMoves;
     }

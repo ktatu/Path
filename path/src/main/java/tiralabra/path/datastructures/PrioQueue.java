@@ -56,7 +56,9 @@ public class PrioQueue {
     private void sizeCheck() {
         if (firstOpen == queue.length) {
             Grid[] newQueue = new Grid[queue.length * 2];
-            System.arraycopy(queue, 1, newQueue, 1, queue.length - 1);
+            for (int i = 0; i < queue.length; i++) {
+                newQueue[i] = queue[i];
+            }
             queue = newQueue;
         }
     }

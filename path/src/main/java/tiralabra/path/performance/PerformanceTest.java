@@ -3,6 +3,7 @@ package tiralabra.path.performance;
 import java.io.File;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
@@ -34,9 +35,6 @@ public class PerformanceTest extends Application {
             stage.setScene(new Scene(bfsPathLengthTest(), 600, 500));
             stage.show();
         }
-        else if (arguments[0].equals("arrays_copy")) {
-            arrayCopyTest();
-        }
     }
     
     public static void main(String[] args) {
@@ -56,34 +54,22 @@ public class PerformanceTest extends Application {
         return pathTest.shortestPathChart(getMap(mapFileName), getScenarios(scenFileName), iterations, mapFileName);
     }
     
-    private BarChart bfsPathLengthTest() {
-        if ((arguments.length - 1) % 2 != 0) {
-            System.out.println("Cannot run performance test: there should be an equal amount of map and scen files");
-            return null;
-        }
-        
+    private BarChart bfsPathLengthTest() {        
         BFSPathLength bfsPathTest = new BFSPathLength();
-        
-        // Last map file == args.get(argDivider)
-        int argDivider = (arguments.length - 1) / 2;
         
         ArrayList<GridMap> maps = new ArrayList<>();
         ArrayList<String> mapNames = new ArrayList<>();
-        for (int i = 1; i <= argDivider; i++) {
+        for (int i = 1; i < arguments.length; i++) {
             maps.add(getMap(arguments[i]));
             mapNames.add(arguments[i]);
         }
         
         ArrayList<ArrayList<Scenario>> mapScens = new ArrayList<>();
-        for (int i = argDivider + 1; i < arguments.length; i++) {
+        for (int i = 1; i < arguments.length; i++) {
             mapScens.add(getScenarios(arguments[i]));
         }
         
         return bfsPathTest.pathLengthChart(maps, mapScens, mapNames);
-    }
-    
-    private void arrayCopyTest() {
-        ArrayCopy.arrayCopyPerformanceTest();
     }
     
     private GridMap getMap(String fileName) {
@@ -92,9 +78,10 @@ public class PerformanceTest extends Application {
         return mapReader.getGridMap(new File(fileName));
     }
     
-    private ArrayList<Scenario> getScenarios(String fileName) {
+    // Scenario file name is derived from map name so that it's not needed in arguments
+    private ArrayList<Scenario> getScenarios(String mapFileName) {
         FileScenarioReader scenReader = new FileScenarioReader();
         
-        return scenReader.collectScenarios(new File(fileName));
+        return scenReader.collectScenarios(new File(mapFileName+".scen"));
     }
 }

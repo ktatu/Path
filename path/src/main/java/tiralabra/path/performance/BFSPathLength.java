@@ -71,6 +71,7 @@ public class BFSPathLength {
             runner.algorithmPerformanceTest("BFS", scens.get(i));
             bfsLength = runner.getDistance();
             
+            System.out.println("index: + " + i + ", optimal: " + optimalLength + ", bfsLength: " + bfsLength);
             resData[i] = (optimalLength / bfsLength) * 100;
         }
         
@@ -89,7 +90,7 @@ public class BFSPathLength {
     }
     
     private float getAverage(float[] results) {
-        float sumOfDifferences = 0f;
+        long sumOfDifferences = 0l;
         for (float res: results) {
             // Some scen files contain scenarios where the start and goal grids are the same, skip these
             if (Float.isNaN(res)) {
@@ -97,7 +98,7 @@ public class BFSPathLength {
             }
             sumOfDifferences += res;
         }
-        return sumOfDifferences / results.length;
+        return (float) sumOfDifferences / results.length;
     }
     
     private float getMedian(float[] results) {
