@@ -5,7 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -28,14 +30,9 @@ public class Gui extends Application {
     // global for adjusting size based on images
     private Stage stage;
     
-    //private PerformanceTest perf = new PerformanceTest();
-    
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-        
-        //stage.setScene(new Scene(perf.performanceChart()));
-        
         
         this.algoService = new AlgorithmService();
         this.inputData = new InputData();
@@ -81,7 +78,15 @@ public class Gui extends Application {
         VBox algoBox = new VBox();
         algoBox.setAlignment(Pos.CENTER);
         algoBox.setSpacing(30);
-        algoBox.getChildren().addAll(algoImageView(), resultInfo());
+        
+        WritableImage algoImage = algoService.getAlgoImage();
+        if (algoImage.getWidth() > 900 || algoImage.getHeight() > 350) {
+            algoBox.getChildren().add(algoImageScrollPane(algoImage));
+        } else {
+            algoBox.getChildren().add(new ImageView(algoImage));
+        }
+        
+        algoBox.getChildren().add(resultInfo());
         return algoBox;
     }
 
@@ -109,9 +114,23 @@ public class Gui extends Application {
         popup.show();
     }
     
-    private ImageView algoImageView() {
-        adjustGuiSize();
-        return new ImageView(algoService.getAlgoImage());
+    private ScrollPane algoImageScrollPane(WritableImage algoImage) {
+        ScrollPane sp = new ScrollPane();
+        
+        if (algoImage.getWidth() > 900) {
+            sp.setMaxWidth(900);
+        } else {
+            sp.setMaxWidth(algoImage.getWidth());
+        }
+        
+        if (algoImage.getHeight() > 400) {
+            sp.setMaxHeight(350);
+        } else {
+            sp.setMaxHeight(algoImage.getHeight());
+        }
+        
+        sp.setContent(new ImageView(algoService.getAlgoImage()));
+        return sp;
     }
     
     private void adjustGuiSize() {

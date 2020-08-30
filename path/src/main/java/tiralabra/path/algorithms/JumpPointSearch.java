@@ -4,7 +4,6 @@ import tiralabra.path.datastructures.GridList;
 import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
-import tiralabra.path.logic.MathUtil;
 import tiralabra.path.logic.Scenario;
 
 /**

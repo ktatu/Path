@@ -1,4 +1,4 @@
-package tiralabra.path.logic;
+package tiralabra.path.algorithms;
 
 /**
  * Replacements for Math.abs and Math.min

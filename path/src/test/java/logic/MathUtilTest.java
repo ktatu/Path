@@ -2,7 +2,7 @@ package logic;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tiralabra.path.logic.MathUtil;
+import tiralabra.path.algorithms.MathUtil;
 
 /**
  *

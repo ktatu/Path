@@ -43,7 +43,8 @@ public class BFSPathLength {
         median.setName("Median");
         
         for (int i = 0; i < maps.size(); i++) {
-            System.out.println("Running map " + i + "/" + maps.size());
+            int mapIndex = i+1;
+            System.out.println("Running map " + mapIndex + "/" + maps.size());
             
             float[] results = getMapData(maps.get(i), scens.get(i));
             
@@ -71,7 +72,6 @@ public class BFSPathLength {
             runner.algorithmPerformanceTest("BFS", scens.get(i));
             bfsLength = runner.getDistance();
             
-            System.out.println("index: + " + i + ", optimal: " + optimalLength + ", bfsLength: " + bfsLength);
             resData[i] = (optimalLength / bfsLength) * 100;
         }
         
