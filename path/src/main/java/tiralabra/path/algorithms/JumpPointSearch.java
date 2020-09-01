@@ -1,6 +1,6 @@
 package tiralabra.path.algorithms;
 
-import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.List;
 import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
@@ -62,7 +62,7 @@ public class JumpPointSearch extends Dijkstra {
     private void scanNeighbors(int y, int x) {
         boolean isStartGrid = (y == scen.getStartY() && x == scen.getStartX());
                 
-        GridList neighbors = prunedNeighbors(y, x, isStartGrid);
+        List neighbors = prunedNeighbors(y, x, isStartGrid);
         while (neighbors.canIterate()) {
             int nbor = neighbors.getNext();
             
@@ -174,13 +174,13 @@ public class JumpPointSearch extends Dijkstra {
         return diagonalMoves * sqrtTwo + horAndVerMoves;
     }
     
-    private GridList prunedNeighbors(int y, int x, boolean isStartGrid) {
+    private List prunedNeighbors(int y, int x, boolean isStartGrid) {
         // No pruning when grid (x,y) is the starting grid
         if (isStartGrid) {
             return neighborList(y, x);
         }
         
-        GridList neighbors = new GridList(8);
+        List neighbors = new List(8);
         
         int parent = prevGrid[gridToInt(y, x)];
         int pY = intToGridY(parent);

@@ -123,7 +123,7 @@ public class Gui extends Application {
             sp.setMaxWidth(algoImage.getWidth());
         }
         
-        if (algoImage.getHeight() > 400) {
+        if (algoImage.getHeight() > 350) {
             sp.setMaxHeight(350);
         } else {
             sp.setMaxHeight(algoImage.getHeight());

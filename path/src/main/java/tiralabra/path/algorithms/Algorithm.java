@@ -1,11 +1,11 @@
 package tiralabra.path.algorithms;
 
-import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.List;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
 /**
- * Methods and data structures used by all algorithms
+ * Upper class for actual algorithm implementation classes
  * @author Tatu
  */
 public abstract class Algorithm {
@@ -14,37 +14,17 @@ public abstract class Algorithm {
      * Keeps track of each grid's predecessor
      * Each cell in prevGrid[] represents a grid, which has been converted into an integer based on its coordinates
      */
-    public int[] prevGrid;
+    protected int[] prevGrid;
     // Distance from start grid to others
-    public float[][] distance;
+    protected float[][] distance;
     public boolean[][] visited;
     
     public Scenario scen;
     public GridMap gridMap;
     
-    public GridList path;
+    public List path;
     
     protected final float sqrtTwo = (float) 1.4;
-    
-    /**
-     * 
-     * @param map
-     * @param scen 
-     */
-    protected void initializeAlgorithm(GridMap map, Scenario scen) {
-        path = new GridList(map.getMapHeight() + map.getMapWidth());
-        
-        this.gridMap = map;
-        this.distance = new float[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
-        this.visited = new boolean[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
-        this.scen = scen;
-        
-        // Same initialization for all algorithms so done in constructor instead of initializeAlgorithm()
-        this.prevGrid = new int[this.gridMap.getMapHeight() * this.gridMap.getMapWidth()];
-        for (int i = 0; i < prevGrid.length; i++) {
-            prevGrid[i] = -1;
-        }
-    }
     
     /**
      * Running the algorithm with given map and scenario
@@ -52,35 +32,6 @@ public abstract class Algorithm {
      * @param scen
      */
     abstract public void runAlgorithm(GridMap map, Scenario scen);
-    
-    protected void constructPath() {
-        int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
-        
-        while (prevGrid[goalGridAsInt] != -1) {
-            path.add(goalGridAsInt);
-            goalGridAsInt = prevGrid[goalGridAsInt];
-        }
-    }
-    
-    /**
-     * Check if coordinates are within map boundaries and the grid in these coordinates is passable terrain
-     * @param y coordinate
-     * @param x coordinate
-     * @return true if grid can be moved to, otherwise false
-     */
-    protected boolean isValidHorOrVerMove(int y, int x) {
-        if (outOfBounds(y, x)) {
-            return false;
-        }
-        return gridMap.isPassable(gridMap.getGrid(y, x));
-    }
-    
-    protected boolean outOfBounds(int y, int x) {
-        if (y < 0 || y >= gridMap.getMapHeight() || x < 0 || x >= gridMap.getMapWidth()) {
-            return true;
-        }
-        return false;
-    }
     
     /**
      * Grid's coordinates are converted into an integer
@@ -121,10 +72,59 @@ public abstract class Algorithm {
         return visited[scen.getGoalY()][scen.getGoalX()];
     }
     
+    /**
+     * Distance from start grid to goal grid
+     * @return path length from distance[][]
+     */
+    public float getPathLength() {
+        return distance[scen.getGoalY()][scen.getGoalX()];
+    }
+    
+    /**
+     * Check if the grid (x,y) is within bounds and passable terrain
+     * @param y
+     * @param x
+     * @return 
+     */
     protected boolean isPassable(int y, int x) {
         if (outOfBounds(y, x)) {
             return false;
         }
         return gridMap.passableGrid(y, x);
+    }
+    
+    /**
+     * Creates a path from goal grid to start grid
+     */
+    protected void constructPath() {
+        int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
+        
+        while (prevGrid[goalGridAsInt] != -1) {
+            path.add(goalGridAsInt);
+            goalGridAsInt = prevGrid[goalGridAsInt];
+        }
+    }
+    
+    /**
+     * Initialization operations shared between all algorithms
+     * @param map
+     * @param scen 
+     */
+    protected void initializeAlgorithm(GridMap map, Scenario scen) {
+        this.path = new List(map.getMapHeight() + map.getMapWidth());
+        this.gridMap = map;
+        this.distance = new float[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
+        this.visited = new boolean[this.gridMap.getMapHeight()][this.gridMap.getMapWidth()];
+        this.scen = scen;
+        this.prevGrid = new int[this.gridMap.getMapHeight() * this.gridMap.getMapWidth()];
+        
+        prevGrid[gridToInt(scen.getStartY(), scen.getStartX())] = -1;
+    }
+    
+    private boolean outOfBounds(int y, int x) {
+        if (y < 0 || y >= gridMap.getMapHeight() || x < 0 || x >= gridMap.getMapWidth()) {
+            return true;
+        }
+        return false;
     }
 }

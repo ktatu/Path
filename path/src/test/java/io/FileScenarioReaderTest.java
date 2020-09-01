@@ -1,10 +1,10 @@
 
-package data;
+package io;
 
 import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tiralabra.path.data.FileScenarioReader;
+import tiralabra.path.io.FileScenarioReader;
 import tiralabra.path.logic.Scenario;
 
 /**

@@ -1,6 +1,6 @@
 package tiralabra.path.algorithms;
 
-import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.List;
 import tiralabra.path.datastructures.PrioQueue;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
@@ -48,7 +48,7 @@ public class AStar extends Dijkstra {
                 break;
             }
             
-            GridList neighbors = neighborList(y, x);
+            List neighbors = neighborList(y, x);
             while (neighbors.canIterate()) {
                 int neighbor = neighbors.getNext();
                 checkGrid(neighbor, current);

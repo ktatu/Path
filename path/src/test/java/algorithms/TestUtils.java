@@ -26,6 +26,7 @@ public class TestUtils {
     }
     
     public float resultDistance(Algorithm algo, Scenario scen) {
-        return algo.distance[scen.getGoalY()][scen.getGoalX()];
+        //return algo.getDistanceFromGoal(scen.getGoalY(), scen.getGoalX());
+        return algo.getPathLength();
     }
 }

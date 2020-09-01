@@ -1,4 +1,4 @@
-package tiralabra.path.data;
+package tiralabra.path.io;
 
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;

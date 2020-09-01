@@ -66,14 +66,14 @@ public class BreadthFirstSearch extends Algorithm {
     }
     
     /**
-     * Checks whether the grid can be moved into and does related BFS operations if so
+     * Checks whether the grid can be moved into and does related operations if so
      * @param y y coordinate of grid currently being visited
      * @param x x coordinate of grid currently being visited
      * @param pY y coordinate of the previous grid
      * @param pX x cooordinate of the previous grid
      */
     private void checkGrid(int y, int x, int pY, int pX) {
-        if (!isValidHorOrVerMove(y, x)) {
+        if (!isPassable(y, x)) {
             return;
         } else if (visited[y][x]) {
             return;

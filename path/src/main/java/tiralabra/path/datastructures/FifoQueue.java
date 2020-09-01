@@ -16,17 +16,29 @@ public class FifoQueue {
         indexFirstOpenCell = 0;
     }
     
+    /**
+     * Polling the queue
+     * @return the first int (==the oldest)
+     */
     public int poll() {
         int polledInt = queue[indexFirstEntry];
         indexFirstEntry++;
         return polledInt;
     }
     
+    /**
+     * Add an integer to queue
+     * @param number integer to be added
+     */
     public void add(int number) {
         queue[indexFirstOpenCell] = number;
         indexFirstOpenCell++;
     }
     
+    /**
+     * Check if queue is empty
+     * @return true if empty
+     */
     public boolean isEmpty() {
         return indexFirstEntry == indexFirstOpenCell;
     }

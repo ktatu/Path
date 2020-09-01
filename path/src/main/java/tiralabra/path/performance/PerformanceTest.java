@@ -8,8 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.stage.Stage;
-import tiralabra.path.data.FileGridMapReader;
-import tiralabra.path.data.FileScenarioReader;
+import tiralabra.path.io.FileGridMapReader;
+import tiralabra.path.io.FileScenarioReader;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 

@@ -3,13 +3,13 @@ package tiralabra.path.datastructures;
 import tiralabra.path.logic.Grid;
 
 /**
- * PriorityQueue for Grids. Used by Dijkstra variations
+ * PriorityQueue for Grids. Used by Dijkstra, A* and JPS
  * @author Tatu
  */
 public class PrioQueue {
     
     // PrioQueue is a binary heap in the form of an array. If n is a grid's index, then its children are 2*n and 2*n+1
-    Grid[] queue;
+    private Grid[] queue;
     private int firstOpen;
     
     public PrioQueue() {
@@ -30,15 +30,15 @@ public class PrioQueue {
     
     /**
      * Check if the queue is currectly empty
-     * @return 
+     * @return true if empty
      */
     public boolean isEmpty() {
         return queue[1] == null;
     }
     
     /**
-     * Remove the grid with smallest value (distance + estimation)
-     * @return 
+     * Remove from queue and return the grid with smallest value (distance + estimation)
+     * @return the smallest grid in queue
      */
     public Grid poll() {
         if (isEmpty()) {
@@ -47,6 +47,7 @@ public class PrioQueue {
         Grid toReturn = queue[1];
         moveLatestGrid();
         sortAfterPolling();
+        
         return toReturn;
     }
     
@@ -65,7 +66,7 @@ public class PrioQueue {
     
     /**
      * Sort queue after add() was called
-     * Sorting done by moving the recently added Grid up the tree until it no longer is bigger than its parent
+     * Sorting is done by moving the recently added Grid up the tree until it no longer is smaller than its parent
      */
     private void sortAfterAdding() {
         int posIndex = firstOpen - 1;
@@ -83,7 +84,7 @@ public class PrioQueue {
     
     /**
      * Sort queue after poll() was called
-     * Sorting happens by moving the newest gridin queue to root and moving it downwards
+     * Sorting happens by initially moving the newest grid in queue to root and moving it downwards
      */
     private void sortAfterPolling() {
         int pos = 1;
@@ -94,9 +95,15 @@ public class PrioQueue {
             int leftIndex = 2 * pos;
             int rightIndex = 2 * pos + 1;
             
-            if (leftChild == null || rightChild == null) {
-                pos = nullChildSwap(pos, leftChild, rightChild, leftIndex, rightIndex);
+            // If leftChild is null then rightChild also has to be null, we can stop the loop
+            if (leftChild == null) {
+                break;
+            }
+            // Check for swap with only leftChild when right is null
+            if (rightChild == null) {
+                pos = nullChildSwap(pos, leftIndex);
             } else {
+                // Check for swap when both children need to be considered
                 pos = pollSwap(pos, leftChild, rightChild, leftIndex, rightIndex);
             }
         }
@@ -140,40 +147,23 @@ public class PrioQueue {
     }
     
     /**
-     * Checking for swap when one of parent grid's children is null
+     * Checking for swap with left child when right child of a grid is null
      * @param parentIndex index of grid whose children are being checked
-     * @param leftChild grid in position 2 * parentIndex
-     * @param rightChild grid in position 2 * parentIndex + 1
      * @param leftIndex index of left grid
-     * @param rightIndex index of right grid
-     * @return -1 if no swap happened, otherwise the index of the child that swap happened with
+     * @return -1 if no swap happened, index of leftChild if it did
      */
-    private int nullChildSwap(int parentIndex, Grid leftChild, Grid rightChild, int leftIndex, int rightIndex) {
+    private int nullChildSwap(int parentIndex, int leftIndex) {
         Grid parent = queue[parentIndex];
+        Grid leftChild = queue[leftIndex];
         
-        if (leftChild == null && rightChild == null) {
-            return -1;
-        }
-        
-        if (leftChild == null) {
-            if (parent.compareTo(rightChild) == 1) {
-                return swapPositions(parentIndex, rightIndex);
-            } else {
-                return -1;
-            }
-        } else if (rightChild == null) {
-            if (parent.compareTo(leftChild) == 1) {
-                return swapPositions(parentIndex, leftIndex);
-            } else {
-                return -1;
-            }
-        }
-        // This return should never happen
+        if (parent.compareTo(leftChild) == 1) {
+            return swapPositions(parentIndex, leftIndex);
+        } 
         return -1;
     }
     
     /**
-     * Checking for swap when neither child was null
+     * Checking for swap when neither child is null
      * @param parentIndex index of grid whose children are being checked
      * @param leftChild grid in position 2 * parentIndex
      * @param rightChild grid in position 2 * parentIndex + 1
@@ -187,32 +177,12 @@ public class PrioQueue {
         if (leftChild.compareTo(rightChild) == -1) {
             if (parent.compareTo(leftChild) == 1) {
                 return swapPositions(parentIndex, leftIndex);
-            } else {
-                if (parent.compareTo(rightChild) == 1) {
-                    return swapPositions(parentIndex, rightIndex);
-                }
-            }
-        } else {
-            if (parent.compareTo(rightChild) == 1) {
-                swapPositions(parentIndex, rightIndex);
-                return rightIndex;
-            } else {
-                if (parent.compareTo(leftChild) == 1) {
-                    swapPositions(parentIndex, leftIndex);
-                    return leftIndex;
-                }
-            }
+            } 
         }
+        if (parent.compareTo(rightChild) == 1) {
+            return swapPositions(parentIndex, rightIndex);
+        }
+        
         return -1;
     }
-    
-    /*
-    public void printQueue() {
-        for (int i = 1; i < queue.length; i++) {
-            if (queue[i] != null) {
-                System.out.println(queue[i].getDistance());
-            }
-        }
-    }
-    */
 }

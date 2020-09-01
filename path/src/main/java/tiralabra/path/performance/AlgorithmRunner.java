@@ -42,9 +42,8 @@ public class AlgorithmRunner {
             long end = System.nanoTime();
             
             runtimes[i] = (end - start) / 1e7;
-            distance = algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];;
         }
-        distance = algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];;
+        distance = algo.getPathLength();
     }
     
     public float getDistance() {

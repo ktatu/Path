@@ -10,8 +10,8 @@ import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.BreadthFirstSearch;
 import tiralabra.path.algorithms.Dijkstra;
 import tiralabra.path.algorithms.JumpPointSearch;
-import tiralabra.path.data.AlgorithmImageWriter;
-import tiralabra.path.data.FileIO;
+import tiralabra.path.io.AlgorithmImageWriter;
+import tiralabra.path.io.FileIO;
 import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 
@@ -85,7 +85,7 @@ public class AlgorithmService {
         dFormat.setRoundingMode(RoundingMode.CEILING);
         dFormat.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
         
-        float dist = algo.distance[algo.scen.getGoalY()][algo.scen.getGoalX()];
+        float dist = algo.getPathLength();
         
         return dFormat.format(dist);
     }

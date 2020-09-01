@@ -1,7 +1,7 @@
-package data;
+package io;
 
-import static data.FileManagement.testArrayList;
-import static data.FileManagement.testIOFile;
+import static io.FileManagement.testArrayList;
+import static io.FileManagement.testIOFile;
 import java.io.File;
 import java.util.ArrayList;
 import org.junit.After;
@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tiralabra.path.data.FileGridMapReader;
+import tiralabra.path.io.FileGridMapReader;
 import tiralabra.path.logic.GridMap;
 
 /**

@@ -1,7 +1,7 @@
 package tiralabra.path.logic;
 
 import java.io.File;
-import tiralabra.path.data.FileGridMapReader;
+import tiralabra.path.io.FileGridMapReader;
 import tiralabra.path.logic.exceptions.InvalidScenarioException;
 import tiralabra.path.logic.exceptions.MissingUserInputException;
 import tiralabra.path.logic.exceptions.NoPathFoundException;

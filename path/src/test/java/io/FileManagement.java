@@ -1,4 +1,4 @@
-package data;
+package io;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import tiralabra.path.data.FileIO;
+import tiralabra.path.io.FileIO;
 /**
  * Used by test classes for creating tested files
  * @author Tatu

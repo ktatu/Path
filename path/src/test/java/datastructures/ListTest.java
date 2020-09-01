@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.List;
 
 /**
  *
  * @author Tatu
  */
-public class GridListTest {
+public class ListTest {
     
-    private GridList testList;
+    private List testList;
     Random r = new Random(1337);
 
     @Test
     public void gridsCanBeAddedToGridList() {
-        testList = new GridList(3);
+        testList = new List(3);
         
         testList.add(1);
         testList.add(2);
@@ -26,7 +26,7 @@ public class GridListTest {
     
     @Test
     public void gridListSizeIncreasesDynamically() {
-        testList = new GridList(2);
+        testList = new List(2);
         
         for (int i = 0; i < 2048; i++) {
             testList.add(r.nextInt(1000000));
@@ -35,7 +35,7 @@ public class GridListTest {
     
     @Test
     public void gridListCanBeIterated() {
-        testList = new GridList(100);
+        testList = new List(100);
         
         for (int i = 0; i < 1000; i++) {
             testList.add(r.nextInt());
@@ -50,7 +50,7 @@ public class GridListTest {
     
     @Test
     public void iteratedGridsAreInExpectedOrder() {
-        testList = new GridList(1000);
+        testList = new List(1000);
         ArrayList<Integer> comparison = new ArrayList<>();
         
         for (int i = 0; i < 1000; i++) {
@@ -66,5 +66,26 @@ public class GridListTest {
             assertEquals(fromComparison, next);
             idx++;
         }
+    }
+    
+    @Test
+    public void containsReturnsFalseWhenIntegerIsNotInList() {
+        testList = new List(10);
+        assertFalse(testList.contains(1));
+        
+        testList.add(10);
+        assertFalse(testList.contains(1));
+    }
+    
+    @Test
+    public void containsReturnsTrueWhenIntegerIsAlreadyInList() {
+        testList = new List(10);
+        
+        testList.add(1);
+        assertTrue(testList.contains(1));
+        
+        // There should never be duplicate integers but no reason not to test the interaction anyway
+        testList.add(1);
+        assertTrue(testList.contains(1));
     }
 }

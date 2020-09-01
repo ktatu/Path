@@ -1,16 +1,16 @@
 package tiralabra.path.datastructures;
 
 /**
- * ArrayList-like structure for saving and accessing grids as integers
+ * ArrayList-like structure. Generic so it can also be used for Strings in data-package classes
  * @author Tatu
  */
-public class GridList {
+public class List {
     private int[] array;
     
     private int firstOpen;
     private int iterationIndex;
     
-    public GridList(int size) {
+    public List(int size) {
         this.array = new int[size];
         this.firstOpen = 0;
         this.iterationIndex = 0;

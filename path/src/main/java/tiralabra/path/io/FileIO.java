@@ -1,4 +1,4 @@
-package tiralabra.path.data;
+package tiralabra.path.io;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,7 +1,7 @@
 package tiralabra.path.algorithms;
 
 import tiralabra.path.datastructures.PrioQueue;
-import tiralabra.path.datastructures.GridList;
+import tiralabra.path.datastructures.List;
 import tiralabra.path.logic.Grid;
 import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
@@ -53,7 +53,7 @@ public class Dijkstra extends Algorithm {
                 break;
             }
             
-            GridList neighbors = neighborList(y, x);
+            List neighbors = neighborList(y, x);
             while (neighbors.canIterate()) {
                 int neighbor = neighbors.getNext();
                 checkGrid(neighbor, current);
@@ -167,8 +167,8 @@ public class Dijkstra extends Algorithm {
         }
     }
     
-    protected GridList neighborList(int y, int x) {
-        GridList nList = new GridList(8);
+    protected List neighborList(int y, int x) {
+        List nList = new List(8);
         
         nList.add(gridToInt(y - 1, x));
         nList.add(gridToInt(y + 1, x));

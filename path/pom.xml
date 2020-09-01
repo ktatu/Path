@@ -85,12 +85,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.5.2</version>
-            </plugin>
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -119,6 +113,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>tiralabra/path/performance/**/*</exclude>
+                        <exclude>tiralabra/path/ui/**/*</exclude>
+                        <exclude>tiralabra/path/logic/exceptions/**/*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             
             <plugin>
