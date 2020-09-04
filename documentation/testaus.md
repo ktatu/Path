@@ -19,7 +19,7 @@ Suorituskykytestauksessa on käytetty Moving Ai:n kartta- ja skenaariotiedostoja
 ```
 java -jar path-SNAPSHOT.jar no_bfs_runtime kartta.map 10
 ```
-Testi vertaa Dijkstran, A*:n ja JPS:n suorituskykyä yhdellä kartalla. kartta.map on Moving Ai-kartta, jolla testi halutaan suorittaa ja viimeisenä argumenttina annettava luku kertoo testille kuinka monta kertaa kukin skenaario suoritetaan per algoritmi, luku voi siis olla mitä tahansa (>0). Suoritusajaksi valitaan lopuksi iteraatioiden mediaani. Luotettavan suoritusajan saamiseksi jokainen skenaario pitäisi suorittaa ainakin muutaman kerran, mutta etenkin isommilla kartoilla yli 10 iteraatiolla testistä tulee erittäin hidas.
+Testi vertaa Dijkstran, A*:n ja JPS:n suorituskykyä suorittamalla joka kymmenennen skenaarion tiedostosta parametrina annetulla kartalla. kartta.map on Moving Ai-kartta, jolla testi halutaan suorittaa ja viimeisenä argumenttina annettava luku kertoo testille kuinka monta kertaa kukin skenaario suoritetaan per algoritmi, luku voi siis olla mitä tahansa (>0). Suoritusajaksi valitaan lopuksi iteraatioiden mediaani. Luotettavan suoritusajan saamiseksi jokainen skenaario pitäisi suorittaa ainakin muutaman kerran, mutta etenkin isommilla kartoilla yli 10 iteraatiolla testistä tulee erittäin hidas.
 
 ```
 java -jar path-SNAPSHOT.jar bfs_path kartta.map
@@ -31,5 +31,7 @@ java -jar path-SNAPSHOT.jar bfs_runtime kartta.map 10
 ```
 Nopeusvertailu ensimmäisen testin tapaan, mutta leveyshaku mukana. Ero on oikeastaan graafissa, sillä leveyshaku ei löydä yhtä lyhyttä reittiä kuin muut algoritmit. Sen vuoksi tässä testissä näytetään vain x-akselilla testinumero polun pituuden sijaan. Myös tämä testi on hidas, joten iteraatioiden määrä kannattaa pitää pienenä.
 
-### Tuloksia
+.jarin, kartta- ja skenaariotiedostojen täytyy kaikkien sijaita samassa hakemistossa suorituskykytestien ajamista varten.
 
+### Tuloksia
+Valitsin testikartoikseni 
