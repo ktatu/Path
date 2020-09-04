@@ -3,7 +3,6 @@ package tiralabra.path.performance;
 import java.io.File;
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
