@@ -27,7 +27,7 @@ public class PerformanceTest extends Application {
         
         System.out.println("args size: " + arguments.length);
         
-        if (arguments[0].equals("shortest_path")) {
+        if (arguments[0].equals("no_bfs_runtime")) {
             stage.setScene(new Scene(shortestPathSpeedTest(), 600, 500));
             stage.show();
         }

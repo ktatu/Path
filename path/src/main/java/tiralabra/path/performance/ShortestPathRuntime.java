@@ -45,7 +45,7 @@ public class ShortestPathRuntime {
         XYChart.Series data = new XYChart.Series();
         data.setName(algoId);
         
-        for (int i = 0; i < scens.size(); i += (scens.size() / 100)) {
+        for (int i = 0; i < scens.size(); i += 10) {
             runner.algorithmPerformanceTest(algoId, scens.get(i));
             
             float pathLength = runner.getDistance();
