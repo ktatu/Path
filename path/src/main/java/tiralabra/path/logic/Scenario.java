@@ -14,6 +14,10 @@ public class Scenario {
      * Parameterless constructor is used in PathService where actions in gui directly change the Scenario's coordinates
      */
     public Scenario() {
+        startX = -1;
+        startY = -1;
+        goalX = -1;
+        goalY = -1;
     }
     
     public Scenario(int startY, int startX, int goalY, int goalX) {
@@ -54,9 +58,4 @@ public class Scenario {
     public void setGoalY(int goalY) {
         this.goalY = goalY;
     }
-
-    @Override
-    public String toString() {
-        return "Start coordinates: " + startX + "," + startY + " goal coordinates: " + goalX + "," + goalY;
-    } 
 }

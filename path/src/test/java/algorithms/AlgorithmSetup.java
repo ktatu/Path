@@ -14,13 +14,15 @@ import tiralabra.path.logic.exceptions.InvalidScenarioException;
  */
 public class AlgorithmSetup {
     
-    static Random r = new Random();
+    static Random r = new Random(1337);
     static ScenarioValidation validator = new ScenarioValidation();
     
     final static float sqrtTwo = (float) 1.4;
-    
+    // Testing that algorithms find a path on a randomized map
     static GridMap testMap;
+    // Testing that algorithms actually find the shortest path on an empty map
     static GridMap distanceTestMap;
+    // Testing various common algorithm movement patterns
     static GridMap customMap;
     
     static ArrayList<Scenario> scenarios;
@@ -46,7 +48,7 @@ public class AlgorithmSetup {
     
     // if distanceTest is true then method returns a map consisting of only passable terrain
     public static GridMap createTestMap(boolean distanceTest) {
-        char[][] gridMap = new char[20][20];
+        char[][] gridMap = new char[100][100];
         
         for (int y = 0; y < gridMap.length; y++) {
             for (int x = 0; x < gridMap[0].length; x++) {
@@ -61,7 +63,7 @@ public class AlgorithmSetup {
             return '.';
         }
         int terrainRandomizer = r.nextInt(10) + 1;
-        if (terrainRandomizer == 10) {
+        if (terrainRandomizer >= 9) {
             return '@';
         }
         return '.';
@@ -70,7 +72,7 @@ public class AlgorithmSetup {
     private static ArrayList<Scenario> createValidScenarios(GridMap testMap) {
         ArrayList<Scenario> newScenarios = new ArrayList<>();
         
-        while (newScenarios.size() < 5) {
+        while (newScenarios.size() < 20) {
             int hLimit = testMap.getMapHeight();
             int wLimit = testMap.getMapWidth();
             

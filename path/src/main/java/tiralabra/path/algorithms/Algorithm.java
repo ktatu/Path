@@ -121,6 +121,12 @@ public abstract class Algorithm {
         prevGrid[gridToInt(scen.getStartY(), scen.getStartX())] = -1;
     }
     
+    /**
+     * Check if (x,y) is actually inside the map
+     * @param y coordinate
+     * @param x coordinate
+     * @return true if (x,y) is not within map boundaries
+     */
     private boolean outOfBounds(int y, int x) {
         if (y < 0 || y >= gridMap.getMapHeight() || x < 0 || x >= gridMap.getMapWidth()) {
             return true;

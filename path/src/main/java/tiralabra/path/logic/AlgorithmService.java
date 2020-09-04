@@ -35,13 +35,15 @@ public class AlgorithmService {
         algo.runAlgorithm(map, scen);
         endTime = System.nanoTime();
         
-        
         if (!algo.goalVisited()) {
             throw new NoPathFoundException(algoId + " didn't find a path to goal grid");
         }
-        
     }
     
+    /**
+     * Setting the algorithm to be run
+     * @param algoId algorithm's String identifier from gui
+     */
     private void setAlgorithm(String algoId) {
         switch (algoId) {
             case "bfs":
@@ -60,10 +62,19 @@ public class AlgorithmService {
         }
     }
     
+    /**
+     * Gather data from ran algorithm for gui
+     * @return String to be shown in gui 
+     */
     public String getResultInfo() {
         return "Runtime: " + runTime() + "s, " + "visited grids: " + numOfVisitedGrids() + ", path length: " + pathLength();
     }
     
+    /**
+     * How many grids did the algorithm go through to find the path
+     * Note: on JPS this returns the number of scanned grids, most of them don't end up in priority queue
+     * @return 
+     */
     private int numOfVisitedGrids() {
         int visitedGrids = 0;
         for (int y = 0; y < algo.gridMap.getMapHeight(); y++) {

@@ -14,6 +14,11 @@ public class Dijkstra extends Algorithm {
 
     protected PrioQueue prioQueue;
 
+    /**
+     * Necessary initialization operations for running Dijkstra
+     * @param map
+     * @param scen 
+     */
     private void initializeDijkstra(GridMap map, Scenario scen) {
         initializeAlgorithm(map, scen);
         
@@ -32,7 +37,7 @@ public class Dijkstra extends Algorithm {
     }
     
     /**
-     * Runs initialization then Dijkstra. Goes through every neighbor of each grid polled from priority queue
+     * Iterate through priority queue until a path to goal grid is found
      */
     @Override
     public void runAlgorithm(GridMap map, Scenario scen) {

@@ -27,13 +27,8 @@ public class Gui extends Application {
     private AlgorithmService algoService;
     private InputPanel inputPanel;
     
-    // global for adjusting size based on images
-    private Stage stage;
-    
     @Override
     public void start(Stage stage) {
-        this.stage = stage;
-        
         this.algoService = new AlgorithmService();
         this.inputData = new InputData();
         this.inputPanel = new InputPanel(stage, inputData);
@@ -67,9 +62,10 @@ public class Gui extends Application {
                 } catch (InvalidScenarioException | MissingUserInputException | NoPathFoundException e) {
                     exceptionPopup(e.getMessage());
                 } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                    exceptionPopup("Selected map file is incorrectly formatted");
+                    exceptionPopup("Error caused by selected map file");
                 }
-        });
+            }
+        );
         
         return executeProgram;
     }
@@ -131,16 +127,6 @@ public class Gui extends Application {
         
         sp.setContent(new ImageView(algoService.getAlgoImage()));
         return sp;
-    }
-    
-    private void adjustGuiSize() {
-        int mapWidth = algoService.algo.gridMap.getMapHeight();
-        int mapHeight = algoService.algo.gridMap.getMapWidth();
-        
-        if (mapWidth > 900) {
-            stage.setMinWidth(mapWidth + 100);
-        }
-        stage.setMinHeight(mapHeight + 400);
     }
     
     private Label resultInfo() {

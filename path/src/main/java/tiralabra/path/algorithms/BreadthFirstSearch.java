@@ -15,6 +15,8 @@ public class BreadthFirstSearch extends Algorithm {
     
     /**
      * Start grid related operations
+     * @param map
+     * @param scen
      */
     public void initializeBFS(GridMap map, Scenario scen) {
         initializeAlgorithm(map, scen);
@@ -31,7 +33,7 @@ public class BreadthFirstSearch extends Algorithm {
     }
 
     /**
-     * Runs initialization then BFS
+     * Iterate through first-in-first-out queue until a path to goal grid is found
      */
     @Override
     public void runAlgorithm(GridMap map, Scenario scen) {

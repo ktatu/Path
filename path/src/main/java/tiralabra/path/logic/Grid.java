@@ -1,7 +1,7 @@
 package tiralabra.path.logic;
 
 /**
- * Grid describes a single piece of terrain on the map
+ * Grid describes a single piece (x,y) of terrain on the map
  * Implemented for keeping priorityQueues sorted
  * @author Tatu
  */
@@ -49,31 +49,6 @@ public class Grid implements Comparable<Grid> {
     public float getEstimation() {
         return estimation;
     }
-
-    /**
-     * if statement returns a comparison used by Dijkstra (no heuristic), else is for others
-     * @param o comparable object
-     * @return the result of comparison
-     */
-    
-    /*
-    @Override
-    public int compareTo(Grid o) {
-        if (estimation == -1) {
-            if (this.getDistance() - o.getDistance() <= 0) {
-                return -1;
-            }
-            return 1;
-        } else {
-            if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) < 0) {
-                return -1;
-            } else if ((this.getDistance() + this.getEstimation()) - (o.getDistance() + o.getEstimation()) == 0) {
-                return 0;
-            }
-            return 1;
-        }
-    }
-    */
     
     /**
      * Comparing grids. Only distance to the grid from start is taken into account when comparing pure Dijkstra's grids

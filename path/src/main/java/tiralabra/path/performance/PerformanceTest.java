@@ -46,12 +46,11 @@ public class PerformanceTest extends Application {
     
     private LineChart shortestPathSpeedTest() {
         String mapFileName = arguments[1];
-        String scenFileName = arguments[2];
-        int iterations = Integer.valueOf(arguments[3]);
+        int iterations = Integer.valueOf(arguments[2]);
         
         ShortestPathRuntime pathTest = new ShortestPathRuntime();
         
-        return pathTest.shortestPathChart(getMap(mapFileName), getScenarios(scenFileName), iterations, mapFileName);
+        return pathTest.shortestPathChart(getMap(mapFileName), getScenarios(mapFileName), iterations, mapFileName);
     }
     
     private BarChart bfsPathLengthTest() {        

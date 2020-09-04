@@ -51,11 +51,13 @@ public class InputPanel {
     
     private Button mapChooser(Stage stage) {
         Button mapFileSelection = new Button("Choose a map");
-        mapFileSelection.setOnAction((event) -> {
+        mapFileSelection.setOnAction(
+            (event) -> {
                 FileChooser mapChooser = new FileChooser();
                 mapChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Map Files", "*.map"));
                 dataCollector.setMapFile(mapChooser.showOpenDialog(stage));
-        });
+            }
+        );
         
         return mapFileSelection;
     }
@@ -92,12 +94,14 @@ public class InputPanel {
         field.setId(id);
         field.setPrefWidth(50);
         
-        field.setOnKeyTyped((event) -> {
-            try {
-                dataCollector.setCoordinate(id, Integer.valueOf(field.getText()));
-            } catch(NumberFormatException e) {
+        field.setOnKeyTyped(
+            (event) -> {
+                try {
+                    dataCollector.setCoordinate(id, Integer.valueOf(field.getText()));
+                } catch(NumberFormatException e) {
+                }
             }
-        });
+        );
         
         return field;
     }
@@ -127,13 +131,15 @@ public class InputPanel {
         
         algoBox.getChildren().addAll(bfs, dijkstra, aStar, jps);
         
-        algos.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-            @Override
-            public void changed(ObservableValue<? extends Toggle> ov, Toggle prevToggle, Toggle newToggle) {
-                RadioButton testi = (RadioButton)newToggle.getToggleGroup().getSelectedToggle();
-                dataCollector.setAlgorithmId(testi.getId());
-             } 
-        });
+        algos.selectedToggleProperty().addListener(
+            new ChangeListener<Toggle>() {
+                @Override
+                public void changed(ObservableValue<? extends Toggle> ov, Toggle prevToggle, Toggle newToggle) {
+                    RadioButton testi = (RadioButton)newToggle.getToggleGroup().getSelectedToggle();
+                    dataCollector.setAlgorithmId(testi.getId());
+                 } 
+            }
+        );
         
         return algoBox;
     }

@@ -92,6 +92,7 @@
                 <version>2.17</version>
                 <configuration>
                   <configLocation>checkstyle.xml</configLocation>
+                  <excludes>tiralabra/path/ui/**/*</excludes>
                 </configuration>
             </plugin>
             
@@ -118,6 +119,7 @@
                         <exclude>tiralabra/path/performance/**/*</exclude>
                         <exclude>tiralabra/path/ui/**/*</exclude>
                         <exclude>tiralabra/path/logic/exceptions/**/*</exclude>
+                        <exclude>**/*AlgorithmImageWriter.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>

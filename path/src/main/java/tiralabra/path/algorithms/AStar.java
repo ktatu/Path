@@ -12,6 +12,11 @@ import tiralabra.path.logic.Scenario;
  */
 public class AStar extends Dijkstra {
 
+    /**
+     * Necessary initialization operations for running A*
+     * @param map
+     * @param scen 
+     */
     public void initializeAStar(GridMap map, Scenario scen) {
         initializeAlgorithm(map, scen);
         
@@ -29,6 +34,11 @@ public class AStar extends Dijkstra {
         prioQueue.add(new Grid(startY, startX, 0, diagonalDistanceToGoal(startY, startX)));
     }
     
+    /**
+     * Iterate through grids until a path to goal grid is found
+     * @param map
+     * @param scen 
+     */
     @Override
     public void runAlgorithm(GridMap map, Scenario scen) {
         initializeAStar(map, scen);
@@ -59,6 +69,11 @@ public class AStar extends Dijkstra {
         }
     }
     
+    /**
+     * Consider the grid for priority queue update data structures if it gets added 
+     * @param nbor the grid being considered
+     * @param prev grid from which the movement to nbor is happening
+     */
     private void checkGrid(int nbor, Grid prev) {
         int x = intToGridX(nbor);
         int y = intToGridY(nbor);
@@ -77,6 +92,12 @@ public class AStar extends Dijkstra {
         }
     }
     
+    /**
+     * Calculating the heuristic from (x,y) to goal grid
+     * @param y coordinate
+     * @param x coordinate
+     * @return diagonal distance to goal
+     */
     private float diagonalDistanceToGoal(int y, int x) {
         int distanceY = MathUtil.abs(scen.getGoalY() - y);
         int distanceX = MathUtil.abs(scen.getGoalX() - x);

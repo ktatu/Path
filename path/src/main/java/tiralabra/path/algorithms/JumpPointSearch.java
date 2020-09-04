@@ -59,6 +59,11 @@ public class JumpPointSearch extends Dijkstra {
         }
     }
     
+    /**
+     * Go through (x,y)'s neighbors, jump to each neighbor that does not get pruned
+     * @param y coord
+     * @param x coord
+     */
     private void scanNeighbors(int y, int x) {
         boolean isStartGrid = (y == scen.getStartY() && x == scen.getStartX());
                 
@@ -76,6 +81,12 @@ public class JumpPointSearch extends Dijkstra {
         }
     }
 
+    /**
+     * Add grid found by jump() to priority queue, update relevant data structures
+     * @param jumpGrid jump point grid as an integer
+     * @param parentY parent y coordinate of the new jump point
+     * @param parentX parent x coordinate of the new jump point
+     */
     private void addNewJumpPoint(int jumpGrid, int parentY, int parentX) {
         int jumpY = intToGridY(jumpGrid);
         int jumpX = intToGridX(jumpGrid);
@@ -94,6 +105,14 @@ public class JumpPointSearch extends Dijkstra {
         }
     } 
 
+    /**
+     * Recursively look for new jump points
+     * @param y current grid's y
+     * @param x current grid's x
+     * @param dirY how the algorithm is moving vertically, -1 or 1
+     * @param dirX how the algorithm is moving horizontally, -1  or 1
+     * @return -1 if no jump point was found or the jump point as an integer
+     */
     private int jump(int y, int x, int dirY, int dirX) {
         int nextY = y + dirY;
         int nextX = x + dirX;
@@ -109,18 +128,18 @@ public class JumpPointSearch extends Dijkstra {
         if (y == scen.getGoalY() && x == scen.getGoalX()) {
             return gridToInt(y, x);
         }
-        
+        // Same principle in checking for forced neighbors as in pruning
         if (diagonal) {
-            if (forcedDiagonal(y, x, dirY, dirX)) {
+            if ((!isPassable(y - dirY, x) && isPassable(y - dirY, x + dirX)) || (!isPassable(y, x - dirX) && isPassable(y + dirY, x - dirX))) {
                 return gridToInt(y, x);
             }
         } else {
             if (dirY == 0) {
-                if (checkForcedHorizontal(y, x, dirX)) {
+                if ((!isPassable(y - 1, x) && isPassable(y - 1, x + dirX)) || (!isPassable(y + 1, x) && isPassable(y + 1, x + dirX))) {
                     return gridToInt(y, x);
                 }
             } else {
-                if (checkForcedVertical(y, x, dirY)) {
+                if ((!isPassable(y, x - 1) && isPassable(y + dirY, x - 1)) || (!isPassable(y, x + 1) && isPassable(y + dirY, x + 1))) {
                     return gridToInt(y, x);
                 }
             }
@@ -134,36 +153,14 @@ public class JumpPointSearch extends Dijkstra {
         return jump(nextY, nextX, dirY, dirX);
     }
     
-    private boolean checkForcedVertical(int y, int x, int directionY) {
-        // Scanning north
-        if (directionY == -1) {
-            if ((!isPassable(y, x - 1) && isPassable(y - 1, x - 1)) || (!isPassable(y, x + 1) && isPassable(y - 1, x + 1))) {
-                return true;
-            }
-            return false;
-        }
-        // South
-        if ((!isPassable(y, x - 1) && isPassable(y + 1, x - 1)) || (!isPassable(y, x + 1) && isPassable(y + 1, x + 1))) {
-            return true;
-        }
-        return false;
-    }
-    
-    private boolean checkForcedHorizontal(int y, int x, int directionX) {
-        // West
-        if (directionX == -1) {
-            if ((!isPassable(y - 1, x) && isPassable(y - 1, x - 1)) || (!isPassable(y + 1, x) && isPassable(y + 1, x -1))) {
-                return true;
-            }
-            return false;
-        }
-        //East
-        if ((!isPassable(y - 1, x) && isPassable(y - 1, x + 1)) || (!isPassable(y + 1, x) && isPassable(y + 1, x + 1))) {
-            return true;
-        }
-        return false;
-    }
-    
+    /**
+     * Measuring diagonal distance between two grids
+     * @param startY
+     * @param startX
+     * @param targetY
+     * @param targetX
+     * @return the distance
+     */
     private float diagonalDistance(int startY, int startX, int targetY, int targetX) {
         int distanceY = MathUtil.abs(targetY - startY);
         int distanceX = MathUtil.abs(targetX - startX);
@@ -173,9 +170,15 @@ public class JumpPointSearch extends Dijkstra {
         
         return diagonalMoves * sqrtTwo + horAndVerMoves;
     }
-    
+
+    /**
+     * Prune neighbors of (x,y) for jump() by considering movement direction and forced grids
+     * @param y coordinate
+     * @param x coordinate
+     * @param isStartGrid if (x,y) == (scen.getStartX, scen.getStartY) then no neighbors get pruned
+     * @return list of neighbors (as integers) that survived pruning
+     */
     private List prunedNeighbors(int y, int x, boolean isStartGrid) {
-        // No pruning when grid (x,y) is the starting grid
         if (isStartGrid) {
             return neighborList(y, x);
         }
@@ -188,33 +191,21 @@ public class JumpPointSearch extends Dijkstra {
         
         int dirY = getDirectionY(y, pY);
         int dirX = getDirectionX(x, pX);
-
+        
         if (dirY != 0 && dirX != 0) {
-            if (forcedDiagonal(y, x, dirY, dirX)) {
-                neighbors.add(gridToInt(y + dirY, x - dirX));
-                neighbors.add(gridToInt(y - dirY, x + dirX));
-            }
-            neighbors.add(gridToInt(y + dirY, x + dirX));
-            neighbors.add(gridToInt(y + dirY, x));
-            neighbors.add(gridToInt(y, x + dirX));
+            pruneDiagonal(y, x, dirY, dirX, neighbors);
         } else if (dirY == 0) {
-            if (checkForcedHorizontal(y, x, dirX)) {
-                neighbors.add(gridToInt(y - 1, x + dirX));
-                neighbors.add(gridToInt(y + 1, x + dirX));
-            }
-            neighbors.add(gridToInt(y, x + dirX));
+            pruneHorizontal(y, x, dirX, neighbors);
         } else {
-            if (checkForcedVertical(y, x, dirY)) {
-                neighbors.add(gridToInt(y + dirY, x + 1));
-                neighbors.add(gridToInt(y + dirY, x - 1));
-            }
-            neighbors.add(gridToInt(y + dirY, x));
-
+            pruneVertical(y, x, dirY, neighbors);
         }
+        
         return neighbors;
     }
     
-    // JPS requires a separate implementation of constructing path because of the gaps between jump points
+    /**
+     * JPS requires a separate implementation of constructing path because of the gaps between jump points
+     */
     @Override
     protected void constructPath() {
         int goalGridAsInt = gridToInt(scen.getGoalY(), scen.getGoalX());
@@ -226,6 +217,10 @@ public class JumpPointSearch extends Dijkstra {
         }
     }
     
+    /**
+     * Add the gaps between two jump points for a proper path
+     * @param grid 
+     */
     private void pathBetweenJumpPoints(int grid) {
         if (prevGrid[grid] == -1 || grid == -1) {
             return;
@@ -247,39 +242,62 @@ public class JumpPointSearch extends Dijkstra {
         }
     }
     
-    private boolean forcedDiagonal(int y, int x, int directionY, int directionX) {
-        // Scanning southwest
-        if (directionY == 1 && directionX == -1) {
-            if (!isPassable(y - 1, x) && isPassable(y - 1, x- 1)) {
-                return true;
-            } else if (!isPassable(y, x +1) && isPassable(y + 1, x)) {
-                return true;
-            }
+    /**
+     * Which neighbors to add to the "not-pruned" list when movement is diagonal
+     * @param y coordinate
+     * @param x coordinate
+     * @param dirY vertical direction of movement
+     * @param dirX horizontal direction of movement
+     * @param nborList list of neighbors that do not get pruned
+     */
+    private void pruneDiagonal(int y, int x, int dirY, int dirX, List nborList) {
+        // jump() checks if these are passable grids anyway so no point in verifying them
+        // Same principle with the no-check adds in pruneVertical and pruneHorizontal
+        nborList.add(gridToInt(y + dirY, x + dirX));
+        nborList.add(gridToInt(y + dirY, x));
+        nborList.add(gridToInt(y, x + dirX));
+        
+        if (!isPassable(y - dirY, x) && isPassable(y - dirY, x + dirX)) {
+            nborList.add(gridToInt(y - dirY, x + dirX));
         }
-        // Northwest
-        else if (directionY == -1 && directionX == -1) {
-            if (!isPassable(y + 1, x) && isPassable(y + 1, x - 1)) {
-                return true;
-            } else if (!isPassable(y, x + 1) && isPassable(y - 1, x + 1)) {
-                return true;
-            }
+        if (!isPassable(y, x - dirX) && isPassable(y + dirY, x - dirX)) {
+            nborList.add(gridToInt(y + dirY, x - dirX));
         }
-        // Northeast
-        else if (directionY == -1 && directionX == 1) {
-            if (!isPassable(y, x - 1) && isPassable(y - 1, x - 1)) {
-                return true;
-            } else if (!isPassable(y + 1, x) && isPassable(y + 1, x + 1)) {
-                return true;
-            }
+    }
+    
+    /**
+     * Which neighbors to add to the "not-pruned" list when movement is horizontal
+     * @param y coordinate
+     * @param x coordinate
+     * @param dirX horizontal direction of movement
+     * @param nborList list of neighbors that do not get pruned
+     */
+    private void pruneHorizontal(int y, int x, int dirX, List nborList) {
+        nborList.add(gridToInt(y, x + dirX));
+        
+        if (!isPassable(y - 1, x) && isPassable(y - 1, x + dirX)) {
+            nborList.add(gridToInt(y - 1, x + dirX));
         }
-        // Southeast
-        else {
-            if (!isPassable(y - 1, x) && isPassable(y - 1, x + 1)) {
-                return true;
-            } else if (!isPassable(y, x - 1) && isPassable(y + 1, x - 1)) {
-                return true;
-            }
+        if (!isPassable(y + 1, x) && isPassable(y + 1, x + dirX)) {
+            nborList.add(gridToInt(y + 1, x + dirX));
         }
-        return false;
+    }
+    
+    /**
+     * Which neighbors to add to the "not-pruned" list when movement is vertical
+     * @param y coordinate
+     * @param x coordinate
+     * @param dirX vertical direction of movement
+     * @param nborList list of neighbors that do not get pruned
+     */
+    private void pruneVertical(int y, int x, int dirY, List nborList) {
+        nborList.add(gridToInt(y + dirY, x));
+        
+        if (!isPassable(y, x - 1) && isPassable(y + dirY, x - 1)) {
+            nborList.add(gridToInt(y + dirY, x - 1));
+        }
+        if (!isPassable(y, x + 1) && isPassable(y + dirY, x + 1)) {
+            nborList.add(gridToInt(y + dirY, x + 1));
+        }
     }
 }

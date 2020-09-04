@@ -49,7 +49,7 @@ public class JumpPointSearchTest extends AlgorithmSetup {
             Algorithm jps = new JumpPointSearch();
             jps.runAlgorithm(customMap, customScenarios.get(i));
             
-            if (Math.abs(util.resultDistance(jps, customScenarios.get(i)) - util.expectedResults[i]) > 0.1) {
+            if (Math.abs(util.resultDistance(jps, customScenarios.get(i)) - util.expectedResults[i]) > 0.001) {
                 System.out.println(i);
                 System.out.println(util.resultDistance(jps, customScenarios.get(i)));
                 System.out.println(util.expectedResults[i]);

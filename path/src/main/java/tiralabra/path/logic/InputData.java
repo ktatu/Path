@@ -4,7 +4,6 @@ import java.io.File;
 import tiralabra.path.io.FileGridMapReader;
 import tiralabra.path.logic.exceptions.InvalidScenarioException;
 import tiralabra.path.logic.exceptions.MissingUserInputException;
-import tiralabra.path.logic.exceptions.NoPathFoundException;
 
 /**
  * Data from gui is collected and verified here
@@ -18,17 +17,35 @@ public class InputData {
     // User input from gui
     private File mapFile;
     private String algoId;
-    private boolean saveImage = false;
-    private final Scenario scen = new Scenario();
+    private boolean saveImage;
+    private final Scenario scen;
     
     private GridMap map;
     
-    public void dataVerification() throws MissingUserInputException, InvalidScenarioException, NoPathFoundException, IndexOutOfBoundsException, NumberFormatException {
+    /**
+     * Scenario gets initialized to unusable values for checking if user input is missing
+     */
+    public InputData() {
+        saveImage = false;
+        scen = new Scenario();
+    }
+    
+    /**
+     * Verify all data and throw a relevant exception back to gui if data is flawed
+     * @throws MissingUserInputException
+     * @throws InvalidScenarioException
+     * @throws IndexOutOfBoundsException
+     * @throws NumberFormatException 
+     */
+    public void dataVerification() throws MissingUserInputException, InvalidScenarioException, IndexOutOfBoundsException, NumberFormatException {
         if (missingUserInput()) {
             throw new MissingUserInputException("Choose a map, type coordinates and select algorithm before pressing the button");
         }
         
+        // Can throw IndexOutOfBoundsException or NumberFormatException to gui when map file was not properly formatted
         map = getMapFromFile();
+        
+        // Throws MissingUserException back to gui if validation fails
         scenValidator.validateScenario(map, scen);
     }
     
@@ -84,11 +101,21 @@ public class InputData {
         return map;
     }
     
+    /**
+     * Get a GridMap object from a file
+     * @return
+     * @throws IndexOutOfBoundsException
+     * @throws NumberFormatException 
+     */
     private GridMap getMapFromFile() throws IndexOutOfBoundsException, NumberFormatException {
         return mapReader.getGridMap(mapFile);
     }
     
+    /**
+     * Check if any input required for running an algorithm is missing
+     * @return 
+     */
     private boolean missingUserInput() {
-        return (mapFile == null || algoId == null);
+        return (mapFile == null || algoId == null || scen.getStartX() == -1 || scen.getStartY() == -1 || scen.getGoalX() == -1 || scen.getGoalY() == -1);
     }
 }
