@@ -42,14 +42,31 @@ Suorituskykytestaukseni tapahtui kartoilla [Cauldron.map](https://github.com/kta
 Kyseiset kartat edustavat kolmea hyvin erilaista reitinhakualgoritmien sovelluskohdetta (sokkelot, strategiapelit, kartta- ja reitinhakusovellukset), joten ne tuntuivat luontevilta valinnoilta monipuolisen vertailun aikaansaamiseksi.
 
 #### Suorituskyky - Dijkstra, A* ja JPS
-Testit tehty .jarista komennolla ``` java -jar path-1.0-SNAPSHOT.jar no_bfs_runtime karttatiedoston_nimi.map 10```
+Testit tehty .jarista komennolla ```java -jar path-1.0-SNAPSHOT.jar no_bfs_runtime karttatiedoston_nimi.map 10```
 
 Cauldron.map               |  Berlin_1_1024.map        |  maze512-32-7.map
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/no_bfs_runtime_cauldron.png" height="200">   | <img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/no_bfs_runtime_berlin.png" height="200">   | <img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/no_bfs_runtime_maze512-32-7.png" height="200">
 
+Testi mittaa algoritmien nopeuseroja millisekunneissa eripituisten lyhyimpien polkujen etsinnässä.
+
 Testien perusteella on ilmeistä, että JPS on ylivertainen jos haluaa löytää lyhimmän reitin mahdollisimman nopeasti. JPS:n teho sokkelokartassa oli melko suuri yllätys, mutta toisaalta sille on myös helppo keksiä ainakin yksi selitys. Lyhyet välimatkat seinien välillä sokkelokartassa tarkoittavat, että JPS ei koskaan joudu rekursiivisesti hyppäämään pitkälle turhaan. Avoimissa kartoissa JPS voi pahimmillaan skannata koko kartan halki horisontaalisti tai vertikaalisti löytämättä yhtäkään jump pointtia. 
 
 A* selvästi toimii sitä paremmin mitä avoimempi kartta, mutta ei siltikään yllä lähellekään JPS:n nopeuksia. A*:n suuret nopeusvaihtelut selittynevät algoritmin käytöksellä isompien esteiden kohdalla, jotka saattavat johdattaa A*:n aivan päinvastaiseen suuntaan optimaalisesta reitistä. Sama ilmiö puolestaan selittää Dijkstran tasaista suoritusta isoimmilla pituuksilla, jolloin yksittäisten esteiden merkitys on pienempi algoritmille joka muutenkin etenee joka suuntaan. Dijkstra näyttäisi olevan varteenotettava vaihtoehto sokkelokartoissa jos vaihtoehtoina on Dijkstra ja A*, mutta JPS:n toteutus kannattaa aina.
 
-#### Leveyshaun reitin pituus
+#### Leveyshaku verrattuna muihin
+Leveyshaku ei voi löytää lyhyimpiä reittiä ruudukkokartoissa, sillä algoritmi ei kykene huomioimaan diagonaalisen liikkeen kustannusta. Diagonaalisen liikkeen kustannus on ohjelmassa 1.4, vertikaalisilla ja horisontaalisilla liikkeillä se on 1. Kaikissa reitinhaun sovelluskohteissa ei kuitenkaan ole aina tarpeen löytää kaikista lyhyin reitti, vaan ainoastaan "tarpeeksi hyvä". Leveyshakua on siis syytä yrittää suoraan verrata muihin algoritmeihin.
+
+Reitinpituus-testi suorittetu komennolla ```java -jar path-1.0-SNAPSHOT.jar bfs_path Cauldron.map Berlin_1_1024.map maze512-32-7.map```
+
+<img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/bfs_path_length.png">
+
+Testi vertaa leveyshaun löytämien reittien pituutta optimaaliseen. Vertailu tapahtuu suorittamalla karttojen skenaariotiedostojen jokainen skenaario optimaalisen reitin löytävällä algoritmilla (käytin JPS:ää) ja BFS:llä ja sitten vertailemalla tuloksia kaavalla (optimaalinen_pituus / bfs_pituus) * 100. Tulosten perusteella leveyshaun reitti on keskimäärin noin 15 prosenttiyksikköä optimaalista pidempi. Yllättävää on tulosten tasaisuus, sokkelokartassa leveyshaku suoriutui odotetusti paremmin kuin muissa, mutta ero on pieni.
+
+Nopeuserotestit komennolla ```java -jar path-1.0-SNAPSHOT.jar bfs_runtime karttatiedoston_nimi.map 10```
+
+Cauldron.map               |  Berlin_1_1024.map        |  maze512-32-7.map
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/bfs_runtime_cauldron.png" height="200"> | <img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/bfs_runtime_Berlin.png" height="200"> | <img src="https://github.com/ktatu/Path/blob/master/documentation/kuvat/bfs_runtime_maze.png" height="200"> 
+
+Suorituskykytesti on käytännössä sama kuin ensimmäinenkin. Sinisellä graafeissa näkyy leveyshaku ja x-akselilla on testinumeroita. Käytetyt skenaariot ovat kuitenkin samat, joten graafeja voi halutessaan verrata ensimmäisen testin tuloksiin. Tulosten perusteella leveyshaku on suoritusnopeudeltaan melko lähellä JPS:ää. Leveyshaku on kilpailukykyinen vaihtoehto Dijkstralle ja A*:lle ruudukkokartoissa, jos sovelluksessa ei ole tarvetta kaikista lyhyimmälle reitille.
