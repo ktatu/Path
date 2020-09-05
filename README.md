@@ -19,3 +19,5 @@ Ohjelma piirtää eri reitinhakualgoritmien reittejä kaksiulotteisissa ruudukko
 [Käyttöohje](https://github.com/ktatu/Path/blob/master/documentation/kayttoohje.md)
 
 [Testausdokumentti](https://github.com/ktatu/Path/blob/master/documentation/testaus.md)
+
+[Toteutusdokumentti](https://github.com/ktatu/Path/blob/master/documentation/toteutus.md)
