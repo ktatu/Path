@@ -34,6 +34,10 @@ public class PerformanceTest extends Application {
             stage.setScene(new Scene(bfsPathLengthTest(), 600, 500));
             stage.show();
         }
+        else if (arguments[0].equals("bfs_runtime")) {
+            stage.setScene(new Scene(bfsPathSpeedTest(), 600, 500));
+            stage.show();
+        }
     }
     
     public static void main(String[] args) {
@@ -48,6 +52,15 @@ public class PerformanceTest extends Application {
         int iterations = Integer.valueOf(arguments[2]);
         
         ShortestPathRuntime pathTest = new ShortestPathRuntime();
+        
+        return pathTest.shortestPathChart(getMap(mapFileName), getScenarios(mapFileName), iterations, mapFileName);
+    }
+    
+    private LineChart bfsPathSpeedTest() {
+        String mapFileName = arguments[1];
+        int iterations = Integer.valueOf(arguments[2]);
+        
+        BFSRuntime pathTest = new BFSRuntime();
         
         return pathTest.shortestPathChart(getMap(mapFileName), getScenarios(mapFileName), iterations, mapFileName);
     }
