@@ -13,11 +13,7 @@ Graafinen käyttöliittymä aukeaa suorittamalla .jar komennolla
 ```
 java -jar path-1.0-SNAPSHOT.jar
 ```
-Suorituskykytestejä voi suorittaa .jarista komennolla
-```
-java -jar path-1.0-SNAPSHOT.jar testityyppi karttatiedosto.map skenaariotiedosto.map.scen suoritukset_per_skenaario
-```
-Lisäohjeistusta löytyy testausdokumentista
+Myös suorituskykytestit voi suorittaa .jarista. Tarkemmat ohjeet löytyy testausdokumentista.
 
 ## Käyttöliittymä
 Graafisen käyttöliittymän komponentit:
@@ -34,5 +30,3 @@ Graafisen käyttöliittymän komponentit:
   
 ## Ohjelman suoritus
 Ohjelma suorittaa valitun algoritmin Run algorithm-napista. Mahdollisista käyttäjäsyötteestä johtuvista virhetilanteista ilmestyy näytölle virheilmoitus. Onnistuneesti suoritetusta algoritmista ilmestyy kuva käyttöliittymään.
-  
-  
