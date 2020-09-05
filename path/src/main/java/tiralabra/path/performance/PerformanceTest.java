@@ -13,10 +13,9 @@ import tiralabra.path.logic.GridMap;
 import tiralabra.path.logic.Scenario;
 
 /**
- *
+ * Performance testing of pathfinding algorithms
  * @author Tatu
  */
-
 public class PerformanceTest extends Application {
     
     private static String[] arguments;
