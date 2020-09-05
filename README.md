@@ -1,6 +1,8 @@
 # Path
 Ohjelma piirtää eri reitinhakualgoritmien reittejä kaksiulotteisissa ruudukkokartoissa
 
+[Ohjelman .jar](https://github.com/ktatu/Path/releases/tag/1.0)
+
 ## Dokumentaatio
 [Raportti viikko 1](https://github.com/ktatu/Path/blob/master/documentation/viikko1_raportti.md)
 
