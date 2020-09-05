@@ -10,7 +10,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import tiralabra.path.algorithms.Algorithm;
 import tiralabra.path.algorithms.JumpPointSearch;
-import tiralabra.path.algorithms.JumpPointSearch;
 import tiralabra.path.logic.Scenario;
 
 public class JumpPointSearchTest extends AlgorithmSetup {

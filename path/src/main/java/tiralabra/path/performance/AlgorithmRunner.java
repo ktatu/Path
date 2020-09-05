@@ -27,6 +27,11 @@ public class AlgorithmRunner {
         this.map = map;
     }
     
+    /**
+     * Running the algorithm specified by algoId for the number of iterations supplied to the constructor
+     * @param algoId which algorithm will be run
+     * @param scen on which scenario the algorithm will be run
+     */
     public void algorithmPerformanceTest(String algoId, Scenario scen) {
         this.runtimes = new double[iterations];
         
@@ -46,14 +51,24 @@ public class AlgorithmRunner {
         distance = algo.getPathLength();
     }
     
+    /**
+     * Distance of path found by the algorithm
+     * @return distance from start to goal as float
+     */
     public float getDistance() {
         return this.distance;
     }
+    
     
     public double getMedianRuntime() {
         return runtimes[runtimes.length / 2];
     }
     
+    /**
+     * Determine which algorithm to run based on the String identifier
+     * @param algoId
+     * @return 
+     */
     private Algorithm getAlgorithm(String algoId) {
         Algorithm algo;
         if (algoId.equals("A*")) {

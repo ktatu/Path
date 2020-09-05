@@ -159,7 +159,7 @@ public class JumpPointSearch extends Dijkstra {
      * @param startX
      * @param targetY
      * @param targetX
-     * @return the distance
+     * @return the distance as float
      */
     private float diagonalDistance(int startY, int startX, int targetY, int targetX) {
         int distanceY = MathUtil.abs(targetY - startY);

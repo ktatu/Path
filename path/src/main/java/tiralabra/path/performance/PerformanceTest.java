@@ -28,12 +28,10 @@ public class PerformanceTest extends Application {
         if (arguments[0].equals("no_bfs_runtime")) {
             stage.setScene(new Scene(shortestPathSpeedTest(), 600, 500));
             stage.show();
-        }
-        else if (arguments[0].equals("bfs_path")) {
+        } else if (arguments[0].equals("bfs_path")) {
             stage.setScene(new Scene(bfsPathLengthTest(), 600, 500));
             stage.show();
-        }
-        else if (arguments[0].equals("bfs_runtime")) {
+        } else if (arguments[0].equals("bfs_runtime")) {
             stage.setScene(new Scene(bfsPathSpeedTest(), 600, 500));
             stage.show();
         }
@@ -92,6 +90,6 @@ public class PerformanceTest extends Application {
     private ArrayList<Scenario> getScenarios(String mapFileName) {
         FileScenarioReader scenReader = new FileScenarioReader();
         
-        return scenReader.collectScenarios(new File(mapFileName+".scen"));
+        return scenReader.collectScenarios(new File(mapFileName + ".scen"));
     }
 }

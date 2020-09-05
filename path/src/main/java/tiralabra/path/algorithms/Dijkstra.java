@@ -69,6 +69,11 @@ public class Dijkstra extends Algorithm {
         }
     }
     
+    /**
+     * Check if a new optimal distance to a passable grid has been found
+     * @param nbor the grid being checked
+     * @param prev grid from which the algorithm arrived to nbor
+     */
     private void checkGrid(int nbor, Grid prev) {
         int x = intToGridX(nbor);
         int y = intToGridY(nbor);
@@ -172,6 +177,12 @@ public class Dijkstra extends Algorithm {
         }
     }
     
+    /**
+     * Add all horizontal, vertical and diagonal neighbors of (x,y) to a list
+     * @param y coordinate
+     * @param x coordinate
+     * @return a list of neighbors
+     */
     protected List neighborList(int y, int x) {
         List nList = new List(8);
         

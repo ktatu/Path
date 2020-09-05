@@ -7,6 +7,8 @@ import tiralabra.path.logic.Scenario;
 
 /**
  * Creates a list of Scenarios from a .scen file
+ * Note that collectScenarios is only used to provide an ArrayList of scenarios for performance testing
+ * No use of ArrayList in the actual program outside of io / performance testing!
  * @author Tatu
  */
 public class FileScenarioReader {
@@ -36,6 +38,11 @@ public class FileScenarioReader {
         return scenarios;
     }
     
+    /**
+     * Attempt to read each line from the provided list
+     * @param scenFileAsList list of the scenarios as string
+     * @param scenarios list into which the scenarios will be added
+     */
     private void readMovingAiFormat(ArrayList<String> scenFileAsList, ArrayList<Scenario> scenarios) {
         for (int i = 1; i < scenFileAsList.size(); i++) {
             try {
