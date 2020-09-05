@@ -11,3 +11,9 @@ Lopullisen ohjelman aika- ja tilavaativuudet eivät iso-o-notaatioltaan poikkea 
 ## Puutteita, parannettavaa
 - Ohjelmassa joutuu itse keksimään tai katsomaan skenaariotiedostoista suoritettavia koordinaatteja, jotka syöttää käyttöliittymässä. Olisi käyttäjälle kätevämpää, jos kartan voisi saada näkyviin ja sitten klikata kartasta alku- ja loppupisteet
 - Algoritmi-luokissa kokonaislukujen käyttö eri metodeissa kuvaamaan ruutuja ei ollut mielestäni hyvä ratkaisu. Toisaalta se toimii, mutta koordinaatteja joutuu jatkuvasti metodista toiseen muuttamaan kokonaisluvusta koordinaateiksi tai päinvastoin. Tämä ratkaisu saattoi ehkä säästää jonkin verran muistia (talletetaan kokonaislukuja Grid-olioiden sijaan jne.), mutta ohjelmassa ei ole puute muistista ja hintana on koodin paikoittainen epäselvyys.
+
+## Lähteet
+- A*: https://en.wikipedia.org/wiki/A*_search_algorithm
+- Dijkstra: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm, Tietorakenteet ja Algoritmit (Antti Laaksonen 2020) s. 125-127
+- Leveyshaku (BFS): https://en.wikipedia.org/wiki/Breadth-first_search
+- Jump Point Search (JPS): Online Graph Pruning for Pathfinding on Grid Maps (Daniel Harabor ja Alban Grastien), [latauslinkki](https://www.aaai.org/ocs/index.php/AAAI/AAAI11/paper/download/3761/4007)
